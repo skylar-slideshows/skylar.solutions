@@ -1,0 +1,681 @@
+/* ==========================================================================
+   skylar.solutions: shared styles for every page
+   1. Tokens  2. Base  3. Home layout  4. Home sections  5. Project pages
+   6. PCB stage + trace animation  7. Reduced motion
+   ========================================================================== */
+
+/* 1. Tokens ------------------------------------------------------------ */
+:root {
+  color-scheme: light;
+
+  --lavender: #ece8fa;   /* page background */
+  --paper: #fcfbff;      /* main sheet */
+  --lilac: #e5dffb;      /* sidebar, call-to-action panel */
+  --lilac-soft: #f1edfe; /* tags, PCB board */
+  --line: #d6cef6;       /* borders and dividers */
+  --ink: #261f55;        /* text */
+  --ink-soft: #5e5791;   /* secondary text */
+  --indigo: #4b33c4;     /* links, buttons, focus */
+  --indigo-deep: #3a25a3;
+  --trace: #4a2da6;      /* PCB copper, the "darker purple" */
+  --pulse: #f4f0ff;      /* signal pulse travelling along a trace */
+
+  --font: "Recursive", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --radius-sheet: 28px;
+  --radius-card: 22px;
+  --radius-chip: 14px;
+  --gutter: clamp(1rem, 3vw, 2.5rem);
+}
+
+/* 2. Base -------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Recursive is a variable font: CASL makes it casual, MONO makes it monospaced.
+   Set --casl / --mono on any element to dial them in. */
+* {
+  font-variation-settings: "CASL" var(--casl, 0), "MONO" var(--mono, 0);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--lavender);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-kerning: normal;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.15;
+  font-weight: 750;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--indigo);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--indigo);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: #d9cefd;
+  color: var(--ink);
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 10;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  background: var(--indigo);
+  color: #fff;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--lilac-soft);
+  font-size: 0.875rem;
+  line-height: 1.3;
+}
+
+/* 3. Home layout ------------------------------------------------------- */
+.home {
+  display: grid;
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  align-items: start;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--gutter);
+}
+
+@media (min-width: 960px) {
+  .home {
+    grid-template-columns: minmax(280px, 330px) minmax(0, 1fr);
+  }
+}
+
+.profile {
+  display: grid;
+  gap: 2rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border-radius: var(--radius-sheet);
+  background: var(--lilac);
+}
+
+@media (min-width: 960px) and (min-height: 760px) {
+  .profile {
+    position: sticky;
+    top: var(--gutter);
+  }
+}
+
+.profile__name {
+  --casl: 1;
+  font-size: clamp(2.6rem, 7vw, 3.3rem);
+  font-weight: 850;
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+}
+
+.profile__headline {
+  margin-top: 1rem;
+  color: var(--ink-soft);
+  font-size: 1.125rem;
+  line-height: 1.45;
+}
+
+.profile__subhead {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.profile .tag {
+  border-color: rgba(75, 51, 196, 0.16);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.contact {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0;
+}
+
+.contact dt {
+  color: var(--ink-soft);
+  font-size: 0.8125rem;
+  font-weight: 650;
+}
+
+.contact dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.sheet {
+  display: grid;
+  gap: clamp(2.5rem, 5vw, 3.5rem);
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border-radius: var(--radius-sheet);
+  background: var(--paper);
+  box-shadow: 0 30px 60px -45px rgba(58, 37, 163, 0.45);
+}
+
+/* 4. Home sections ----------------------------------------------------- */
+.section__title {
+  --casl: 0.5;
+  margin-bottom: 1rem;
+  font-size: 1.375rem;
+}
+
+.about__hello {
+  --casl: 0.7;
+  margin-bottom: 0.6rem;
+  font-size: 1.3rem;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+/* Featured project: the whole card is one link */
+.project-feature {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--paper);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.project-feature.is-live {
+  border-color: #b9aaf2;
+  box-shadow: 0 26px 50px -32px rgba(74, 45, 166, 0.6);
+}
+
+.project-feature .pcb-stage {
+  border-bottom: 1px solid var(--line);
+}
+
+.project-feature__body {
+  display: grid;
+  gap: 0.9rem;
+  justify-items: start;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.project-feature__title {
+  --casl: 0.5;
+  font-size: clamp(1.3rem, 2.4vw, 1.6rem);
+  line-height: 1.2;
+}
+
+.project-feature__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.project-feature__title a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.project-feature__more {
+  color: var(--indigo);
+  font-weight: 650;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.project-feature.is-live .project-feature__more {
+  text-decoration-thickness: 2px;
+}
+
+@supports selector(:has(*)) {
+  .project-feature__title a:focus-visible {
+    outline: none;
+  }
+
+  .project-feature:has(a:focus-visible) {
+    outline: 3px solid var(--indigo);
+    outline-offset: 4px;
+  }
+}
+
+.split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: clamp(2.5rem, 5vw, 3rem);
+}
+
+.edu__degree {
+  font-weight: 650;
+}
+
+.edu__school {
+  color: var(--ink-soft);
+}
+
+.edu__dates {
+  margin-top: 0.25rem;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+}
+
+/* Awards list, with PCB vias for bullets */
+.awards {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.award {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  column-gap: 0.9rem;
+  align-items: baseline;
+  padding: 0.8rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.award:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.award::before {
+  content: "";
+  width: 0.7rem;
+  height: 0.7rem;
+  border: 3px solid var(--trace);
+  border-radius: 50%;
+}
+
+.award__name {
+  font-weight: 650;
+}
+
+.award__org {
+  grid-column: 2;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+}
+
+.award__year {
+  grid-column: 3;
+  grid-row: 1;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 5. Project pages ----------------------------------------------------- */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1.25rem var(--gutter);
+}
+
+.site-header__home {
+  --casl: 1;
+  color: var(--ink);
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.site-header__home:hover {
+  color: var(--indigo);
+}
+
+.article {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 var(--gutter) clamp(3rem, 8vw, 5rem);
+}
+
+.article__intro,
+.prose,
+.talk {
+  max-width: 44rem;
+  margin-inline: auto;
+}
+
+.article__intro {
+  padding: clamp(1.5rem, 6vw, 4rem) 0 clamp(1.75rem, 4vw, 2.75rem);
+}
+
+.article__title {
+  --casl: 1;
+  font-size: clamp(2.1rem, 5vw, 3.5rem);
+  font-weight: 820;
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+}
+
+.article__meta {
+  margin-top: 1.1rem;
+  color: var(--ink-soft);
+  font-size: 1.125rem;
+}
+
+.article__figure {
+  margin: 0 0 clamp(2.5rem, 6vw, 4rem);
+}
+
+.article__figure .pcb-stage {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sheet);
+}
+
+.prose {
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.prose > * + * {
+  margin-top: 1.15em;
+}
+
+.prose h2 {
+  --casl: 0.6;
+  margin-bottom: -0.2em;
+  font-size: clamp(1.6rem, 3.5vw, 2rem);
+  font-weight: 780;
+}
+
+.prose ul {
+  display: grid;
+  gap: 0.7em;
+  padding: 0;
+  list-style: none;
+}
+
+.prose li {
+  position: relative;
+  padding-left: 1.75em;
+}
+
+.prose li::before {
+  content: "";
+  position: absolute;
+  left: 0.15em;
+  top: 0.48em;
+  width: 0.75em;
+  height: 0.75em;
+  border: 3px solid var(--trace);
+  border-radius: 50%;
+}
+
+.talk {
+  margin-top: clamp(3rem, 7vw, 4.5rem);
+  padding: clamp(1.75rem, 5vw, 2.75rem);
+  border-radius: var(--radius-sheet);
+  background: var(--paper);
+  box-shadow: 0 30px 60px -45px rgba(58, 37, 163, 0.45);
+}
+
+.talk__title {
+  --casl: 1;
+  font-size: clamp(1.6rem, 4vw, 2.25rem);
+  font-weight: 820;
+  line-height: 1.1;
+}
+
+.talk__text {
+  --casl: 1;
+  margin-top: 0.6rem;
+  color: var(--indigo);
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.talk__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.9rem;
+  padding: 0.6rem 1.35rem;
+  border: 2px solid var(--indigo);
+  border-radius: 999px;
+  background: var(--indigo);
+  color: #fff;
+  font-weight: 650;
+  text-decoration: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.button:hover {
+  border-color: var(--indigo-deep);
+  background: var(--indigo-deep);
+}
+
+.button--quiet {
+  background: transparent;
+  color: var(--indigo);
+}
+
+.button--quiet:hover {
+  border-color: var(--indigo);
+  background: var(--paper);
+}
+
+.site-footer {
+  padding: 0 var(--gutter) 3rem;
+  text-align: center;
+  font-size: 0.9375rem;
+}
+
+/* 6. PCB stage + trace animation ----------------------------------------- */
+.pcb-stage {
+  position: relative;
+  overflow: hidden;
+  container-type: inline-size;
+  background-color: var(--lilac-soft);
+  /* KiCad-style dot grid */
+  background-image: radial-gradient(circle, rgba(74, 45, 166, 0.2) 1px, transparent 1.6px);
+  background-position: center;
+  background-size: 18px 18px;
+}
+
+.pcb-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1000 / 560;
+}
+
+/* On narrow stages, zoom in so the console stays big; the trace ends get cropped. */
+@container (max-width: 540px) {
+  .pcb-canvas {
+    width: 128%;
+    margin-left: -14%;
+  }
+}
+
+.pcb-chip {
+  position: absolute;
+  top: 7.142857%;   /* 40 / 560 */
+  left: 18%;        /* 180 / 1000 */
+  width: 64%;       /* 640 / 1000 */
+  height: 85.714286%; /* 480 / 560 */
+  display: block;
+  margin: 0;
+}
+
+.pcb-chip img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-chip);
+  box-shadow: 0 0 0 1px rgba(38, 31, 85, 0.3), 0 18px 30px -20px rgba(38, 31, 85, 0.7);
+}
+
+.pcb-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.pcb-trace {
+  fill: none;
+  stroke: var(--trace);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dashoffset: var(--hide);
+  transition: stroke-dashoffset 0.3s cubic-bezier(0.55, 0, 0.8, 0.3);
+}
+
+.is-live .pcb-trace {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--dur) cubic-bezier(0.2, 0.75, 0.25, 1) var(--delay);
+}
+
+.pcb-pulse {
+  fill: none;
+  stroke: var(--pulse);
+  stroke-linecap: round;
+}
+
+.pcb-pad,
+.pcb-pin1 {
+  fill: var(--trace);
+}
+
+.pcb-via {
+  fill: var(--lilac-soft);
+  stroke: var(--trace);
+}
+
+.pcb-pad,
+.pcb-via,
+.pcb-pin1 {
+  transform: scale(0);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.16s ease-in;
+}
+
+.is-live .pcb-pad,
+.is-live .pcb-via,
+.is-live .pcb-pin1 {
+  transform: scale(1);
+  transition: transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1) var(--delay);
+}
+
+.pcb-silk {
+  --mono: 1;
+  fill: var(--trace);
+  font-family: var(--font);
+  font-size: 20px;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.is-live .pcb-silk {
+  opacity: 0.75;
+  transition: opacity 0.4s ease var(--delay);
+}
+
+/* 7. Reduced motion: traces simply fade in, no drawing or pulses ----------- */
+@media (prefers-reduced-motion: reduce) {
+  .pcb-trace,
+  .is-live .pcb-trace {
+    stroke-dashoffset: 0;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .pcb-pad,
+  .pcb-via,
+  .pcb-pin1,
+  .is-live .pcb-pad,
+  .is-live .pcb-via,
+  .is-live .pcb-pin1 {
+    transform: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .is-live .pcb-trace,
+  .is-live .pcb-pad,
+  .is-live .pcb-via,
+  .is-live .pcb-pin1 {
+    opacity: 1;
+  }
+
+  .pcb-pulse {
+    display: none;
+  }
+
+  .project-feature,
+  .button {
+    transition: none;
+  }
+}

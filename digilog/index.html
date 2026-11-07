@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Digilog: instant-recall mixing console | Skylar Denno</title>
+  <meta name="description" content="An instant-recall music mixing console with digital control of fully analog signal paths. Skylar Denno’s team capstone project.">
+  <link rel="canonical" href="https://skylar.solutions/digilog/">
+
+  <!-- Link previews (LinkedIn, iMessage, Slack...) -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://skylar.solutions/digilog/">
+  <meta property="og:site_name" content="Skylar Denno">
+  <meta property="og:title" content="Instant-recall music mixing console with digital control of fully analog signal paths">
+  <meta property="og:description" content="Skylar Denno’s team capstone project: ten PCBs, firmware, and entire weeks in KiCAD.">
+  <meta property="og:image" content="https://skylar.solutions/assets/img/digilog-og.jpg">
+  <meta property="og:image:alt" content="3D render of the mixing console">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
+  <link rel="stylesheet" href="../assets/site.css">
+  <script src="../assets/pcb-traces.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <a class="site-header__home" href="../">Skylar Denno</a>
+    <a href="mailto:skylar.denno@gmail.com">Email me</a>
+  </header>
+
+  <main class="article" id="main">
+    <header class="article__intro">
+      <h1 class="article__title">Instant-recall music mixing console with digital control of fully analog signal paths</h1>
+      <p class="article__meta">Digilog, my team’s capstone project, fall 2026</p>
+    </header>
+
+    <!-- Hovering the image draws the PCB traces (assets/pcb-traces.js). -->
+    <figure class="article__figure">
+      <div class="pcb-stage" data-pcb>
+        <div class="pcb-canvas">
+          <picture class="pcb-chip">
+            <source type="image/webp"
+                    srcset="../assets/img/digilog-console-900.webp 900w, ../assets/img/digilog-console.webp 1443w"
+                    sizes="(min-width: 1180px) 700px, (min-width: 600px) 62vw, 80vw">
+            <img src="../assets/img/digilog-console.jpg" width="1443" height="1082" fetchpriority="high"
+                 alt="3D render of the mixing console: two banks of eight channel strips with knobs and fader slots, set into a sloped cream-colored desk">
+          </picture>
+        </div>
+      </div>
+    </figure>
+
+    <div class="prose">
+      <h2>So here is what I did</h2>
+
+      <p>I did a large amount of the project, specifically nearly all the hardware. I just spent this entire Fall living and breathing digital system integration, MCUs, and mixed signal PCB design. I literally put entire weeks into KiCAD. I designed, from schematic to physical assembly and validation, a total of ten individual PCBs (not counting the ones with &lt; 4 layers) in the past four months, all for this project. These include:</p>
+
+      <ul>
+        <li>Two different STM32 boards with displays (FMC/parallel), I2C, SPI, USB-C, and UART;</li>
+        <li>Five low noise, low crosstalk, highly linear, analog audio processing “mini-boards” and two larger analog routing motherboards; and</li>
+        <li>A user controls board utilizing MCP23017 GPIO expanders, rotary encoders, and shift-register driven LED displays.</li>
+      </ul>
+
+      <p>In addition to this, I wrote a large amount of the firmware, including designing the I2C polling scheme, a few FreeRTOS tasks, and writing low level hardware code. I also wrote code that allows the console to receive timecode and transport commands from industry standard Digital Audio Workstation (DAW) programs, and I wrote a standalone console remote control and configuration computer program.</p>
+
+      <p>Through all of this, I had to break what seemed like a monumental monolith of a goal into little pieces for both myself and my teammates. I had to then coordinate all of these little pieces to come back together into the final product. The school’s capstone goal is to make a functional prototype, but we ended up making somewhat of a highly featured, definitely not cost optimized, functional proto-product.</p>
+
+      <p>To be able to do all of this in a single semester, I used Claude initially as an idea “bouncing” board to help me build the first ideas. (Note however that this concept is my own original idea). Later in the semester, I came up with creative ways to use AI to increase productivity through the automation of annoying tasks. For example, a recording console has a lot of parallelism in its channels, so there were a lot of places I routed one channel or drew one schematic and told Claude to copy the routing over to the other identical channels under their corresponding nets.</p>
+
+      <p>I am confident and have decent experience with using AI tools (GitHub Copilot and Claude Code) to help me write code. I know how to get these tools to do the right things and go the right direction. I can make .md skill files to explain more complex criteria to AI or give necessary technical context to my teammates’ AIs to also work on the project. At this point, I can “PCBify” nearly anything, and I feel confident in being able to at least help undertake designing complex systems like this, but of course, I have a lot I can also learn from more senior engineers.</p>
+    </div>
+
+    <section class="talk" aria-labelledby="talk-title">
+      <h2 class="talk__title" id="talk-title">Do you want to talk to me more about this project?</h2>
+      <p class="talk__text">I know I do!!!</p>
+      <div class="talk__actions">
+        <a class="button" href="mailto:skylar.denno@gmail.com?subject=Your%20mixing%20console%20project">Email me</a>
+        <a class="button button--quiet" href="https://www.linkedin.com/in/skylardenno/" target="_blank" rel="noopener me">Connect on LinkedIn</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a href="../">Back to the portfolio</a>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Skylar Denno | Embedded systems and mixed signal hardware</title>
+  <meta name="description" content="High energy, fresh Northeastern graduate interested in embedded systems and mixed signal hardware.">
+  <link rel="canonical" href="https://skylar.solutions/">
+
+  <!-- Link previews (LinkedIn, iMessage, Slack...) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://skylar.solutions/">
+  <meta property="og:site_name" content="Skylar Denno">
+  <meta property="og:title" content="Skylar Denno">
+  <meta property="og:description" content="High energy, fresh Northeastern graduate interested in embedded systems and mixed signal hardware.">
+  <meta property="og:image" content="https://skylar.solutions/assets/img/digilog-og.jpg">
+  <meta property="og:image:alt" content="3D render of the analog mixing console from Skylar's capstone project">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
+  <link rel="stylesheet" href="assets/site.css">
+  <script src="assets/pcb-traces.js" defer></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Skylar Denno",
+    "url": "https://skylar.solutions/",
+    "email": "mailto:skylar.denno@gmail.com",
+    "address": { "@type": "PostalAddress", "addressLocality": "Boston", "addressRegion": "MA", "addressCountry": "US" },
+    "alumniOf": { "@type": "CollegeOrUniversity", "name": "Northeastern University" },
+    "knowsAbout": ["Embedded systems", "Mixed signal hardware", "PCB design", "Analog design", "STM32"],
+    "sameAs": ["https://www.linkedin.com/in/skylardenno/", "https://github.com/skylar-slideshows/"]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="home">
+
+    <!-- Sidebar: who I am and how to reach me -->
+    <header class="profile">
+      <div>
+        <h1 class="profile__name">Skylar Denno</h1>
+        <p class="profile__headline">High energy, fresh Northeastern graduate interested in embedded systems and mixed signal hardware</p>
+      </div>
+
+      <dl class="contact">
+        <div>
+          <dt>Email</dt>
+          <dd><a href="mailto:skylar.denno@gmail.com">skylar.denno@gmail.com</a></dd>
+        </div>
+        <div>
+          <dt>LinkedIn</dt>
+          <dd><a href="https://www.linkedin.com/in/skylardenno/" target="_blank" rel="noopener me">linkedin.com/in/skylardenno</a></dd>
+        </div>
+        <div>
+          <dt>GitHub</dt>
+          <dd><a href="https://github.com/skylar-slideshows/" target="_blank" rel="noopener me">github.com/skylar-slideshows</a></dd>
+        </div>
+        <div>
+          <dt>Location</dt>
+          <dd>Boston, MA</dd>
+        </div>
+      </dl>
+
+      <section aria-labelledby="focus-title">
+        <h2 class="profile__subhead" id="focus-title">Focus areas</h2>
+        <ul class="tags">
+          <li class="tag">Embedded Systems</li>
+          <li class="tag">Analog Design</li>
+          <li class="tag">PCB and RF Design</li>
+          <li class="tag">System Integration</li>
+          <li class="tag">Hardware Debugging</li>
+        </ul>
+      </section>
+    </header>
+
+    <!-- Main sheet -->
+    <main class="sheet" id="main">
+
+      <section aria-labelledby="about-title">
+        <h2 class="section__title" id="about-title">About</h2>
+        <p class="about__hello">Hey! I’m Skylar. Welcome to my portfolio!</p>
+        <p>I’m highly motivated and friendly, so I tend to take initiative by leading and collaborating with others on projects. I’m independent and can get started (and finish) complex tasks.</p>
+      </section>
+
+      <section id="projects" aria-labelledby="projects-title">
+        <h2 class="section__title" id="projects-title">Projects</h2>
+
+        <!-- Featured project. Hovering the card draws the PCB traces (assets/pcb-traces.js). -->
+        <article class="project-feature" data-pcb-trigger>
+          <div class="pcb-stage" data-pcb>
+            <div class="pcb-canvas">
+              <picture class="pcb-chip">
+                <source type="image/webp"
+                        srcset="assets/img/digilog-console-900.webp 900w, assets/img/digilog-console.webp 1443w"
+                        sizes="(min-width: 960px) 420px, 80vw">
+                <img src="assets/img/digilog-console.jpg" width="1443" height="1082" decoding="async"
+                     alt="3D render of the mixing console: two banks of eight channel strips with knobs and fader slots, set into a sloped cream-colored desk">
+              </picture>
+            </div>
+          </div>
+
+          <div class="project-feature__body">
+            <h3 class="project-feature__title">
+              <a href="digilog/">Instant-recall music mixing console with digital control of fully analog signal paths</a>
+            </h3>
+            <p>Digilog, my team’s capstone project. I designed nearly all of the hardware: ten PCBs, from schematic to physical assembly and validation, in four months.</p>
+            <ul class="tags" aria-label="Tools used">
+              <li class="tag">KiCAD</li>
+              <li class="tag">STM32</li>
+              <li class="tag">FreeRTOS</li>
+              <li class="tag">Mixed signal PCB design</li>
+            </ul>
+            <span class="project-feature__more" aria-hidden="true">Read the write-up</span>
+          </div>
+        </article>
+      </section>
+
+      <div class="split">
+        <section aria-labelledby="education-title">
+          <h2 class="section__title" id="education-title">Education</h2>
+          <p class="edu__degree">Bachelor of Science in Electrical Engineering</p>
+          <p class="edu__school">Northeastern University</p>
+          <p class="edu__dates">September 2023 – December 2026</p>
+        </section>
+
+        <section aria-labelledby="tools-title">
+          <h2 class="section__title" id="tools-title">Tools</h2>
+          <ul class="tags">
+            <li class="tag">KiCAD</li>
+            <li class="tag">Altium Designer</li>
+            <li class="tag">STM32</li>
+            <li class="tag">Python</li>
+            <li class="tag">C</li>
+          </ul>
+        </section>
+      </div>
+
+      <section aria-labelledby="awards-title">
+        <h2 class="section__title" id="awards-title">Awards and certifications</h2>
+        <ul class="awards">
+          <li class="award">
+            <span class="award__name">Altium Designer Advanced</span>
+            <span class="award__year">2026</span>
+            <span class="award__org">Altium</span>
+          </li>
+          <li class="award">
+            <span class="award__name">Altium Designer Essentials</span>
+            <span class="award__year">2026</span>
+            <span class="award__org">Altium</span>
+          </li>
+          <li class="award">
+            <span class="award__name">TBP – MA Epsilon Chapter</span>
+            <span class="award__year">2024</span>
+            <span class="award__org">Tau Beta Pi – The Engineering Honors Society</span>
+          </li>
+          <li class="award">
+            <span class="award__name">AP Scholar with Distinction</span>
+            <span class="award__year">2023</span>
+            <span class="award__org">Advanced Placement (AP) – College Board</span>
+          </li>
+          <li class="award">
+            <span class="award__name">AWS Academy Graduate</span>
+            <span class="award__year">2023</span>
+            <span class="award__org">Amazon Web Services (AWS)</span>
+          </li>
+        </ul>
+      </section>
+
+    </main>
+  </div>
+</body>
+</html>
