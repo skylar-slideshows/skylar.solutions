@@ -9,40 +9,40 @@
    Light is the default; [data-theme="dark"] is set on <html> by the inline
    script in each page's <head> and by the switch (assets/site.js). */
 
-/* Light: light grey with lightish purple accents */
+/* Light: pastel lavender with purple accents */
 :root {
   color-scheme: light;
 
-  --bg: #ececef;            /* page */
-  --surface: #f8f8fa;       /* schematic sheets */
+  --bg: #ece8fa;            /* page */
+  --surface: #fcfbff;       /* schematic sheets */
   --surface-edge: transparent;
-  --panel: #e2e2e8;         /* sidebar */
-  --sunk: #efeff3;          /* panels inside a sheet */
-  --line: #d6d5dd;          /* borders */
-  --ink: #24222e;           /* text */
-  --ink-soft: #5f5c6e;      /* secondary text */
+  --panel: #e5dffb;         /* sidebar */
+  --sunk: #f3f0fe;          /* panels inside a sheet */
+  --line: #d6cef6;          /* borders */
+  --ink: #261f55;           /* text */
+  --ink-soft: #5e5791;      /* secondary text */
 
-  --accent: #9a86f3;        /* wires, symbols, bullets */
-  --accent-soft: #e8e3fd;   /* tag and symbol fills */
-  --accent-line: #d3c9fb;   /* tag borders */
-  --link: #5f45d6;          /* text links (contrast-safe purple) */
-  --button: #5f45d6;
-  --button-hover: #4a32bd;
-  --selection: #ddd4fe;
-  --frame: rgba(154, 134, 243, 0.55); /* sheet frame and title block */
-  --label: #7b70ad;         /* reference designators, zone markers */
-  --shadow: rgba(40, 30, 90, 0.16);
+  --accent: #8f78ee;        /* wires, symbols, bullets */
+  --accent-soft: #efebfd;   /* tag and symbol fills */
+  --accent-line: #d6cef6;   /* tag borders */
+  --link: #4b33c4;          /* links (contrast-safe purple) */
+  --button: #4b33c4;
+  --button-hover: #3a25a3;
+  --selection: #d9cefd;
+  --frame: rgba(118, 93, 222, 0.42); /* sheet frame and title block */
+  --label: #6f62b0;         /* reference designators, zone markers */
+  --shadow: rgba(58, 37, 163, 0.4);
 
-  --board: #ede9fb;         /* PCB stage */
-  --board-dot: rgba(85, 55, 200, 0.18);
-  --chip-ring: rgba(36, 34, 46, 0.3);
-  --trace: #5537c8;         /* PCB copper */
-  --pulse: #ffffff;
+  --board: #f1edfe;         /* PCB stage */
+  --board-dot: rgba(74, 45, 166, 0.2);
+  --chip-ring: rgba(38, 31, 85, 0.3);
+  --trace: #4a2da6;         /* PCB copper, the "darker purple" */
+  --pulse: #f4f0ff;
   --pulse-glow: none;
 
-  --switch-track: #d8d7e0;
+  --switch-track: #d9d2f7;
   --switch-thumb: #ffffff;
-  --switch-icon: #3b3946;
+  --switch-icon: #3b3560;
 
   --font: "Recursive", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --radius-sheet: 18px;
@@ -315,7 +315,7 @@ a:hover {
 }
 
 .site-header__home {
-  --casl: 1;
+  --casl: 0;
   color: var(--ink);
   font-size: 1.25rem;
   font-weight: 800;
@@ -564,7 +564,7 @@ a:hover {
   background: var(--panel);
 }
 
-@media (min-width: 960px) and (min-height: 760px) {
+@media (min-width: 960px) and (min-height: 1100px) {
   .profile {
     position: sticky;
     top: var(--gutter);
@@ -572,11 +572,11 @@ a:hover {
 }
 
 .profile__name {
-  --casl: 1;
+  --casl: 0; /* Recursive's straight "linear" style: more serious than the casual one */
   font-size: clamp(2.6rem, 7vw, 3.3rem);
-  font-weight: 850;
+  font-weight: 800;
   line-height: 0.95;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.025em;
 }
 
 .profile__headline {
@@ -750,12 +750,6 @@ a:hover {
     outline: 3px solid var(--link);
     outline-offset: 4px;
   }
-}
-
-.split {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
-  gap: clamp(2.5rem, 5vw, 3rem);
 }
 
 .edu__degree {
@@ -1078,6 +1072,132 @@ a:hover {
 .is-live .pcb-silk {
   opacity: 0.75;
   transition: opacity 0.4s ease var(--delay);
+}
+
+/* 8b. 3D board viewer -------------------------------------------------------
+   Fixed colours on purpose: the 3D view looks the same in light and dark mode.
+   Sized with the padding trick (not aspect-ratio) so older browsers get it right. */
+.board-figure {
+  margin: clamp(2.5rem, 6vw, 3.5rem) 0;
+}
+
+.board-viewer {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: #e7e5ee;
+  background: linear-gradient(180deg, #f6f5fa 0%, #dedbe8 100%);
+  color-scheme: light;
+}
+
+.board-viewer::before {
+  content: "";
+  display: block;
+  padding-top: 56.25%; /* 16:9 */
+}
+
+@media (max-width: 640px) {
+  .board-viewer::before {
+    padding-top: 80%;
+  }
+}
+
+.board-viewer__poster,
+.board-viewer__canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.board-viewer__poster {
+  object-fit: cover;
+  transition: opacity 0.5s ease;
+}
+
+.board-viewer.is-ready .board-viewer__poster {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.board-viewer__canvas {
+  z-index: 1;
+  display: block;
+  cursor: grab;
+  outline: none;
+  -ms-touch-action: pan-y;
+  touch-action: pan-y;          /* page can still scroll past it on phones */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.board-viewer.is-engaged .board-viewer__canvas {
+  -ms-touch-action: none;
+  touch-action: none;           /* once grabbed, every gesture moves the model */
+}
+
+.board-viewer__canvas:active {
+  cursor: grabbing;
+}
+
+.board-viewer__canvas:focus-visible {
+  box-shadow: inset 0 0 0 3px #4b33c4;
+}
+
+.board-viewer__status {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 0.9rem;
+  max-width: calc(100% - 2rem);
+  margin: 0;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(32, 28, 52, 0.8);
+  color: #ffffff;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  text-align: center;
+  pointer-events: none;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+.board-viewer__status[hidden],
+.board-viewer__reset[hidden] {
+  display: none;
+}
+
+.board-viewer__reset {
+  position: absolute;
+  z-index: 2;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid rgba(32, 28, 52, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #262040;
+  font: 600 0.8125rem/1.4 var(--font);
+  cursor: pointer;
+}
+
+.board-viewer__reset:hover {
+  background: #ffffff;
+}
+
+.board-viewer__reset:focus-visible {
+  outline: 3px solid #4b33c4;
+  outline-offset: 2px;
+}
+
+.board-figure__caption {
+  max-width: 44rem;
+  margin: 0.9rem auto 0;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+  line-height: 1.55;
 }
 
 /* 9. Reduced motion: traces simply fade in; no drawing, pulses or slides ---- */

@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="16" fill="#5f45d6"/>
-  <circle cx="32" cy="32" r="13" fill="none" stroke="#e8e3fd" stroke-width="9"/>
+  <!-- "S" from Distortion Dos Analogue (Chequered Ink), as an outline -->
+  <path fill="#ffffff" transform="translate(13.19 54.00) scale(0.03143 -0.03143)" d="M971 705H1171Q1226 594 1196 450Q1156 264 996.0 132.0Q836 0 650 0H0L85 400H735Q756 400 773.5 414.5Q791 429 796 450Q800 471 788.5 485.5Q777 500 756 500H556Q370 500 266 632Q239 667 221 705H21Q-28 813 2 950Q41 1136 201.5 1268.0Q362 1400 548 1400H1198L1113 1000H463Q442 1000 424.0 985.5Q406 971 402 950Q397 929 408.5 914.5Q420 900 441 900H641Q827 900 931 768Q955 738 971 705Z"/>
 </svg>

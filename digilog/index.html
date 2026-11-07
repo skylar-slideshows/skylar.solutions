@@ -32,12 +32,15 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
   <link rel="stylesheet" href="../assets/site.css">
   <script src="../assets/site.js" defer></script>
   <script src="../assets/pcb-traces.js" defer></script>
+  <script src="../assets/board-viewer.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -94,7 +97,21 @@
         <li>Five low noise, low crosstalk, highly linear, analog audio processing “mini-boards” and two larger analog routing motherboards; and</li>
         <li>A user controls board utilizing MCP23017 GPIO expanders, rotary encoders, and shift-register driven LED displays.</li>
       </ul>
+    </div>
 
+    <!-- Interactive 3D model (assets/board-viewer.js). Rebuild the .bin with tools/step-to-mesh.mjs. -->
+    <figure class="board-figure">
+      <div class="board-viewer" data-board-viewer data-src="../assets/models/bucket-routing-board.bin">
+        <img class="board-viewer__poster" src="../assets/img/bucket-routing-board.jpg" width="1600" height="900" alt="3D render of the Digilog analog motherboard: a long green PCB lined with black pin sockets and headers, gold pins and white silkscreen">
+        <canvas class="board-viewer__canvas" tabindex="0" role="img"
+                aria-label="Interactive 3D model of the Digilog analog motherboard. Arrow keys rotate, Shift with arrows pans, plus and minus zoom, 0 resets the view."></canvas>
+        <p class="board-viewer__status" data-viewer-status role="status" hidden></p>
+        <button class="board-viewer__reset" type="button" data-viewer-reset hidden>Reset view</button>
+      </div>
+      <figcaption class="board-figure__caption">The Digilog analog motherboard, rendered from its STEP model. Drag to rotate, scroll or pinch to zoom, and right-drag or use two fingers to pan.</figcaption>
+    </figure>
+
+    <div class="prose">
       <p>In addition to this, I wrote a large amount of the firmware, including designing the I2C polling scheme, a few FreeRTOS tasks, and writing low level hardware code. I also wrote code that allows the console to receive timecode and transport commands from industry standard Digital Audio Workstation (DAW) programs, and I wrote a standalone console remote control and configuration computer program.</p>
 
       <p>Through all of this, I had to break what seemed like a monumental monolith of a goal into little pieces for both myself and my teammates. I had to then coordinate all of these little pieces to come back together into the final product. The school’s capstone goal is to make a functional prototype, but we ended up making somewhat of a highly featured, definitely not cost optimized, functional proto-product.</p>
