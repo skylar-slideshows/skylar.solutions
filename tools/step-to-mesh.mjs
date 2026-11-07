@@ -9,9 +9,10 @@
   data split into 16-bit-index chunks (renders on any WebGL 1 device).
 
   Usage
-    node tools/step-to-mesh.mjs <input.step> <output.bin> [--tol 0.01]
+    node tools/step-to-mesh.mjs <input.step> <output.bin> [--tol 0.01] [--mask-shade 0.72]
 
-  --tol  chordal tolerance in model units (mm). Smaller = smoother, bigger file.
+  --tol         chordal tolerance in model units (mm). Smaller = smoother, bigger file.
+  --mask-shade  darkens the solder mask green (default 0.72; 1 = colours as exported).
 
   Also writes <output.bin>.js, a script copy of the same model that the viewer
   uses when a page is opened from disk (file://) instead of a web server.
@@ -51,6 +52,11 @@ const INPUT = argv[0];
 const OUTPUT = argv[1];
 const tolFlag = argv.indexOf("--tol");
 const TOL = tolFlag >= 0 ? parseFloat(argv[tolFlag + 1]) : 0.01;
+const shadeFlag = argv.indexOf("--mask-shade");
+// KiCad exports a bright solder mask green, and the copper under the mask is
+// brighter still, so boards read as lime. Green-dominant colours (the mask
+// and the copper under it) are scaled by this. --mask-shade 1 turns it off.
+const MASK_SHADE = shadeFlag >= 0 ? parseFloat(argv[shadeFlag + 1]) : 0.72;
 const MIN_STEP = Math.PI / 12; // finest angular step for arcs (15 deg)
 const MAX_STEP = Math.PI / 6;  // coarsest angular step for arcs (30 deg)
 const MAX_NORMAL_TURN = Math.cos(Math.PI / 6); // refine curved faces until normals turn < 30 deg per edge
@@ -1427,7 +1433,13 @@ for (const [id, e] of E) {
 }
 const palette = [];
 const paletteIndex = new Map();
+function shadeMask(c) {
+  const [r, g, b] = c;
+  if (!(g > r + 0.1 && g > b + 0.04)) return c; // only the mask greens
+  return [r * MASK_SHADE, g * MASK_SHADE, Math.min(1, b * MASK_SHADE * 1.04)];
+}
 function colourIndex(c) {
+  c = shadeMask(c);
   const key = c.map((x) => Math.round(Math.min(1, Math.max(0, x)) * 255)).join(",");
   let i = paletteIndex.get(key);
   if (i === undefined) {
