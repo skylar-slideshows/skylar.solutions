@@ -13,7 +13,10 @@
 
   --tol  chordal tolerance in model units (mm). Smaller = smoother, bigger file.
 
-  Supported geometry: planes, cylinders, tori, surfaces of revolution and
+  Also writes <output.bin>.js, a script copy of the same model that the viewer
+  uses when a page is opened from disk (file://) instead of a web server.
+
+  Supported geometry: planes, cylinders, cones, spheres, tori, surfaces of revolution and
   (rational, open or closed) B-spline surfaces, bounded by lines, circles,
   ellipses and (rational) B-spline curves. That covers typical KiCad /
   OpenCascade exports. Example (from the site root):
@@ -24,7 +27,8 @@
     u32 colourCount, colourCount x (u8 r, g, b, pad)
     f32 worldMin[3], f32 worldMax[3]
     u32 meshCount
-      per mesh: u32 flags (1 = overlay, e.g. silkscreen), f32 qMin[3], f32 qStep[3], u32 chunkCount
+      per mesh: u32 flags (bit 0 = overlay layer such as copper/pads/silkscreen,
+                bits 1-3 = its stacking order), f32 qMin[3], f32 qStep[3], u32 chunkCount
         per chunk: u32 vertexCount, u32 indexCount,
                    u16 position[vertexCount*3]        (p = qMin + q * qStep)
                    i8  normalColour[vertexCount*4]    (normal xyz * 127, colour index)
@@ -516,6 +520,38 @@ function surfaceOf(id) {
         return add(f.o, add(add(scl(f.x, rad * Math.cos(u)), scl(f.y, rad * Math.sin(u))), scl(f.z, r * Math.sin(v))));
       },
       normal: (u, v) => add(add(scl(f.x, Math.cos(v) * Math.cos(u)), scl(f.y, Math.cos(v) * Math.sin(u))), scl(f.z, Math.sin(v))),
+    };
+  }
+  if (t === "CONICAL_SURFACE") {
+    const f = frameOf(e.args[1].id);
+    const r = e.args[2];
+    const ang = e.args[3] > Math.PI / 2 ? (e.args[3] * Math.PI) / 180 : e.args[3]; // radians (degrees if clearly so)
+    const ta = Math.tan(ang), ca = Math.cos(ang), sa = Math.sin(ang);
+    return {
+      kind: "cone", periodicU: true, angularU: true, scaleU: Math.max(r, 1e-3), scaleV: 1,
+      param: (p) => { const d = sub(p, f.o); return [Math.atan2(dot(d, f.y), dot(d, f.x)), dot(d, f.z)]; },
+      point: (u, v) => {
+        const rad = r + v * ta;
+        return add(f.o, add(add(scl(f.x, rad * Math.cos(u)), scl(f.y, rad * Math.sin(u))), scl(f.z, v)));
+      },
+      normal: (u) => add(scl(add(scl(f.x, Math.cos(u)), scl(f.y, Math.sin(u))), ca), scl(f.z, -sa)),
+      isPole: (p) => Math.abs(r + dot(sub(p, f.o), f.z) * ta) < 1e-7, // the apex
+    };
+  }
+  if (t === "SPHERICAL_SURFACE") {
+    const f = frameOf(e.args[1].id);
+    const r = e.args[2];
+    const dirAt = (u, v) => add(add(scl(f.x, Math.cos(v) * Math.cos(u)), scl(f.y, Math.cos(v) * Math.sin(u))), scl(f.z, Math.sin(v)));
+    return {
+      kind: "sphere", periodicU: true, angularU: true, angularV: true, scaleU: r, scaleV: r,
+      param: (p) => {
+        const d = sub(p, f.o);
+        const x = dot(d, f.x), y = dot(d, f.y), z = dot(d, f.z);
+        return [Math.atan2(y, x), Math.atan2(z, Math.sqrt(x * x + y * y))];
+      },
+      point: (u, v) => add(f.o, scl(dirAt(u, v), r)),
+      normal: (u, v) => dirAt(u, v),
+      isPole: (p) => { const d = sub(p, f.o); const x = dot(d, f.x), y = dot(d, f.y); return Math.sqrt(x * x + y * y) < 1e-7 * Math.max(1, r); },
     };
   }
   if (t === "SURFACE_OF_REVOLUTION") return revolutionSurface(e);
@@ -1072,6 +1108,23 @@ function tessellateFace(fid) {
 
   // parameter-space polygons
   for (const L of loops) L.uv = L.pts.map((p) => surf.param(p));
+  if (surf.isPole) {
+    for (const L of loops) {
+      const n = L.pts.length;
+      if (!L.pts.some((p) => surf.isPole(p))) continue;
+      const pts = [], uv = [];
+      L.poleAt = [];
+      for (let i = 0; i < n; i++) {
+        if (!surf.isPole(L.pts[i])) { pts.push(L.pts[i]); uv.push(L.uv[i]); continue; }
+        const before = L.uv[(i - 1 + n) % n], after = L.uv[(i + 1) % n];
+        pts.push(L.pts[i], L.pts[i]);
+        uv.push([before[0], L.uv[i][1]], [after[0], L.uv[i][1]]);
+        L.poleAt.push(uv.length - 1);
+      }
+      L.pts = pts;
+      L.uv = uv;
+    }
+  }
   const periodOf = (k) => (k === 0 ? surf.periodU : surf.periodV) || TWO_PI;
   const wrapP = (d, T) => d - T * Math.round(d / T);
   if (surf.periodicU || surf.periodicV) {
@@ -1083,7 +1136,11 @@ function tessellateFace(fid) {
           L.uv[i][k] = L.uv[i - 1][k] + wrapP(L.uv[i][k] - L.uv[i - 1][k], T);
         }
         const winding = L.uv[L.uv.length - 1][k] + wrapP(L.uv[0][k] - L.uv[L.uv.length - 1][k], T) - L.uv[0][k];
-        if (Math.abs(winding) > T / 2) L.wraps = true;
+        if (Math.abs(winding) > T / 2) {
+          // crossing a pole can jump a whole turn in longitude; take the jump at the pole
+          if (k === 0 && L.poleAt && L.poleAt.length) for (let i = L.poleAt[0]; i < L.uv.length; i++) L.uv[i][0] -= winding;
+          else L.wraps = true;
+        }
       }
     }
     if (loops.some((L) => L.wraps)) {
@@ -1447,6 +1504,8 @@ for (const inst of instances) {
   if (meshOfRep.has(inst.rep)) continue;
   const pos = [], nrm = [], col = [], idx = [];
   let overlay = false;
+  const repName = String(args(inst.rep)[0] || "");
+  const layer = /silk/i.test(repName) ? 3 : /pad|mask|paste/i.test(repName) ? 2 : /copper|\bcu\b/i.test(repName) ? 1 : 3;
   for (const item of geometryItems(inst.rep)) {
     if (typeOf(item) === "SHELL_BASED_SURFACE_MODEL") overlay = true;
     for (const { face, shell } of shellFaces(item)) {
@@ -1466,7 +1525,7 @@ for (const inst of instances) {
     }
   }
   meshOfRep.set(inst.rep, meshes.length);
-  meshes.push({ pos, nrm, col, idx, overlay });
+  meshes.push({ pos, nrm, col, idx, overlay, layer });
 }
 console.log(`tessellated ${faceCount} faces (${failed} skipped) in ${((Date.now() - tTess) / 1000).toFixed(1)}s`);
 
@@ -1527,7 +1586,7 @@ meshes.forEach((m, mi) => {
   const [lo, hi] = meshBounds[mi];
   const step = [0, 1, 2].map((k) => Math.max(hi[k] - lo[k], 1e-9) / 65535);
   const chunks = m.idx.length ? chunksOf(m) : [];
-  u32(m.overlay ? 1 : 0);
+  u32(m.overlay ? 1 | (m.layer << 1) : 0);
   f32(...(isFinite(lo[0]) ? lo : [0, 0, 0]), ...step);
   u32(chunks.length);
   for (const ch of chunks) {
@@ -1557,7 +1616,12 @@ for (const inst of instances) {
   f32(...inst.m);
 }
 
-writeFileSync(OUTPUT, Buffer.concat(parts));
+const out = Buffer.concat(parts);
+writeFileSync(OUTPUT, out);
+// Browsers block data requests from pages opened straight from disk, so the
+// viewer falls back to this script copy of the same bytes (base64) there.
+const key = OUTPUT.split(/[\\/]/).pop();
+writeFileSync(OUTPUT + ".js", `(window.__boardModels=window.__boardModels||{})[${JSON.stringify(key)}]="${out.toString("base64")}";\n`);
 let placedTris = 0;
 for (const inst of instances) placedTris += meshes[meshOfRep.get(inst.rep)].idx.length / 3;
 console.log(`${meshes.length} meshes, ${totalVerts} vertices, ${totalTris} triangles stored (${placedTris} drawn), ${palette.length} colours`);

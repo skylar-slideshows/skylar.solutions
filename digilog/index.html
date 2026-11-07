@@ -37,10 +37,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
-  <link rel="stylesheet" href="../assets/site.css">
-  <script src="../assets/site.js" defer></script>
-  <script src="../assets/pcb-traces.js" defer></script>
-  <script src="../assets/board-viewer.js" defer></script>
+  <link rel="stylesheet" href="../assets/site.css?v=20261107">
+  <script src="../assets/site.js?v=20261107" defer></script>
+  <script src="../assets/pcb-traces.js?v=20261107" defer></script>
+  <script src="../assets/board-viewer.js?v=20261107" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -101,7 +101,7 @@
 
     <!-- Interactive 3D model (assets/board-viewer.js). Rebuild the .bin with tools/step-to-mesh.mjs. -->
     <figure class="board-figure">
-      <div class="board-viewer" data-board-viewer data-src="../assets/models/bucket-routing-board.bin">
+      <div class="board-viewer" data-board-viewer data-src="../assets/models/bucket-routing-board.bin?v=20261107">
         <img class="board-viewer__poster" src="../assets/img/bucket-routing-board.jpg" width="1600" height="900" alt="3D render of the Digilog analog motherboard: a long green PCB lined with black pin sockets and headers, gold pins and white silkscreen">
         <canvas class="board-viewer__canvas" tabindex="0" role="img"
                 aria-label="Interactive 3D model of the Digilog analog motherboard. Arrow keys rotate, Shift with arrows pans, plus and minus zoom, 0 resets the view."></canvas>
@@ -110,6 +110,57 @@
       </div>
       <figcaption class="board-figure__caption">The Digilog analog motherboard, rendered from its STEP model. Drag to rotate, scroll or pinch to zoom, and right-drag or use two fingers to pan.</figcaption>
     </figure>
+
+    <section class="board-cards" aria-labelledby="cards-title">
+      <h2 class="board-cards__title" id="cards-title">The five mini-boards, in 3D</h2>
+      <ul class="board-cards__grid">
+        <li>
+          <a class="board-card" href="input/">
+            <picture>
+              <source type="image/webp" srcset="../assets/img/input-card-thumb.webp">
+              <img src="../assets/img/input-card-thumb.jpg" width="640" height="360" loading="lazy" alt="">
+            </picture>
+            <span>Input</span>
+          </a>
+        </li>
+        <li>
+          <a class="board-card" href="eq/">
+            <picture>
+              <source type="image/webp" srcset="../assets/img/eq-card-thumb.webp">
+              <img src="../assets/img/eq-card-thumb.jpg" width="640" height="360" loading="lazy" alt="">
+            </picture>
+            <span>EQ</span>
+          </a>
+        </li>
+        <li>
+          <a class="board-card" href="comp/">
+            <picture>
+              <source type="image/webp" srcset="../assets/img/comp-card-thumb.webp">
+              <img src="../assets/img/comp-card-thumb.jpg" width="640" height="360" loading="lazy" alt="">
+            </picture>
+            <span>Comp</span>
+          </a>
+        </li>
+        <li>
+          <a class="board-card" href="sends/">
+            <picture>
+              <source type="image/webp" srcset="../assets/img/sends-card-thumb.webp">
+              <img src="../assets/img/sends-card-thumb.jpg" width="640" height="360" loading="lazy" alt="">
+            </picture>
+            <span>Sends</span>
+          </a>
+        </li>
+        <li>
+          <a class="board-card" href="output/">
+            <picture>
+              <source type="image/webp" srcset="../assets/img/fader-vca-card-thumb.webp">
+              <img src="../assets/img/fader-vca-card-thumb.jpg" width="640" height="360" loading="lazy" alt="">
+            </picture>
+            <span>Output (fader VCA)</span>
+          </a>
+        </li>
+      </ul>
+    </section>
 
     <div class="prose">
       <p>In addition to this, I wrote a large amount of the firmware, including designing the I2C polling scheme, a few FreeRTOS tasks, and writing low level hardware code. I also wrote code that allows the console to receive timecode and transport commands from industry standard Digital Audio Workstation (DAW) programs, and I wrote a standalone console remote control and configuration computer program.</p>

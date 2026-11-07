@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Speech noise reduction with LSTM neural networks | Skylar Denno</title>
+  <meta name="description" content="Skylar Denno’s solo machine learning project: an LSTM that pulls voices out of noisy recordings, in a real-time version and a high-quality version.">
+  <link rel="canonical" href="https://skylar.solutions/denoise/">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ece8fa">
+
+  <!-- Apply the saved (or system) theme before first paint -->
+  <script>
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem("theme"); } catch (e) {}
+      if (theme !== "light" && theme !== "dark") {
+        theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+
+  <!-- Link previews (LinkedIn, iMessage, Slack...) -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://skylar.solutions/denoise/">
+  <meta property="og:site_name" content="Skylar Denno">
+  <meta property="og:title" content="Speech noise reduction using LSTM neural networks">
+  <meta property="og:description" content="A solo machine learning project: one real-time denoiser and one high-quality one.">
+  <meta property="og:image" content="https://skylar.solutions/assets/img/denoise/waveform-p232_036.jpg">
+  <meta property="og:image:alt" content="A noisy speech waveform above the same clip after denoising">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
+  <link rel="stylesheet" href="../assets/site.css?v=20261107">
+  <script src="../assets/site.js?v=20261107" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <a class="site-header__home" href="../">Skylar Denno</a>
+    <div class="site-header__end">
+      <a href="mailto:skylar.denno@gmail.com">Email me</a>
+      <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode">
+        <span class="theme-switch__thumb" aria-hidden="true">
+          <svg class="theme-switch__icon theme-switch__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+          </svg>
+          <svg class="theme-switch__icon theme-switch__moon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Drawn as schematic sheet "/denoise/" -->
+  <main class="sheet article" id="main">
+    <div class="sheet-frame" aria-hidden="true"></div>
+
+    <header class="article__intro">
+      <h1 class="article__title">Speech noise reduction using LSTM neural networks</h1>
+      <p class="article__meta">My solo machine learning project, built in Python with PyTorch</p>
+    </header>
+
+    <figure class="article__figure wave-hero">
+      <img src="../assets/img/denoise/waveform-p232_036.svg" width="1600" height="900"
+           alt="The same 2.8 second sentence twice: on top, a noisy waveform buried in a thick band of noise; below, the denoised version with the same word shapes and flat silence between them">
+      <figcaption class="board-figure__caption">A sentence from the test set (a voice the model never heard during training), before and after the high-quality model. Same audio, way less noise.</figcaption>
+    </figure>
+
+    <section class="listen" aria-labelledby="listen-title">
+      <h2 class="listen__title" id="listen-title">Listen for yourself</h2>
+      <p class="listen__lead">Same sentence, three ways. Headphones recommended!</p>
+      <div class="listen__grid">
+        <figure class="listen__item">
+          <figcaption>Noisy input</figcaption>
+          <audio controls preload="none" src="../assets/audio/p232_036-noisy.wav"></audio>
+        </figure>
+        <figure class="listen__item">
+          <figcaption>Real-time model (16 kHz)</figcaption>
+          <audio controls preload="none" src="../assets/audio/p232_036-realtime-16k.wav"></audio>
+        </figure>
+        <figure class="listen__item">
+          <figcaption>High-quality model (44.1 kHz)</figcaption>
+          <audio controls preload="none" src="../assets/audio/p232_036-hq-44k.wav"></audio>
+        </figure>
+      </div>
+    </section>
+
+    <div class="prose">
+      <h2>So here is what I did</h2>
+
+      <p>This one was all me: no group members, and I wrote every line of the code, from the data validation scripts all the way to the training loop and the inference tools. The goal is pretty simple to say and pretty hard to do. Take a recording of someone talking with a bunch of junk in the background (traffic, other people talking, wind, electronic hum), and give back just their voice, as cleanly as possible, using a neural network I trained myself.</p>
+
+      <p>I trained it on the University of Edinburgh’s Noisy Speech Database, which has 11,572 pairs of the exact same recording: one clean, and one with noise mixed in, from 28 different speakers. The model learns the “difference” between the noisy and clean versions, and then has to figure out that difference on its own for audio it has never heard before.</p>
+
+      <h2>How it works</h2>
+
+      <p>The model never actually looks at the raw audio samples. Noise is really a frequency problem, so first, every file goes through a short-time Fourier transform (STFT). That chops the audio into tiny 32 ms frames (512 samples at 16 kHz) and breaks each frame into 257 frequency bins, so a recording turns into a grid of little spectral pieces, one column per frame.</p>
+    </div>
+
+    <figure class="article__figure pipeline">
+      <svg class="pipeline__svg" viewBox="0 40 1100 132" role="img" aria-labelledby="pipe-title">
+        <title id="pipe-title">Noisy audio goes into a short-time Fourier transform. The LSTM turns those frames into a mask with a weight from 0 to 1 per frequency bin, which multiplies the noisy spectrum. An inverse STFT turns the result back into clean audio.</title>
+        <defs>
+          <marker id="pipe-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M0 0L10 5L0 10Z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <g class="pipe-wire">
+          <path d="M140 80H186" marker-end="url(#pipe-head)"/>
+          <path d="M300 80H376" marker-end="url(#pipe-head)"/>
+          <path d="M500 80H556" marker-end="url(#pipe-head)"/>
+          <path d="M680 80H736" marker-end="url(#pipe-head)"/>
+          <path d="M780 80H816" marker-end="url(#pipe-head)"/>
+          <path d="M950 80H976" marker-end="url(#pipe-head)"/>
+          <path d="M338 80V160H760V104" marker-end="url(#pipe-head)"/>
+        </g>
+        <circle class="pipe-dot" cx="338" cy="80" r="5"/>
+        <g class="pipe-box">
+          <rect x="10" y="52" width="130" height="56" rx="10"/>
+          <rect x="190" y="52" width="110" height="56" rx="10"/>
+          <rect x="380" y="52" width="120" height="56" rx="10"/>
+          <rect x="560" y="52" width="120" height="56" rx="10"/>
+          <circle cx="760" cy="80" r="20"/>
+          <rect x="820" y="52" width="130" height="56" rx="10"/>
+          <rect x="980" y="52" width="110" height="56" rx="10"/>
+        </g>
+        <g class="pipe-text">
+          <text x="75" y="86">Noisy audio</text>
+          <text x="245" y="86">STFT</text>
+          <text x="440" y="86">LSTM</text>
+          <text x="620" y="86">Mask</text>
+          <text x="760" y="88">&#215;</text>
+          <text x="885" y="86">Inverse STFT</text>
+          <text x="1035" y="86">Clean audio</text>
+        </g>
+        <g class="pipe-note">
+          <text x="440" y="132">past (and future) frames</text>
+          <text x="620" y="132">0 to 1 per bin</text>
+          <text x="549" y="152">noisy spectrum, original phase</text>
+        </g>
+      </svg>
+    </figure>
+
+    <div class="prose">
+      <p>Then the LSTM walks through those frames in order, and for every single bin in every frame, it infers a weight between 0 and 1 for the mask. Basically, “how much of this little piece is voice?” Multiply the noisy spectrum by the mask (keeping the original phase), run an inverse STFT, and out comes the clean audio.</p>
+    </div>
+
+    <figure class="article__figure shot">
+      <picture><source type="image/webp" srcset="../assets/img/denoise/encode.webp"><img class="shot__img" src="../assets/img/denoise/encode.png" width="1400" height="179" loading="lazy" alt="Terminal output showing an encoded file’s array shape: 257 frequency bins by its number of time frames"></picture>
+      <figcaption class="board-figure__caption">One of the encoded files: 257 frequency bins by however many 32 ms frames the recording has.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <p>Why an LSTM? Noise changes over time, but between two 32 ms frames it barely changes at all, so knowing what the mask was a moment ago makes it way easier to guess what it should be now. That makes it a sequence problem, which is exactly what recurrent neural networks are for. A plain RNN would basically forget anything more than a few frames back (vanishing gradients: hundreds of numbers smaller than 1 multiplied together end up as nearly 0), and a single file has hundreds of frames. An LSTM’s cell state adds instead of multiplies, so it can keep context from way earlier in the recording.</p>
+
+      <h2>Two versions</h2>
+
+      <p>I trained two separate models, because “best possible quality” and “works live” pull in opposite directions.</p>
+    </div>
+
+    <div class="versions">
+      <section class="version" aria-labelledby="v-rt">
+        <h3 class="version__title" id="v-rt">Real-time</h3>
+        <p class="version__kind">Unidirectional (causal) LSTM</p>
+        <svg class="ctx" viewBox="0 0 280 72" aria-hidden="true"><defs><marker id="ctx-head" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="currentColor"/></marker></defs><rect class="ctx-frame ctx-frame--used" x="8" y="26" width="22" height="22" rx="4"/><rect class="ctx-frame ctx-frame--used" x="38" y="26" width="22" height="22" rx="4"/><rect class="ctx-frame ctx-frame--used" x="68" y="26" width="22" height="22" rx="4"/><rect class="ctx-frame ctx-frame--used" x="98" y="26" width="22" height="22" rx="4"/><rect class="ctx-frame ctx-frame--now" x="128" y="26" width="22" height="22" rx="4"/><rect class="ctx-frame ctx-frame--unknown" x="158" y="26" width="22" height="22" rx="4"/><rect class="ctx-frame ctx-frame--unknown" x="188" y="26" width="22" height="22" rx="4"/><rect class="ctx-frame ctx-frame--unknown" x="218" y="26" width="22" height="22" rx="4"/><rect class="ctx-frame ctx-frame--unknown" x="248" y="26" width="22" height="22" rx="4"/><path class="ctx-arrow" d="M38 22 Q80 2 122 22" marker-end="url(#ctx-head)"/><text x="53" y="66">past</text><text x="139" y="66">now</text><text x="225" y="66">not here yet</text></svg>
+        <p>Only ever uses past frames, so it can clean up audio live as it comes in, like in conference call software where the future hasn’t happened yet. This is the one I think would actually get used in the real world.</p>
+        <dl class="version__specs">
+          <div><dt>Context</dt><dd>Past frames only</dd></div>
+          <div><dt>Sample rate</dt><dd>16 kHz (the important part of the hearing range for speech)</dd></div>
+          <div><dt>Frame size</dt><dd>512 samples (32 ms)</dd></div>
+          <div><dt>Training</dt><dd>25 epochs, batch size 4</dd></div>
+        </dl>
+      </section>
+      <section class="version" aria-labelledby="v-hq">
+        <h3 class="version__title" id="v-hq">High quality</h3>
+        <p class="version__kind">Bidirectional LSTM</p>
+        <svg class="ctx" viewBox="0 0 280 72" aria-hidden="true"><defs><marker id="ctx-head" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="currentColor"/></marker></defs><rect class="ctx-frame ctx-frame--used" x="8" y="26" width="22" height="22" rx="4"/><rect class="ctx-frame ctx-frame--used" x="38" y="26" width="22" height="22" rx="4"/><rect class="ctx-frame ctx-frame--used" x="68" y="26" width="22" height="22" rx="4"/><rect class="ctx-frame ctx-frame--used" x="98" y="26" width="22" height="22" rx="4"/><rect class="ctx-frame ctx-frame--now" x="128" y="26" width="22" height="22" rx="4"/><rect class="ctx-frame ctx-frame--used" x="158" y="26" width="22" height="22" rx="4"/><rect class="ctx-frame ctx-frame--used" x="188" y="26" width="22" height="22" rx="4"/><rect class="ctx-frame ctx-frame--used" x="218" y="26" width="22" height="22" rx="4"/><rect class="ctx-frame ctx-frame--used" x="248" y="26" width="22" height="22" rx="4"/><path class="ctx-arrow" d="M38 22 Q80 2 122 22" marker-end="url(#ctx-head)"/><path class="ctx-arrow" d="M242 22 Q200 2 158 22" marker-end="url(#ctx-head)"/><text x="53" y="66">past</text><text x="139" y="66">now</text><text x="225" y="66">future</text></svg>
+        <p>Uses past AND future frames to figure out each one, so it needs the whole file first. It’s for cleaning up recordings after the fact, and it sounds noticeably better. It was honestly surprising how much detail it dug out of the voices that the noise had been covering up.</p>
+        <dl class="version__specs">
+          <div><dt>Context</dt><dd>Past and future frames</dd></div>
+          <div><dt>Sample rate</dt><dd>44.1 kHz (the full hearing range)</dd></div>
+          <div><dt>Frame size</dt><dd>2048 samples (about the same window length in time)</dd></div>
+          <div><dt>Training</dt><dd>32 epochs, batch size 8</dd></div>
+        </dl>
+      </section>
+    </div>
+
+    <div class="prose">
+      <p>Even the high-quality model runs way faster than real time on most computers, so cleaning up a whole recording takes much less time than listening to it.</p>
+
+      <h2>Making sure the data is actually good</h2>
+
+      <p>Before training anything, I wrote a validation script that checks every pair: does each clean file have a noisy partner, and is anything silent (nothing louder than &minus;40 dBFS), clipped, way too short (under 1 second), at the wrong sample rate, or carrying a DC offset? The Edinburgh dataset is super well curated, so nothing in it actually failed. That’s not a great test of a validation script though, so I broke the dataset on purpose (deleted 8 partner files, added silent files, a full-scale square wave, and tiny white noise clips) and made sure it caught every single one.</p>
+    </div>
+
+    <div class="figure-pair">
+      <figure class="shot">
+        <picture><source type="image/webp" srcset="../assets/img/denoise/unpaired.webp"><img class="shot__img" src="../assets/img/denoise/unpaired.png" width="1034" height="482" loading="lazy" alt="Terminal output warning that 8 unpaired files with no partner will be skipped"></picture>
+        <figcaption class="board-figure__caption">Catching the 8 files I deleted on purpose.</figcaption>
+      </figure>
+      <figure class="shot">
+        <picture><source type="image/webp" srcset="../assets/img/denoise/ideal.webp"><img class="shot__img" src="../assets/img/denoise/ideal.png" width="1034" height="364" loading="lazy" alt="Terminal summary for the real dataset: 11,572 paired inputs, 11,572 kept, 0 dropped"></picture>
+        <figcaption class="board-figure__caption">The real dataset: all 11,572 pairs kept.</figcaption>
+      </figure>
+    </div>
+
+    <div class="prose">
+      <p>I also split the training and validation data by speaker instead of by file, so no voice shows up in both (24 speakers to train on, 4 held out). Otherwise the model could just get really good at the training speakers’ voices, and the validation scores would look better than it would actually do on a stranger.</p>
+    </div>
+
+    <figure class="article__figure shot shot--narrow">
+      <picture><source type="image/webp" srcset="../assets/img/denoise/split.webp"><img class="shot__img" src="../assets/img/denoise/split.png" width="736" height="308" loading="lazy" alt="Terminal output: 4 validation speakers, 9964 training utterances from 24 speakers, 1608 validation utterances, and an empty speaker overlap"></picture>
+      <figcaption class="board-figure__caption">Four speakers held out for validation, and zero overlap.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h2>Training and results</h2>
+
+      <p>Recordings are all different lengths, so each batch gets padded to the longest one, and then PyTorch’s sequence packing plus a masked MSE loss make sure the padding never counts toward anything. Training uses the Adam optimizer, saves a checkpoint every epoch (every single one is in the repo), and I built a grid search for the hyperparameters (hidden size, number of layers, learning rate, dropout, and weight decay) so I didn’t have to guess.</p>
+
+      <p>The first few epochs sounded garbled and watery (totally unintelligible), but by the last ten, the output was almost always clearer than the noisy input. Both final models ended up with ROC-AUC &ge; 0.99995, MSE &le; 10<sup>&minus;6</sup>, and loss &le; 4 &times; 10<sup>&minus;4</sup>. These learning curves are from the real-time run:</p>
+    </div>
+
+    <div class="figure-pair">
+      <figure class="shot">
+        <picture><source type="image/webp" srcset="../assets/img/denoise/loss.webp"><img class="shot__img" src="../assets/img/denoise/loss.png" width="883" height="667" loading="lazy" alt="Learning curve: training and validation loss dropping quickly, then flattening out over 25 epochs"></picture>
+        <figcaption class="board-figure__caption">Loss: a fast drop, then small refinements.</figcaption>
+      </figure>
+      <figure class="shot">
+        <picture><source type="image/webp" srcset="../assets/img/denoise/mse.webp"><img class="shot__img" src="../assets/img/denoise/mse.png" width="883" height="667" loading="lazy" alt="Learning curve: training and validation mean squared error over 25 epochs"></picture>
+        <figcaption class="board-figure__caption">MSE, with training and validation staying close (no overfitting).</figcaption>
+      </figure>
+    </div>
+
+    <div class="prose">
+      <p>Denoising is really a regression problem, but if you threshold the predicted mask values, you can check how often each bin lands on the right side. Basically no false positives for either model, and the high-quality one catches a bit more of the “keep this” bins (92.9% vs 91.4%):</p>
+    </div>
+
+    <div class="figure-pair">
+      <figure class="shot">
+        <picture><source type="image/webp" srcset="../assets/img/denoise/confusion-realtime.webp"><img class="shot__img" src="../assets/img/denoise/confusion-realtime.png" width="750" height="600" loading="lazy" alt="Normalized confusion matrix for the real-time model at epoch 25: 1.000 true negatives, 0.914 true positives"></picture>
+        <figcaption class="board-figure__caption">Real-time model, best epoch (25).</figcaption>
+      </figure>
+      <figure class="shot">
+        <picture><source type="image/webp" srcset="../assets/img/denoise/confusion-hq.webp"><img class="shot__img" src="../assets/img/denoise/confusion-hq.png" width="750" height="600" loading="lazy" alt="Normalized confusion matrix for the high-quality model at epoch 32: 1.000 true negatives, 0.929 true positives"></picture>
+        <figcaption class="board-figure__caption">High-quality model, best epoch (32).</figcaption>
+      </figure>
+    </div>
+
+    <!-- A low-pass filter, for a denoiser -->
+    <div class="wire" aria-hidden="true">
+      <svg class="wire__part" width="140" height="56" viewBox="0 0 140 56">
+        <text x="70" y="9">FL1</text>
+        <path d="M0 28H45M95 28H140"/>
+        <path class="wire__fill" d="M45 13H95V43H45Z"/>
+        <path d="M53 23q4.5-6 9 0t9 0t9 0t9 0M53 35q4.5-6 9 0t9 0t9 0t9 0M58 41L84 29"/>
+        <text x="70" y="55">LPF</text>
+      </svg>
+    </div>
+
+    <section class="talk" aria-labelledby="talk-title">
+      <h2 class="talk__title" id="talk-title">Do you want to talk about this one too?</h2>
+      <p class="talk__text">I definitely do!!!</p>
+      <div class="talk__actions">
+        <a class="button" href="mailto:skylar.denno@gmail.com?subject=Your%20speech%20denoiser">Email me</a>
+        <a class="button button--quiet" href="https://github.com/skylar-slideshows/ML_denoise" target="_blank" rel="noopener">See the code on GitHub</a>
+        <a class="button button--quiet" href="https://github.com/skylar-slideshows/ML_denoise/blob/main/FINAL_REPORT.pdf" target="_blank" rel="noopener">Read the full report</a>
+      </div>
+    </section>
+
+    <!-- Schematic title block. Update the date and rev when you change the page. -->
+    <footer class="title-block" aria-hidden="true">
+      <p class="title-block__wide"><span>Sheet:</span> /denoise/<br><span>File:</span> denoise/index.html</p>
+      <p class="title-block__wide title-block__title"><span>Title:</span> LSTM speech denoiser</p>
+      <p><span>Size:</span> Responsive</p>
+      <p><span>Date:</span> Nov 2026</p>
+      <p><span>Rev:</span> 01</p>
+      <p class="title-block__wide">Powered by curiosity</p>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <a href="../">Back to the portfolio</a>
+  </footer>
+</body>
+</html>

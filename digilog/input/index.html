@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Input card | Digilog | Skylar Denno</title>
+  <meta name="description" content="Interactive 3D model of the Input card. One of the five analog mini-boards in Digilog.">
+  <link rel="canonical" href="https://skylar.solutions/digilog/input/">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ece8fa">
+
+  <!-- Apply the saved (or system) theme before first paint -->
+  <script>
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem("theme"); } catch (e) {}
+      if (theme !== "light" && theme !== "dark") {
+        theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://skylar.solutions/digilog/input/">
+  <meta property="og:site_name" content="Skylar Denno">
+  <meta property="og:title" content="Input card | Digilog">
+  <meta property="og:description" content="One of the five analog mini-boards in Digilog, in 3D.">
+  <meta property="og:image" content="https://skylar.solutions/assets/img/input-card.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
+  <link rel="stylesheet" href="../../assets/site.css?v=20261107">
+  <script src="../../assets/site.js?v=20261107" defer></script>
+  <script src="../../assets/board-viewer.js?v=20261107" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <a class="site-header__home" href="../../">Skylar Denno</a>
+    <div class="site-header__end">
+      <a href="mailto:skylar.denno@gmail.com">Email me</a>
+      <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode">
+        <span class="theme-switch__thumb" aria-hidden="true">
+          <svg class="theme-switch__icon theme-switch__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+          </svg>
+          <svg class="theme-switch__icon theme-switch__moon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Drawn as schematic sheet "/digilog/input/" -->
+  <main class="sheet article" id="main">
+    <div class="sheet-frame" aria-hidden="true"></div>
+
+    <header class="article__intro">
+      <p class="crumbs"><a href="../">Digilog</a></p>
+      <h1 class="article__title">Input card</h1>
+      <p class="article__meta">One of the five analog mini-boards in Digilog</p>
+    </header>
+
+    <!-- Interactive 3D model (assets/board-viewer.js). Rebuild the .bin with tools/step-to-mesh.mjs. -->
+    <figure class="board-figure board-figure--solo">
+      <div class="board-viewer" data-board-viewer data-src="../../assets/models/input-card.bin?v=20261107">
+        <img class="board-viewer__poster" src="../../assets/img/input-card.jpg" width="1600" height="900" alt="3D render of the Input card circuit board">
+        <canvas class="board-viewer__canvas" tabindex="0" role="img"
+                aria-label="Interactive 3D model of the Input card. Arrow keys rotate, Shift with arrows pans, plus and minus zoom, 0 resets the view."></canvas>
+        <p class="board-viewer__status" data-viewer-status role="status" hidden></p>
+        <button class="board-viewer__reset" type="button" data-viewer-reset hidden>Reset view</button>
+      </div>
+      <figcaption class="board-figure__caption">Rendered from its STEP model. Drag to rotate, scroll or pinch to zoom, and right-drag or use two fingers to pan.</figcaption>
+    </figure>
+
+    <nav class="card-nav" aria-label="The five mini-boards">
+      <ul>
+        <li><a href="../input/" aria-current="page">Input card</a></li>
+        <li><a href="../eq/">EQ card</a></li>
+        <li><a href="../comp/">Comp card</a></li>
+        <li><a href="../sends/">Sends card</a></li>
+        <li><a href="../output/">Output (fader VCA)</a></li>
+      </ul>
+    </nav>
+
+    <!-- Schematic title block. Update the date and rev when you change the page. -->
+    <footer class="title-block" aria-hidden="true">
+      <p class="title-block__wide"><span>Sheet:</span> /digilog/input/<br><span>File:</span> digilog/input/index.html</p>
+      <p class="title-block__wide title-block__title"><span>Title:</span> Input card</p>
+      <p><span>Size:</span> Responsive</p>
+      <p><span>Date:</span> Nov 2026</p>
+      <p><span>Rev:</span> 01</p>
+      <p class="title-block__wide">Powered by curiosity</p>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <a href="../">Back to Digilog</a>
+  </footer>
+</body>
+</html>

@@ -37,9 +37,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
-  <link rel="stylesheet" href="assets/site.css">
-  <script src="assets/site.js" defer></script>
-  <script src="assets/pcb-traces.js" defer></script>
+  <link rel="stylesheet" href="assets/site.css?v=20261107">
+  <script src="assets/site.js?v=20261107" defer></script>
+  <script src="assets/pcb-traces.js?v=20261107" defer></script>
 
   <script type="application/ld+json">
   {
@@ -178,6 +178,26 @@
               <li class="tag">STM32</li>
               <li class="tag">FreeRTOS</li>
               <li class="tag">Mixed signal PCB design</li>
+            </ul>
+            <span class="project-feature__more" aria-hidden="true">Read the write-up</span>
+          </div>
+        </article>
+
+        <!-- Second project. The playhead sweep on hover is pure CSS (site.css). -->
+        <article class="project-card">
+          <div class="project-card__media">
+            <img src="assets/img/denoise/waveform-p232_036.svg" width="1600" height="900" loading="lazy"
+                 alt="A noisy speech waveform above the same clip after denoising">
+            <span class="project-card__playhead" aria-hidden="true"></span>
+          </div>
+          <div class="project-card__body">
+            <h3 class="project-card__title"><a href="denoise/">Speech noise reduction using LSTM neural networks</a></h3>
+            <p>My solo machine learning project: an LSTM that pulls voices out of noisy recordings, in a real-time version and a high-quality version.</p>
+            <ul class="tags" aria-label="Tools used">
+              <li class="tag">Python</li>
+              <li class="tag">PyTorch</li>
+              <li class="tag">LSTM</li>
+              <li class="tag">STFT</li>
             </ul>
             <span class="project-feature__more" aria-hidden="true">Read the write-up</span>
           </div>

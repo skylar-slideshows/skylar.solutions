@@ -152,6 +152,7 @@
       }
       meshes.push({
         overlay: (flags & 1) === 1,
+        layer: ((flags >> 1) & 7) || 1,
         qmin: qmin,
         qsize: [qstep[0] * 65535, qstep[1] * 65535, qstep[2] * 65535],
         chunks: chunks,
@@ -185,6 +186,36 @@
     };
     xhr.onerror = function () { onError(new Error("network error")); };
     xhr.send();
+  }
+
+  // Pages opened straight from disk (file://) can't request data files, so the
+  // converter also writes <model>.bin.js: the same bytes as base64 in a script.
+  function loadScript(url, onDone, onError) {
+    var q = url.indexOf("?");
+    var clean = q >= 0 ? url.slice(0, q) : url;
+    var key = clean.split("/").pop();
+    var s = document.createElement("script");
+    s.src = clean + ".js" + (q >= 0 ? url.slice(q) : "");
+    s.onload = function () {
+      var store = window.__boardModels || {};
+      var b64 = store[key];
+      if (!b64) { onError(new Error("empty model script")); return; }
+      delete store[key];
+      try {
+        var bin = window.atob(b64), n = bin.length, bytes = new Uint8Array(n);
+        for (var i = 0; i < n; i++) bytes[i] = bin.charCodeAt(i);
+        onDone(bytes.buffer);
+      } catch (err) { onError(err); }
+    };
+    s.onerror = function () { onError(new Error("model script failed")); };
+    (document.head || document.documentElement).appendChild(s);
+  }
+
+  function loadModel(url, onProgress, onDone, onError) {
+    if (window.location.protocol === "file:") { loadScript(url, onDone, onError); return; }
+    load(url, onProgress, onDone, function (err) {
+      loadScript(url, onDone, function () { onError(err); });
+    });
   }
 
   /* ---------------------------------------------------------------------- */
@@ -277,8 +308,26 @@
       resetView();
     }
 
+    // The drawing size always comes from the viewer box, never from the canvas
+    // itself: with a missing or stale stylesheet a self-measuring canvas grows
+    // by devicePixelRatio every frame (endless scrollbars). Without the CSS
+    // layout we fall back to 16:9 of the box width.
+    var view = { w: 0, h: 0 }, sizeDirty = true;
+    function measure() {
+      var w = root.clientWidth || 640;
+      var positioned = !window.getComputedStyle || window.getComputedStyle(canvas).position === "absolute";
+      var h = positioned ? root.clientHeight : 0;
+      if (!h || h > w * 1.6) h = Math.round((w * 9) / 16);
+      view.w = w;
+      view.h = h;
+      canvas.style.width = w + "px";
+      canvas.style.height = h + "px";
+      sizeDirty = false;
+    }
+
     function fitDistance() {
-      var aspect = canvas.clientWidth / Math.max(1, canvas.clientHeight) || 1.6;
+      if (sizeDirty || !view.w) measure();
+      var aspect = view.w / Math.max(1, view.h) || 1.6;
       var fovX = 2 * Math.atan(Math.tan(FOV / 2) * aspect);
       // wide frames can crop in closer; narrow (phone) frames back off so the long board fits
       var k = 0.7 + 0.25 * Math.max(0, Math.min(1, (1.78 - aspect) / 0.6));
@@ -319,7 +368,7 @@
 
     function pan(dx, dy) {
       var b = cameraBasis();
-      var scale = (2 * distance * Math.tan(FOV / 2)) / Math.max(1, canvas.clientHeight);
+      var scale = (2 * distance * Math.tan(FOV / 2)) / Math.max(1, view.h);
       target = vcombo(target, 1, b.right, -dx * scale, b.up, dy * scale);
       // don't let the model wander off completely
       for (var k = 0; k < 3; k++) target[k] = Math.max(home[k] - radius, Math.min(home[k] + radius, target[k]));
@@ -333,8 +382,9 @@
 
     /* -- Drawing ------------------------------------------------------------ */
     function resize() {
-      var w = Math.max(1, Math.round(canvas.clientWidth * dpr));
-      var h = Math.max(1, Math.round(canvas.clientHeight * dpr));
+      if (sizeDirty || !view.w) measure();
+      var w = Math.max(1, Math.min(4096, Math.round(view.w * dpr)));
+      var h = Math.max(1, Math.min(4096, Math.round(view.h * dpr)));
       if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w;
         canvas.height = h;
@@ -372,8 +422,9 @@
         gl.uniform3fv(loc.u_qmin, mesh.qmin);
         gl.uniform3fv(loc.u_qsize, mesh.qsize);
         if (mesh.overlay) {
+          // thin layers (copper, pads, silkscreen) stack toward the camera in order
           gl.enable(gl.POLYGON_OFFSET_FILL);
-          gl.polygonOffset(-1, -4);
+          gl.polygonOffset(-1 * mesh.layer, -4 * mesh.layer);
         }
         for (var c = 0; c < mesh.chunks.length; c++) {
           var ch = mesh.chunks[c];
@@ -617,7 +668,7 @@
         return;
       }
       setStatus("Loading 3D model…");
-      load(src, function (loaded, total) {
+      loadModel(src, function (loaded, total) {
         if (total) setStatus("Loading 3D model… " + Math.round((loaded / total) * 100) + "%");
         else setStatus("Loading 3D model… " + (loaded / 1048576).toFixed(1) + " MB");
       }, function (data) {
@@ -650,11 +701,12 @@
     }, false);
 
     if (window.addEventListener) {
-      window.addEventListener("resize", requestRender);
-      window.addEventListener("orientationchange", requestRender);
+      var onResize = function () { sizeDirty = true; requestRender(); };
+      window.addEventListener("resize", onResize);
+      window.addEventListener("orientationchange", onResize);
       document.addEventListener("visibilitychange", function () { if (!document.hidden) requestRender(); });
     }
-    if (window.ResizeObserver) new window.ResizeObserver(function () { requestRender(); }).observe(canvas);
+    if (window.ResizeObserver) new window.ResizeObserver(function () { sizeDirty = true; requestRender(); }).observe(root);
 
     // Load when the viewer gets near the screen; pause drawing while it's off screen.
     if (window.IntersectionObserver) {

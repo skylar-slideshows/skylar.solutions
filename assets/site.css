@@ -1200,6 +1200,414 @@ a:hover {
   line-height: 1.55;
 }
 
+/* Denoise page ------------------------------------------------------------------ */
+.prose + .article__figure {
+  margin-top: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.wave-hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+
+.listen {
+  max-width: 44rem;
+  margin: 0 auto clamp(2.5rem, 6vw, 3.5rem);
+}
+
+.listen__title {
+  --casl: 0.6;
+  font-size: 1.25rem;
+  font-weight: 750;
+}
+
+.listen__lead {
+  margin-top: 0.35rem;
+  color: var(--ink-soft);
+}
+
+.listen__grid {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.listen__item {
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--sunk);
+}
+
+.listen__item figcaption {
+  margin-bottom: 0.45rem;
+  font-size: 0.9375rem;
+  font-weight: 650;
+}
+
+.listen__item audio {
+  display: block;
+  width: 100%;
+}
+
+/* Signal-chain diagram, drawn like the rest of the schematic */
+.pipeline {
+  overflow-x: auto;
+}
+
+.pipeline__svg {
+  display: block;
+  width: 100%;
+  min-width: 640px;
+  height: auto;
+  color: var(--accent);
+}
+
+.pipe-wire path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+}
+
+.pipe-dot {
+  fill: var(--accent);
+}
+
+.pipe-box rect,
+.pipe-box circle {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+  stroke-width: 2.5;
+}
+
+.pipe-text text {
+  fill: var(--ink);
+  font: 700 17px var(--font);
+  text-anchor: middle;
+}
+
+.pipe-note text {
+  fill: var(--label);
+  font: 600 13px var(--font);
+  text-anchor: middle;
+}
+
+/* The two models side by side */
+.versions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 1rem;
+  max-width: 52rem;
+  margin: clamp(1.75rem, 4vw, 2.5rem) auto clamp(2rem, 5vw, 3rem);
+}
+
+.version {
+  padding: clamp(1.25rem, 3vw, 1.6rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--sunk);
+}
+
+.version__title {
+  --casl: 0.6;
+  font-size: 1.35rem;
+  font-weight: 780;
+}
+
+.version__kind {
+  margin-top: 0.2rem;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+  font-weight: 650;
+}
+
+.ctx {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  margin: 1rem 0;
+  color: var(--accent);
+}
+
+.ctx-frame {
+  stroke-width: 2;
+}
+
+.ctx-frame--now {
+  fill: var(--button);
+  stroke: var(--button);
+}
+
+.ctx-frame--used {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+}
+
+.ctx-frame--unknown {
+  fill: none;
+  stroke: var(--line);
+  stroke-dasharray: 4 3;
+}
+
+.ctx-arrow {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.ctx text {
+  fill: var(--label);
+  font: 600 11px var(--font);
+  text-anchor: middle;
+}
+
+.version__specs {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1.1rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.version__specs div {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 0.75rem;
+}
+
+.version__specs dt {
+  color: var(--label);
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+.version__specs dd {
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+/* Pictures from the report */
+.figure-pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 1rem;
+  align-items: start;
+  max-width: 52rem;
+  margin: clamp(1.5rem, 4vw, 2.25rem) auto clamp(2rem, 5vw, 3rem);
+}
+
+.figure-pair > .shot {
+  margin: 0;
+}
+
+.shot__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.shot--narrow {
+  max-width: 40rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Home page: second project card, with a playhead that sweeps on hover */
+.project-card {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  margin-top: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+@media (min-width: 1100px) {
+  .project-card {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+}
+
+.project-card__media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #1b1830; /* matches the waveform image */
+}
+
+.project-card__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.project-card__playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 4%;
+  width: 2px;
+  background: #f4f0ff;
+  box-shadow: 0 0 10px rgba(185, 166, 255, 0.9);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.project-card:hover .project-card__playhead,
+.project-card:focus-within .project-card__playhead {
+  opacity: 1;
+  animation: playhead 2.84s linear infinite; /* the clip's real length */
+}
+
+@keyframes playhead {
+  from { left: 4%; }
+  to { left: 96%; }
+}
+
+.project-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 26px 50px -32px var(--shadow);
+}
+
+.project-card__body {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 0.8rem;
+  padding: clamp(1.1rem, 3vw, 1.5rem);
+}
+
+.project-card__title {
+  --casl: 0.5;
+  font-size: 1.2rem;
+  line-height: 1.25;
+}
+
+.project-card__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.project-card__title a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+@supports selector(:has(*)) {
+  .project-card__title a:focus-visible {
+    outline: none;
+  }
+
+  .project-card:has(a:focus-visible) {
+    outline: 3px solid var(--link);
+    outline-offset: 4px;
+  }
+}
+
+/* Digilog page: links to the mini-board pages */
+.board-cards {
+  margin: 0 0 clamp(2.5rem, 6vw, 3.5rem);
+}
+
+.board-cards__title {
+  --casl: 0.6;
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  font-weight: 750;
+}
+
+.board-cards__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.board-card {
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.board-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #e7e5ee; /* same fixed backdrop as the 3D viewer */
+}
+
+.board-card span {
+  display: block;
+  padding: 0.55rem 0.8rem 0.65rem;
+  font-size: 0.9375rem;
+  font-weight: 650;
+}
+
+.board-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 16px 30px -24px var(--shadow);
+}
+
+/* Mini-board pages: breadcrumb, solo viewer, and links between the five cards */
+.crumbs {
+  margin-bottom: 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 650;
+}
+
+.board-figure--solo {
+  margin-top: 0;
+}
+
+.card-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card-nav a {
+  display: inline-block;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--accent-line);
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--ink);
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.card-nav a:hover {
+  border-color: var(--accent);
+}
+
+.card-nav a[aria-current="page"] {
+  border-color: var(--button);
+  background: var(--button);
+  color: #fff;
+}
+
 /* 9. Reduced motion: traces simply fade in; no drawing, pulses or slides ---- */
 @media (prefers-reduced-motion: reduce) {
   .pcb-trace,
@@ -1229,6 +1637,10 @@ a:hover {
 
   .pcb-pulse {
     display: none;
+  }
+
+  .project-card__playhead {
+    animation: none !important;
   }
 
   .project-feature,
