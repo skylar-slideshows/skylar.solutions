@@ -35,9 +35,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
-  <link rel="stylesheet" href="../../assets/site.css?v=20261107">
-  <script src="../../assets/site.js?v=20261107" defer></script>
-  <script src="../../assets/board-viewer.js?v=20261107" defer></script>
+  <link rel="stylesheet" href="../../assets/site.css?v=20261107b">
+  <script src="../../assets/site.js?v=20261107b" defer></script>
+  <script src="../../assets/board-viewer.js?v=20261107b" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -72,7 +72,7 @@
 
     <!-- Interactive 3D model (assets/board-viewer.js). Rebuild the .bin with tools/step-to-mesh.mjs. -->
     <figure class="board-figure board-figure--solo">
-      <div class="board-viewer" data-board-viewer data-src="../../assets/models/input-card.bin?v=20261107">
+      <div class="board-viewer" data-board-viewer data-src="../../assets/models/input-card.bin?v=20261107b">
         <img class="board-viewer__poster" src="../../assets/img/input-card.jpg" width="1600" height="900" alt="3D render of the Input card circuit board">
         <canvas class="board-viewer__canvas" tabindex="0" role="img"
                 aria-label="Interactive 3D model of the Input card. Arrow keys rotate, Shift with arrows pans, plus and minus zoom, 0 resets the view."></canvas>
@@ -81,6 +81,61 @@
       </div>
       <figcaption class="board-figure__caption">Rendered from its STEP model. Drag to rotate, scroll or pinch to zoom, and right-drag or use two fingers to pan.</figcaption>
     </figure>
+
+    <section class="card-section" aria-labelledby="schematic-title">
+      <h2 class="card-section__title" id="schematic-title">How it works</h2>
+      <p class="card-section__lead">A simplified schematic: just the signal path, with the details left out. Dashed lines are control voltages from the console’s controller.</p>
+      <figure class="schematic">
+        <svg class="sch" viewBox="0 0 1100 420" role="img" aria-labelledby="sch-t sch-d"><title id="sch-t">Input card, simplified schematic</title><desc id="sch-d">Mic, line and Hi-Z inputs each get their own amplifier. A selector picks one, then a buffer, a switchable polarity flip, a switchable high-pass filter, and a VCA that sets the gain from a control voltage, before the output.</desc><defs><marker id="sch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="currentColor"/></marker></defs><path class="sch-port" d="M69.38 79 L108 79 L118 92 L108 105 L69.38 105Z"/><text class="sch-pt" x="79.38" y="96.5" text-anchor="start">Mic</text><path class="sch-port" d="M61.84 201 L108 201 L118 214 L108 227 L61.84 227Z"/><text class="sch-pt" x="71.84" y="218.5" text-anchor="start">Line</text><path class="sch-port" d="M61.84 323 L108 323 L118 336 L108 349 L61.84 349Z"/><text class="sch-pt" x="71.84" y="340.5" text-anchor="start">Hi-Z</text><text class="sch-t" x="160" y="26" text-anchor="middle">+48 V</text><text class="sch-s" x="186" y="26" text-anchor="start">phantom, only on when the mic is selected</text><path class="sch-w" d="M160 34 L160 44"/><circle class="sch-contact" cx="160" cy="48" r="4"/><circle class="sch-contact" cx="160" cy="72" r="4"/><path class="sch-w" d="M157 50 L146 68"/><path class="sch-w" d="M160 76 L160 92"/><circle class="sch-dot" cx="160" cy="92" r="4.5"/><path class="sch-w" d="M118 92 L200 92"/><path class="sch-w" d="M118 214 L200 214"/><path class="sch-w" d="M118 336 L200 336"/><path class="sch-p" d="M200 59 L276 92 L200 125Z"/><text class="sch-t" x="230.4" y="145" text-anchor="middle">INA849</text><text class="sch-s" x="230.4" y="161" text-anchor="middle">mic preamp, relay-set gain</text><path class="sch-p" d="M200 181 L276 214 L200 247Z"/><text class="sch-t" x="230.4" y="267" text-anchor="middle">INA137</text><text class="sch-s" x="230.4" y="283" text-anchor="middle">line receiver</text><path class="sch-p" d="M200 303 L276 336 L200 369Z"/><text class="sch-t" x="230.4" y="389" text-anchor="middle">OPA1679</text><text class="sch-s" x="230.4" y="405" text-anchor="middle">Hi-Z buffer</text><path class="sch-w" d="M276 92 L330 92 L330 174 L370 174"/><path class="sch-w" d="M276 214 L370 214"/><path class="sch-w" d="M276 336 L330 336 L330 254 L370 254"/><circle class="sch-contact" cx="370" cy="174" r="4"/><circle class="sch-contact" cx="370" cy="214" r="4"/><circle class="sch-contact" cx="370" cy="254" r="4"/><circle class="sch-contact" cx="408" cy="214" r="4"/><path class="sch-w" d="M405 214 L375 177"/><text class="sch-s" x="389" y="156" text-anchor="middle">source select</text><path class="sch-w" d="M408 214 L432 214"/><path class="sch-p" d="M432 190 L488 214 L432 238Z"/><text class="sch-t" x="454.4" y="258" text-anchor="middle">buffer</text><path class="sch-w" d="M488 214 L516 214"/><circle class="sch-dot" cx="516" cy="214" r="4.5"/><path class="sch-w" d="M516 214 L516 174 L610 174"/><path class="sch-w" d="M516 214 L516 254 L540 254"/><path class="sch-p" d="M540 234 L586 254 L540 274Z"/><text class="sch-in" x="556.56" y="259" text-anchor="middle">−1</text><path class="sch-w" d="M586 254 L610 254"/><circle class="sch-contact" cx="610" cy="174" r="4"/><circle class="sch-contact" cx="610" cy="254" r="4"/><circle class="sch-contact" cx="646" cy="214" r="4"/><path class="sch-w" d="M643 214 L615 177"/><text class="sch-s" x="628" y="156" text-anchor="middle">phase</text><path class="sch-w" d="M646 214 L676 214"/><circle class="sch-dot" cx="676" cy="214" r="4.5"/><path class="sch-w" d="M676 214 L676 174 L790 174"/><path class="sch-w" d="M676 214 L676 254 L700 254"/><rect class="sch-p" x="700" y="232" width="66" height="44" rx="10"/><path class="sch-icon" d="M713.2 262.316 C727.06 262.316 729.04 245.684 737.752 245.684 L752.8 245.684"/><path class="sch-axis" d="M713.2 265.316 L752.8 265.316"/><path class="sch-w" d="M766 254 L790 254"/><text class="sch-s" x="733" y="296" text-anchor="middle">high-pass</text><circle class="sch-contact" cx="790" cy="174" r="4"/><circle class="sch-contact" cx="790" cy="254" r="4"/><circle class="sch-contact" cx="826" cy="214" r="4"/><path class="sch-w" d="M823 214 L795 177"/><text class="sch-s" x="808" y="156" text-anchor="middle">filter in/out</text><path class="sch-w" d="M826 214 L862 214"/><path class="sch-p" d="M862 179 L944 214 L862 249Z"/><path class="sch-vca" d="M868.56 255 L925.96 177" marker-end="url(#sch-arrow)"/><text class="sch-t" x="894.8" y="269" text-anchor="middle">AS2180</text><text class="sch-s" x="894.8" y="285" text-anchor="middle">VCA (gain)</text><path class="sch-cv" d="M896 92 L896 174" marker-end="url(#sch-arrow)"/><text class="sch-s" x="896" y="82" text-anchor="middle">gain CV</text><path class="sch-w" d="M944 214 L980 214"/><path class="sch-port" d="M980 201 L1018.62 201 L1028.62 214 L1018.62 227 L980 227Z"/><text class="sch-pt" x="990" y="218.5" text-anchor="start">Out</text></svg>
+      </figure>
+    </section>
+
+    <section class="card-section" aria-labelledby="layers-title">
+      <h2 class="card-section__title" id="layers-title">The copper layers</h2>
+      <p class="card-section__lead">All 4 copper layers of the board, top to bottom, drawn from the KiCad layout. Shaded areas are copper pours, labeled with the net they connect to.</p>
+      <ul class="layer-grid">
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/input-fcu.webp">
+            <img src="../../assets/img/layers/input-fcu.jpg" width="468" height="1176" loading="lazy" alt="Top copper layer (F.Cu) of the input card: parts, signal traces and +15 V, +48 V, −15 V, −2.5 V power traces, with a GND pour">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #ff6b6b"></span>Top <span class="layer__code">F.Cu</span></p>
+          <p class="layer__what">Parts, signal traces and +15 V, +48 V, −15 V, −2.5 V power traces, with a GND pour</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/input-in1cu.webp">
+            <img src="../../assets/img/layers/input-in1cu.jpg" width="468" height="1176" loading="lazy" alt="Inner 1 copper layer (In1.Cu) of the input card: solid GND (ground) plane">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #f6c945"></span>Inner 1 <span class="layer__code">In1.Cu</span></p>
+          <p class="layer__what">Solid GND (ground) plane</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/input-in2cu.webp">
+            <img src="../../assets/img/layers/input-in2cu.jpg" width="468" height="1176" loading="lazy" alt="Inner 2 copper layer (In2.Cu) of the input card: solid GND (ground) plane">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #5fd39a"></span>Inner 2 <span class="layer__code">In2.Cu</span></p>
+          <p class="layer__what">Solid GND (ground) plane</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/input-bcu.webp">
+            <img src="../../assets/img/layers/input-bcu.jpg" width="468" height="1176" loading="lazy" alt="Bottom copper layer (B.Cu) of the input card: signal traces and +15 V, −15 V power traces, with a GND pour">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #5aa7ff"></span>Bottom <span class="layer__code">B.Cu</span></p>
+          <p class="layer__what">Signal traces and +15 V, −15 V power traces, with a GND pour</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/input-all.webp">
+            <img src="../../assets/img/layers/input-all.jpg" width="468" height="1176" loading="lazy" alt="All copper layers of the input card stacked together">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch"></span>All layers</p>
+          <p class="layer__what">Every copper layer stacked, top on top</p>
+        </li>
+      </ul>
+    </section>
 
     <nav class="card-nav" aria-label="The five mini-boards">
       <ul>

@@ -1566,6 +1566,175 @@ a:hover {
   box-shadow: 0 16px 30px -24px var(--shadow);
 }
 
+/* Mini-board pages: simplified schematic and copper layer grid */
+.card-section {
+  margin: clamp(2.5rem, 6vw, 3.5rem) 0 0;
+}
+
+.card-section__title {
+  --casl: 0.6;
+  font-size: clamp(1.4rem, 3vw, 1.75rem);
+  font-weight: 780;
+}
+
+.card-section__lead {
+  max-width: 44rem;
+  margin-top: 0.45rem;
+  color: var(--ink-soft);
+}
+
+.schematic {
+  overflow-x: auto;
+  margin: 1.25rem 0 0;
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.sch {
+  display: block;
+  width: 100%;
+  min-width: 760px;
+  height: auto;
+  color: var(--accent);
+}
+
+.sch-w,
+.sch-vca {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sch-vca {
+  stroke-width: 2;
+}
+
+.sch-cv {
+  fill: none;
+  stroke: var(--label);
+  stroke-width: 1.8;
+  stroke-dasharray: 6 5;
+}
+
+.sch-p {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+  stroke-width: 2.4;
+  stroke-linejoin: round;
+}
+
+.sch-off {
+  fill: none;
+  stroke: var(--label);
+  stroke-width: 1.8;
+  stroke-dasharray: 7 6;
+}
+
+.sch-dot {
+  fill: var(--accent);
+}
+
+.sch-contact,
+.sch-port {
+  fill: var(--surface);
+  stroke: var(--accent);
+  stroke-width: 2.2;
+}
+
+.sch-icon {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+
+.sch-axis {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1.5;
+}
+
+.sch-t {
+  fill: var(--ink);
+  font: 700 15px var(--font);
+}
+
+.sch-s {
+  fill: var(--label);
+  font: 600 13px var(--font);
+}
+
+.sch-pt {
+  fill: var(--ink);
+  font: 650 13px var(--font);
+}
+
+.sch-in {
+  fill: var(--ink);
+  font: 700 13px var(--font);
+}
+
+.sch-code {
+  fill: var(--label);
+  font: 700 11px var(--font);
+  letter-spacing: 0.04em;
+}
+
+.layer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 0.9rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.layer img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  background: #14131c; /* same fixed backdrop as the renders */
+}
+
+.layer__name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.45rem;
+  margin-top: 0.6rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.layer__swatch {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 3px;
+  background: var(--sw, linear-gradient(135deg, #ff6b6b, #f6c945, #5fd39a, #5aa7ff));
+}
+
+.layer__code {
+  color: var(--label);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.layer__what {
+  margin-top: 0.2rem;
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.card-section + .card-nav {
+  margin-top: clamp(2.5rem, 6vw, 3.5rem);
+}
+
 /* Mini-board pages: breadcrumb, solo viewer, and links between the five cards */
 .crumbs {
   margin-bottom: 0.75rem;
