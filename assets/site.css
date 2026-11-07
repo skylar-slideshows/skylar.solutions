@@ -1,34 +1,93 @@
 /* ==========================================================================
    skylar.solutions: shared styles for every page
-   1. Tokens  2. Base  3. Home layout  4. Home sections  5. Project pages
-   6. PCB stage + trace animation  7. Reduced motion
+   1. Theme tokens      2. Base             3. Theme switch
+   4. Page chrome       5. Schematic sheet  6. Home page
+   7. Project pages     8. PCB stage        9. Reduced motion
    ========================================================================== */
 
-/* 1. Tokens ------------------------------------------------------------ */
+/* 1. Theme tokens --------------------------------------------------------
+   Light is the default; [data-theme="dark"] is set on <html> by the inline
+   script in each page's <head> and by the switch (assets/site.js). */
+
+/* Light: light grey with lightish purple accents */
 :root {
   color-scheme: light;
 
-  --lavender: #ece8fa;   /* page background */
-  --paper: #fcfbff;      /* main sheet */
-  --lilac: #e5dffb;      /* sidebar, call-to-action panel */
-  --lilac-soft: #f1edfe; /* tags, PCB board */
-  --line: #d6cef6;       /* borders and dividers */
-  --ink: #261f55;        /* text */
-  --ink-soft: #5e5791;   /* secondary text */
-  --indigo: #4b33c4;     /* links, buttons, focus */
-  --indigo-deep: #3a25a3;
-  --trace: #4a2da6;      /* PCB copper, the "darker purple" */
-  --pulse: #f4f0ff;      /* signal pulse travelling along a trace */
+  --bg: #ececef;            /* page */
+  --surface: #f8f8fa;       /* schematic sheets */
+  --surface-edge: transparent;
+  --panel: #e2e2e8;         /* sidebar */
+  --sunk: #efeff3;          /* panels inside a sheet */
+  --line: #d6d5dd;          /* borders */
+  --ink: #24222e;           /* text */
+  --ink-soft: #5f5c6e;      /* secondary text */
+
+  --accent: #9a86f3;        /* wires, symbols, bullets */
+  --accent-soft: #e8e3fd;   /* tag and symbol fills */
+  --accent-line: #d3c9fb;   /* tag borders */
+  --link: #5f45d6;          /* text links (contrast-safe purple) */
+  --button: #5f45d6;
+  --button-hover: #4a32bd;
+  --selection: #ddd4fe;
+  --frame: rgba(154, 134, 243, 0.55); /* sheet frame and title block */
+  --label: #7b70ad;         /* reference designators, zone markers */
+  --shadow: rgba(40, 30, 90, 0.16);
+
+  --board: #ede9fb;         /* PCB stage */
+  --board-dot: rgba(85, 55, 200, 0.18);
+  --chip-ring: rgba(36, 34, 46, 0.3);
+  --trace: #5537c8;         /* PCB copper */
+  --pulse: #ffffff;
+  --pulse-glow: none;
+
+  --switch-track: #d8d7e0;
+  --switch-thumb: #ffffff;
+  --switch-icon: #3b3946;
 
   --font: "Recursive", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-
-  --radius-sheet: 28px;
-  --radius-card: 22px;
-  --radius-chip: 14px;
+  --radius-sheet: 18px;
+  --radius-card: 14px;
+  --radius-chip: 10px;
   --gutter: clamp(1rem, 3vw, 2.5rem);
 }
 
-/* 2. Base -------------------------------------------------------------- */
+/* Dark: dark grey with indigo highlights */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #1b1b20;
+  --surface: #232329;
+  --surface-edge: #2e2e36;
+  --panel: #2a2a31;
+  --sunk: #2c2c34;
+  --line: #393944;
+  --ink: #ecebf3;
+  --ink-soft: #a7a5b6;
+
+  --accent: #6f6cf0;
+  --accent-soft: #2c2b4d;
+  --accent-line: #403e78;
+  --link: #a9aaff;
+  --button: #5f5ce8;
+  --button-hover: #4d4ad4;
+  --selection: #3d3b80;
+  --frame: rgba(111, 108, 240, 0.45);
+  --label: #8e8cd0;
+  --shadow: rgba(0, 0, 0, 0.5);
+
+  --board: #24233b;
+  --board-dot: rgba(143, 140, 255, 0.2);
+  --chip-ring: rgba(255, 255, 255, 0.1);
+  --trace: #8c89ff;
+  --pulse: #ffffff;
+  --pulse-glow: drop-shadow(0 0 4px rgba(170, 168, 255, 0.95));
+
+  --switch-track: #5552d9;
+  --switch-thumb: #121216;
+  --switch-icon: #f1f0ff;
+}
+
+/* 2. Base ---------------------------------------------------------------- */
 *,
 *::before,
 *::after {
@@ -44,11 +103,12 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  background: var(--bg);
 }
 
 body {
   margin: 0;
-  background: var(--lavender);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font);
   font-size: 1.0625rem;
@@ -78,7 +138,7 @@ p {
 }
 
 a {
-  color: var(--indigo);
+  color: var(--link);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
 }
@@ -88,12 +148,12 @@ a:hover {
 }
 
 :focus-visible {
-  outline: 3px solid var(--indigo);
+  outline: 3px solid var(--link);
   outline-offset: 3px;
 }
 
 ::selection {
-  background: #d9cefd;
+  background: var(--selection);
   color: var(--ink);
 }
 
@@ -104,7 +164,7 @@ a:hover {
   z-index: 10;
   padding: 0.6rem 1rem;
   border-radius: 999px;
-  background: var(--indigo);
+  background: var(--button);
   color: #fff;
   font-weight: 650;
   text-decoration: none;
@@ -125,35 +185,383 @@ a:hover {
 
 .tag {
   padding: 0.3rem 0.75rem;
-  border: 1px solid var(--line);
+  border: 1px solid var(--accent-line);
   border-radius: 999px;
-  background: var(--lilac-soft);
+  background: var(--accent-soft);
   font-size: 0.875rem;
   line-height: 1.3;
 }
 
-/* 3. Home layout ------------------------------------------------------- */
+/* 3. Theme switch --------------------------------------------------------
+   Light: white thumb with a monochrome sun. Dark: the thumb slides right,
+   turns black, and shows a light moon on an indigo track. */
+.theme-switch {
+  position: relative;
+  flex: none;
+  width: 56px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--switch-track);
+  cursor: pointer;
+  transition: background-color 0.35s ease, border-color 0.35s ease;
+  view-transition-name: theme-switch;
+}
+
+.theme-switch__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--switch-thumb);
+  color: var(--switch-icon);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
+  transition: transform 0.45s cubic-bezier(0.45, 1.45, 0.55, 1), background-color 0.35s ease, color 0.35s ease;
+}
+
+.theme-switch__icon {
+  grid-area: 1 / 1;
+  width: 14px;
+  height: 14px;
+  transition: opacity 0.3s ease, transform 0.45s cubic-bezier(0.45, 1.45, 0.55, 1);
+}
+
+.theme-switch__moon {
+  opacity: 0;
+  transform: rotate(-100deg) scale(0.4);
+}
+
+/* little stars that appear on the dark track */
+.theme-switch::before,
+.theme-switch::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.theme-switch::before {
+  top: 7px;
+  left: 10px;
+  width: 3px;
+  height: 3px;
+}
+
+.theme-switch::after {
+  top: 17px;
+  left: 18px;
+  width: 2px;
+  height: 2px;
+}
+
+[data-theme="dark"] .theme-switch__thumb {
+  transform: translateX(26px);
+}
+
+[data-theme="dark"] .theme-switch__sun {
+  opacity: 0;
+  transform: rotate(100deg) scale(0.4);
+}
+
+[data-theme="dark"] .theme-switch__moon {
+  opacity: 1;
+  transform: none;
+}
+
+[data-theme="dark"] .theme-switch::before,
+[data-theme="dark"] .theme-switch::after {
+  opacity: 0.85;
+  transition-delay: 0.2s;
+}
+
+/* Theme change cross-fades the page; the switch animates on its own. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+}
+
+::view-transition-old(theme-switch) {
+  display: none;
+}
+
+::view-transition-new(theme-switch) {
+  animation: none;
+}
+
+/* 4. Page chrome --------------------------------------------------------- */
+.topbar {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1rem var(--gutter) 0;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1rem var(--gutter);
+}
+
+.site-header__home {
+  --casl: 1;
+  color: var(--ink);
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.site-header__home:hover {
+  color: var(--link);
+}
+
+.site-header__end {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.site-footer {
+  padding: 1.5rem var(--gutter) 3rem;
+  text-align: center;
+  font-size: 0.9375rem;
+}
+
+/* 5. Schematic sheet ------------------------------------------------------
+   .sheet is a page of a schematic: a frame with zone markers (drawn by
+   assets/site.js), wire dividers with parts on them, and a title block in
+   the bottom-right corner. */
+.sheet {
+  --sheet-pad: clamp(1.25rem, 5vw, 2rem);
+  position: relative;
+  padding: var(--sheet-pad);
+  border: 1px solid var(--surface-edge);
+  border-radius: var(--radius-sheet);
+  background: var(--surface);
+  box-shadow: 0 30px 60px -45px var(--shadow);
+}
+
+.sheet-frame {
+  --band: 16px;
+  --cols: 6;
+  --rows: 4;
+  position: absolute;
+  inset: 12px;
+  display: none;
+  border: 1px solid var(--frame);
+  pointer-events: none;
+}
+
+.sheet-frame::before {
+  content: "";
+  position: absolute;
+  inset: var(--band);
+  border: 1px solid var(--frame);
+}
+
+.sheet-frame::after {
+  --tick-x: repeating-linear-gradient(90deg, transparent 0 calc(100% / var(--cols) - 1px), var(--frame) 0 calc(100% / var(--cols)));
+  --tick-y: repeating-linear-gradient(180deg, transparent 0 calc(100% / var(--rows) - 1px), var(--frame) 0 calc(100% / var(--rows)));
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    var(--tick-x) top / 100% var(--band) no-repeat,
+    var(--tick-x) bottom / 100% var(--band) no-repeat,
+    var(--tick-y) left / var(--band) 100% no-repeat,
+    var(--tick-y) right / var(--band) 100% no-repeat;
+}
+
+.zone {
+  position: absolute;
+  color: var(--label);
+  font-size: 10px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.zone--top,
+.zone--bottom {
+  left: calc((var(--i) + 0.5) * 100% / var(--cols));
+  transform: translateX(-50%);
+}
+
+.zone--top {
+  top: 3px;
+}
+
+.zone--bottom {
+  bottom: 3px;
+}
+
+.zone--left,
+.zone--right {
+  top: calc((var(--i) + 0.5) * 100% / var(--rows));
+  width: var(--band);
+  text-align: center;
+  transform: translateY(-50%);
+}
+
+.zone--left {
+  left: 0;
+}
+
+.zone--right {
+  right: 0;
+}
+
+@media (min-width: 720px) {
+  .sheet {
+    --sheet-pad: 3.5rem;
+  }
+
+  .sheet-frame {
+    display: block;
+  }
+}
+
+/* Title block: sits on the frame's bottom-right corner, like in KiCad */
+.title-block {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  width: min(100%, 22rem);
+  margin: 2.5rem 0 0 auto;
+  border: 1px solid var(--frame);
+  color: var(--ink);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.title-block > p {
+  padding: 0.35rem 0.6rem;
+  border-top: 1px solid var(--frame);
+}
+
+.title-block > p:first-child {
+  border-top: 0;
+}
+
+.title-block__wide {
+  grid-column: 1 / -1;
+}
+
+/* a narrow cell that follows another narrow cell gets a divider */
+.title-block > p:not(.title-block__wide) + p:not(.title-block__wide) {
+  border-left: 1px solid var(--frame);
+}
+
+.title-block span {
+  color: var(--label);
+}
+
+.title-block__title {
+  --casl: 0.5;
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.title-block__title span {
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+@media (min-width: 720px) {
+  .title-block {
+    /* land exactly on the inner frame line: 12px inset + 16px band */
+    margin-right: calc(28px - var(--sheet-pad));
+    margin-bottom: calc(28px - var(--sheet-pad));
+  }
+}
+
+/* Wire dividers: a schematic wire with one part on it */
+.wire {
+  --dot: radial-gradient(circle, var(--accent) 3px, transparent 3.5px);
+  display: flex;
+  align-items: center;
+  color: var(--accent);
+  background: var(--dot) left center / 8px 8px no-repeat, var(--dot) right center / 8px 8px no-repeat;
+}
+
+.wire::before,
+.wire::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: currentColor;
+}
+
+.wire::before {
+  margin-left: 4px;
+}
+
+.wire::after {
+  margin-right: 4px;
+}
+
+.wire__part {
+  display: block;
+  flex: none;
+  overflow: visible;
+}
+
+.wire__part path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.wire__part .wire__fill {
+  fill: var(--accent-soft);
+}
+
+.wire__part circle {
+  fill: currentColor;
+}
+
+.wire__part text {
+  --mono: 1;
+  fill: var(--label);
+  font-family: var(--font);
+  font-size: 10px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+/* 6. Home page ------------------------------------------------------------ */
 .home {
   display: grid;
   gap: clamp(1rem, 2.5vw, 1.75rem);
   align-items: start;
   max-width: 1180px;
   margin: 0 auto;
-  padding: var(--gutter);
+  padding: 1rem var(--gutter) var(--gutter);
 }
 
 @media (min-width: 960px) {
   .home {
-    grid-template-columns: minmax(280px, 330px) minmax(0, 1fr);
+    grid-template-columns: minmax(280px, 350px) minmax(0, 1fr);
   }
 }
 
 .profile {
   display: grid;
   gap: 2rem;
-  padding: clamp(1.5rem, 3vw, 2.25rem);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  border: 1px solid var(--surface-edge);
   border-radius: var(--radius-sheet);
-  background: var(--lilac);
+  background: var(--panel);
 }
 
 @media (min-width: 960px) and (min-height: 760px) {
@@ -183,15 +591,67 @@ a:hover {
   font-size: 1rem;
 }
 
-.profile .tag {
-  border-color: rgba(75, 51, 196, 0.16);
-  background: rgba(255, 255, 255, 0.6);
+/* Contact list drawn as J1, a 4-pin connector: body, pins, pin numbers */
+.contact {
+  --body: 12px;
+  --pin: 18px;
+  --pin-gap: 10px;
+  position: relative;
+  display: grid;
+  gap: 0.9rem;
+  margin: 1.4rem 0 0;
+  padding: 0.65rem 0 0.65rem calc(var(--body) + var(--pin) + var(--pin-gap));
+  counter-reset: pin;
 }
 
-.contact {
-  display: grid;
-  gap: 0.85rem;
-  margin: 0;
+.contact::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--body);
+  border: 2px solid var(--accent);
+  border-radius: 3px;
+  background: var(--accent-soft);
+}
+
+.contact::after {
+  content: "J1";
+  position: absolute;
+  top: -1.3rem;
+  left: 0;
+  color: var(--label);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  font-variation-settings: "MONO" 1, "CASL" 0;
+}
+
+.contact > div {
+  position: relative;
+  counter-increment: pin;
+}
+
+.contact > div::before {
+  content: "";
+  position: absolute;
+  top: 0.6rem;
+  left: calc(-1 * (var(--pin) + var(--pin-gap)));
+  width: var(--pin);
+  height: 2px;
+  background: var(--accent);
+}
+
+.contact > div::after {
+  content: counter(pin);
+  position: absolute;
+  top: -0.05rem;
+  left: calc(4px - var(--pin) - var(--pin-gap));
+  color: var(--label);
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1;
+  font-variation-settings: "MONO" 1, "CASL" 0;
 }
 
 .contact dt {
@@ -202,19 +662,15 @@ a:hover {
 
 .contact dd {
   margin: 0;
-  overflow-wrap: anywhere;
+  font-size: 0.9375rem;
+  overflow-wrap: break-word;
 }
 
-.sheet {
+.home-sheet {
   display: grid;
-  gap: clamp(2.5rem, 5vw, 3.5rem);
-  padding: clamp(1.5rem, 4vw, 3rem);
-  border-radius: var(--radius-sheet);
-  background: var(--paper);
-  box-shadow: 0 30px 60px -45px rgba(58, 37, 163, 0.45);
+  gap: 1.5rem;
 }
 
-/* 4. Home sections ----------------------------------------------------- */
 .section__title {
   --casl: 0.5;
   margin-bottom: 1rem;
@@ -235,13 +691,13 @@ a:hover {
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
-  background: var(--paper);
+  background: var(--surface);
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .project-feature.is-live {
-  border-color: #b9aaf2;
-  box-shadow: 0 26px 50px -32px rgba(74, 45, 166, 0.6);
+  border-color: var(--accent);
+  box-shadow: 0 26px 50px -32px var(--shadow);
 }
 
 .project-feature .pcb-stage {
@@ -274,7 +730,7 @@ a:hover {
 }
 
 .project-feature__more {
-  color: var(--indigo);
+  color: var(--link);
   font-weight: 650;
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -291,7 +747,7 @@ a:hover {
   }
 
   .project-feature:has(a:focus-visible) {
-    outline: 3px solid var(--indigo);
+    outline: 3px solid var(--link);
     outline-offset: 4px;
   }
 }
@@ -341,7 +797,7 @@ a:hover {
   content: "";
   width: 0.7rem;
   height: 0.7rem;
-  border: 3px solid var(--trace);
+  border: 3px solid var(--accent);
   border-radius: 50%;
 }
 
@@ -362,33 +818,10 @@ a:hover {
   font-variant-numeric: tabular-nums;
 }
 
-/* 5. Project pages ----------------------------------------------------- */
-.site-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 1.25rem var(--gutter);
-}
-
-.site-header__home {
-  --casl: 1;
-  color: var(--ink);
-  font-size: 1.25rem;
-  font-weight: 800;
-  text-decoration: none;
-}
-
-.site-header__home:hover {
-  color: var(--indigo);
-}
-
+/* 7. Project pages -------------------------------------------------------- */
 .article {
-  max-width: 1120px;
+  width: min(1120px, 100% - 2 * var(--gutter));
   margin: 0 auto;
-  padding: 0 var(--gutter) clamp(3rem, 8vw, 5rem);
 }
 
 .article__intro,
@@ -399,7 +832,7 @@ a:hover {
 }
 
 .article__intro {
-  padding: clamp(1.5rem, 6vw, 4rem) 0 clamp(1.75rem, 4vw, 2.75rem);
+  padding: clamp(0.5rem, 3vw, 1.5rem) 0 clamp(1.75rem, 4vw, 2.75rem);
 }
 
 .article__title {
@@ -422,7 +855,7 @@ a:hover {
 
 .article__figure .pcb-stage {
   border: 1px solid var(--line);
-  border-radius: var(--radius-sheet);
+  border-radius: var(--radius-card);
 }
 
 .prose {
@@ -456,20 +889,25 @@ a:hover {
 .prose li::before {
   content: "";
   position: absolute;
-  left: 0.15em;
   top: 0.48em;
+  left: 0.15em;
   width: 0.75em;
   height: 0.75em;
-  border: 3px solid var(--trace);
+  border: 3px solid var(--accent);
   border-radius: 50%;
 }
 
+.article .wire {
+  max-width: 44rem;
+  margin: clamp(2.5rem, 6vw, 3.5rem) auto 0;
+}
+
 .talk {
-  margin-top: clamp(3rem, 7vw, 4.5rem);
+  margin-top: clamp(2rem, 5vw, 3rem);
   padding: clamp(1.75rem, 5vw, 2.75rem);
-  border-radius: var(--radius-sheet);
-  background: var(--paper);
-  box-shadow: 0 30px 60px -45px rgba(58, 37, 163, 0.45);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--sunk);
 }
 
 .talk__title {
@@ -482,7 +920,7 @@ a:hover {
 .talk__text {
   --casl: 1;
   margin-top: 0.6rem;
-  color: var(--indigo);
+  color: var(--link);
   font-size: 1.35rem;
   font-weight: 700;
 }
@@ -499,9 +937,9 @@ a:hover {
   align-items: center;
   min-height: 2.9rem;
   padding: 0.6rem 1.35rem;
-  border: 2px solid var(--indigo);
+  border: 2px solid var(--button);
   border-radius: 999px;
-  background: var(--indigo);
+  background: var(--button);
   color: #fff;
   font-weight: 650;
   text-decoration: none;
@@ -509,34 +947,29 @@ a:hover {
 }
 
 .button:hover {
-  border-color: var(--indigo-deep);
-  background: var(--indigo-deep);
+  border-color: var(--button-hover);
+  background: var(--button-hover);
 }
 
 .button--quiet {
+  border-color: var(--link);
   background: transparent;
-  color: var(--indigo);
+  color: var(--link);
 }
 
 .button--quiet:hover {
-  border-color: var(--indigo);
-  background: var(--paper);
+  border-color: var(--link);
+  background: var(--surface);
 }
 
-.site-footer {
-  padding: 0 var(--gutter) 3rem;
-  text-align: center;
-  font-size: 0.9375rem;
-}
-
-/* 6. PCB stage + trace animation ----------------------------------------- */
+/* 8. PCB stage + trace animation ------------------------------------------ */
 .pcb-stage {
   position: relative;
   overflow: hidden;
   container-type: inline-size;
-  background-color: var(--lilac-soft);
+  background-color: var(--board);
   /* KiCad-style dot grid */
-  background-image: radial-gradient(circle, rgba(74, 45, 166, 0.2) 1px, transparent 1.6px);
+  background-image: radial-gradient(circle, var(--board-dot) 1px, transparent 1.6px);
   background-position: center;
   background-size: 18px 18px;
 }
@@ -557,9 +990,9 @@ a:hover {
 
 .pcb-chip {
   position: absolute;
-  top: 7.142857%;   /* 40 / 560 */
-  left: 18%;        /* 180 / 1000 */
-  width: 64%;       /* 640 / 1000 */
+  top: 7.142857%;     /* 40 / 560 */
+  left: 18%;          /* 180 / 1000 */
+  width: 64%;         /* 640 / 1000 */
   height: 85.714286%; /* 480 / 560 */
   display: block;
   margin: 0;
@@ -570,7 +1003,7 @@ a:hover {
   height: 100%;
   object-fit: cover;
   border-radius: var(--radius-chip);
-  box-shadow: 0 0 0 1px rgba(38, 31, 85, 0.3), 0 18px 30px -20px rgba(38, 31, 85, 0.7);
+  box-shadow: 0 0 0 1px var(--chip-ring), 0 18px 30px -20px rgba(20, 16, 50, 0.7);
 }
 
 .pcb-layer {
@@ -596,6 +1029,10 @@ a:hover {
   transition: stroke-dashoffset var(--dur) cubic-bezier(0.2, 0.75, 0.25, 1) var(--delay);
 }
 
+.pcb-signals {
+  filter: var(--pulse-glow);
+}
+
 .pcb-pulse {
   fill: none;
   stroke: var(--pulse);
@@ -608,7 +1045,7 @@ a:hover {
 }
 
 .pcb-via {
-  fill: var(--lilac-soft);
+  fill: var(--board);
   stroke: var(--trace);
 }
 
@@ -643,7 +1080,7 @@ a:hover {
   transition: opacity 0.4s ease var(--delay);
 }
 
-/* 7. Reduced motion: traces simply fade in, no drawing or pulses ----------- */
+/* 9. Reduced motion: traces simply fade in; no drawing, pulses or slides ---- */
 @media (prefers-reduced-motion: reduce) {
   .pcb-trace,
   .is-live .pcb-trace {
@@ -675,7 +1112,10 @@ a:hover {
   }
 
   .project-feature,
-  .button {
+  .button,
+  .theme-switch,
+  .theme-switch__thumb,
+  .theme-switch__icon {
     transition: none;
   }
 }

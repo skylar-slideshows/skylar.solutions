@@ -6,6 +6,20 @@
   <title>Digilog: instant-recall mixing console | Skylar Denno</title>
   <meta name="description" content="An instant-recall music mixing console with digital control of fully analog signal paths. Skylar Denno’s team capstone project.">
   <link rel="canonical" href="https://skylar.solutions/digilog/">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ececef">
+
+  <!-- Apply the saved (or system) theme before first paint -->
+  <script>
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem("theme"); } catch (e) {}
+      if (theme !== "light" && theme !== "dark") {
+        theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
 
   <!-- Link previews (LinkedIn, iMessage, Slack...) -->
   <meta property="og:type" content="article">
@@ -22,6 +36,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
   <link rel="stylesheet" href="../assets/site.css">
+  <script src="../assets/site.js" defer></script>
   <script src="../assets/pcb-traces.js" defer></script>
 </head>
 <body>
@@ -29,10 +44,26 @@
 
   <header class="site-header">
     <a class="site-header__home" href="../">Skylar Denno</a>
-    <a href="mailto:skylar.denno@gmail.com">Email me</a>
+    <div class="site-header__end">
+      <a href="mailto:skylar.denno@gmail.com">Email me</a>
+      <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode">
+        <span class="theme-switch__thumb" aria-hidden="true">
+          <svg class="theme-switch__icon theme-switch__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+          </svg>
+          <svg class="theme-switch__icon theme-switch__moon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+        </span>
+      </button>
+    </div>
   </header>
 
-  <main class="article" id="main">
+  <!-- Drawn as schematic sheet "/digilog/" -->
+  <main class="sheet article" id="main">
+    <div class="sheet-frame" aria-hidden="true"></div>
+
     <header class="article__intro">
       <h1 class="article__title">Instant-recall music mixing console with digital control of fully analog signal paths</h1>
       <p class="article__meta">Digilog, my team’s capstone project, fall 2026</p>
@@ -45,7 +76,7 @@
           <picture class="pcb-chip">
             <source type="image/webp"
                     srcset="../assets/img/digilog-console-900.webp 900w, ../assets/img/digilog-console.webp 1443w"
-                    sizes="(min-width: 1180px) 700px, (min-width: 600px) 62vw, 80vw">
+                    sizes="(min-width: 1180px) 640px, (min-width: 600px) 58vw, 80vw">
             <img src="../assets/img/digilog-console.jpg" width="1443" height="1082" fetchpriority="high"
                  alt="3D render of the mixing console: two banks of eight channel strips with knobs and fader slots, set into a sloped cream-colored desk">
           </picture>
@@ -73,6 +104,16 @@
       <p>I am confident and have decent experience with using AI tools (GitHub Copilot and Claude Code) to help me write code. I know how to get these tools to do the right things and go the right direction. I can make .md skill files to explain more complex criteria to AI or give necessary technical context to my teammates’ AIs to also work on the project. At this point, I can “PCBify” nearly anything, and I feel confident in being able to at least help undertake designing complex systems like this, but of course, I have a lot I can also learn from more senior engineers.</p>
     </div>
 
+    <!-- An op-amp buffer, for the analog signal path -->
+    <div class="wire" aria-hidden="true">
+      <svg class="wire__part" width="160" height="64" viewBox="0 0 160 64">
+        <path class="wire__fill" d="M64 12L104 32L64 52Z"/>
+        <path d="M0 32H44V42H64M116 32V6H52V22H64M104 32H160M68 22H74M68 42H74M71 39V45"/>
+        <circle cx="116" cy="32" r="2.75"/>
+        <text x="86" y="62">U2A</text>
+      </svg>
+    </div>
+
     <section class="talk" aria-labelledby="talk-title">
       <h2 class="talk__title" id="talk-title">Do you want to talk to me more about this project?</h2>
       <p class="talk__text">I know I do!!!</p>
@@ -81,6 +122,16 @@
         <a class="button button--quiet" href="https://www.linkedin.com/in/skylardenno/" target="_blank" rel="noopener me">Connect on LinkedIn</a>
       </div>
     </section>
+
+    <!-- Schematic title block. Update the date and rev when you change the page. -->
+    <footer class="title-block" aria-hidden="true">
+      <p class="title-block__wide"><span>Sheet:</span> /digilog/<br><span>File:</span> digilog/index.html</p>
+      <p class="title-block__wide title-block__title"><span>Title:</span> Instant-recall mixing console</p>
+      <p><span>Size:</span> Responsive</p>
+      <p><span>Date:</span> Nov 2026</p>
+      <p><span>Rev:</span> 01</p>
+      <p class="title-block__wide">Powered by curiosity</p>
+    </footer>
   </main>
 
   <footer class="site-footer">

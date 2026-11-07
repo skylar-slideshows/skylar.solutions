@@ -6,6 +6,20 @@
   <title>Skylar Denno | Embedded systems and mixed signal hardware</title>
   <meta name="description" content="High energy, fresh Northeastern graduate interested in embedded systems and mixed signal hardware.">
   <link rel="canonical" href="https://skylar.solutions/">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ececef">
+
+  <!-- Apply the saved (or system) theme before first paint -->
+  <script>
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem("theme"); } catch (e) {}
+      if (theme !== "light" && theme !== "dark") {
+        theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
 
   <!-- Link previews (LinkedIn, iMessage, Slack...) -->
   <meta property="og:type" content="website">
@@ -22,6 +36,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
   <link rel="stylesheet" href="assets/site.css">
+  <script src="assets/site.js" defer></script>
   <script src="assets/pcb-traces.js" defer></script>
 
   <script type="application/ld+json">
@@ -41,6 +56,20 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
+  <div class="topbar">
+    <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode">
+      <span class="theme-switch__thumb" aria-hidden="true">
+        <svg class="theme-switch__icon theme-switch__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+        </svg>
+        <svg class="theme-switch__icon theme-switch__moon" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+        </svg>
+      </span>
+    </button>
+  </div>
+
   <div class="home">
 
     <!-- Sidebar: who I am and how to reach me -->
@@ -50,6 +79,7 @@
         <p class="profile__headline">High energy, fresh Northeastern graduate interested in embedded systems and mixed signal hardware</p>
       </div>
 
+      <!-- Drawn as J1, a 4-pin connector (see "Contact list drawn as J1" in site.css) -->
       <dl class="contact">
         <div>
           <dt>Email</dt>
@@ -57,11 +87,11 @@
         </div>
         <div>
           <dt>LinkedIn</dt>
-          <dd><a href="https://www.linkedin.com/in/skylardenno/" target="_blank" rel="noopener me">linkedin.com/in/skylardenno</a></dd>
+          <dd><a href="https://www.linkedin.com/in/skylardenno/" target="_blank" rel="noopener me">linkedin.com/<wbr>in/<wbr>skylardenno</a></dd>
         </div>
         <div>
           <dt>GitHub</dt>
-          <dd><a href="https://github.com/skylar-slideshows/" target="_blank" rel="noopener me">github.com/skylar-slideshows</a></dd>
+          <dd><a href="https://github.com/skylar-slideshows/" target="_blank" rel="noopener me">github.com/<wbr>skylar-slideshows</a></dd>
         </div>
         <div>
           <dt>Location</dt>
@@ -81,14 +111,23 @@
       </section>
     </header>
 
-    <!-- Main sheet -->
-    <main class="sheet" id="main">
+    <!-- Main content, drawn as schematic sheet "/" -->
+    <main class="sheet home-sheet" id="main">
+      <div class="sheet-frame" aria-hidden="true"></div>
 
       <section aria-labelledby="about-title">
         <h2 class="section__title" id="about-title">About</h2>
         <p class="about__hello">Hey! I’m Skylar. Welcome to my portfolio!</p>
         <p>I’m highly motivated and friendly, so I tend to take initiative by leading and collaborating with others on projects. I’m independent and can get started (and finish) complex tasks.</p>
       </section>
+
+      <div class="wire" aria-hidden="true">
+        <svg class="wire__part" width="120" height="48" viewBox="0 0 120 48">
+          <text x="60" y="10">R1</text>
+          <path d="M0 24H32L36.7 16L46 32L55.3 16L64.7 32L74 16L83.3 32L88 24H120"/>
+          <text x="60" y="46">10k</text>
+        </svg>
+      </div>
 
       <section id="projects" aria-labelledby="projects-title">
         <h2 class="section__title" id="projects-title">Projects</h2>
@@ -123,6 +162,14 @@
         </article>
       </section>
 
+      <div class="wire" aria-hidden="true">
+        <svg class="wire__part" width="120" height="48" viewBox="0 0 120 48">
+          <text x="60" y="10">C1</text>
+          <path d="M0 24H55M55 14V34M65 14V34M65 24H120"/>
+          <text x="60" y="46">100n</text>
+        </svg>
+      </div>
+
       <div class="split">
         <section aria-labelledby="education-title">
           <h2 class="section__title" id="education-title">Education</h2>
@@ -141,6 +188,14 @@
             <li class="tag">C</li>
           </ul>
         </section>
+      </div>
+
+      <div class="wire" aria-hidden="true">
+        <svg class="wire__part" width="120" height="48" viewBox="0 0 120 48">
+          <text x="60" y="10">L1</text>
+          <path d="M0 24H34a6.5 6.5 0 0 1 13 0a6.5 6.5 0 0 1 13 0a6.5 6.5 0 0 1 13 0a6.5 6.5 0 0 1 13 0H120"/>
+          <text x="60" y="44">10µ</text>
+        </svg>
       </div>
 
       <section aria-labelledby="awards-title">
@@ -174,6 +229,15 @@
         </ul>
       </section>
 
+      <!-- Schematic title block. Update the date and rev when you change the site. -->
+      <footer class="title-block" aria-hidden="true">
+        <p class="title-block__wide"><span>Sheet:</span> /<br><span>File:</span> index.html</p>
+        <p class="title-block__wide title-block__title"><span>Title:</span> Skylar Denno, portfolio</p>
+        <p><span>Size:</span> Responsive</p>
+        <p><span>Date:</span> Nov 2026</p>
+        <p><span>Rev:</span> 01</p>
+        <p class="title-block__wide">Powered by curiosity</p>
+      </footer>
     </main>
   </div>
 </body>
