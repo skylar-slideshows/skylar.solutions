@@ -18,6 +18,7 @@
   uses when a page is opened from disk (file://) instead of a web server.
 
   Supported geometry: planes, cylinders, cones, spheres, tori, surfaces of revolution and
+  linear extrusion, and
   (rational, open or closed) B-spline surfaces, bounded by lines, circles,
   ellipses and (rational) B-spline curves. That covers typical KiCad /
   OpenCascade exports. Example (from the site root):
@@ -561,6 +562,7 @@ function surfaceOf(id) {
     };
   }
   if (t === "SURFACE_OF_REVOLUTION") return revolutionSurface(e);
+  if (t === "SURFACE_OF_LINEAR_EXTRUSION") return extrusionSurface(e);
   if (t === "B_SPLINE_SURFACE_WITH_KNOTS" || (t === "" && e.parts.B_SPLINE_SURFACE)) return bsplineSurface(e);
   return null;
 }
@@ -629,6 +631,45 @@ function revolutionSurface(e) {
       return [u, s];
     },
     normal: (u, v) => numericNormal(point, u, v, 1e-4, 1e-4 * (hi - lo)),
+  };
+}
+
+// A curve swept along a straight line: S(u, v) = C(u) + v * V.
+function extrusionSurface(e) {
+  const prof = curveFunction(e.args[1].id);
+  if (!prof) return null;
+  const va = args(e.args[2].id); // VECTOR(name, direction, magnitude)
+  const dir = dirOf(va[1].id);
+  const mag = va[2] || 1;
+  const lo = Math.max(prof.tmin, -1e2), hi = Math.min(prof.tmax, 1e2);
+  // find u by looking along the sweep direction (it drops out of the distance)
+  const flat = (p) => sub(p, scl(dir, dot(p, dir)));
+  const samples = [];
+  let arc = 0;
+  for (let i = 0; i <= 256; i++) {
+    const s = lo + ((hi - lo) * i) / 256;
+    const q = flat(prof.fn(s));
+    if (i) arc += dist(q, samples[i - 1][1]);
+    samples.push([s, q]);
+  }
+  const point = (u, v) => add(prof.fn(u), scl(dir, v * mag));
+  return {
+    kind: "extrusion", point,
+    scaleU: arc / (hi - lo || 1), scaleV: mag,
+    param: (p) => {
+      const q = flat(p);
+      let best = 0, bestD = Infinity;
+      for (let i = 0; i < samples.length; i++) { const dd = dist(samples[i][1], q); if (dd < bestD) { bestD = dd; best = i; } }
+      let u = samples[best][0];
+      let h = (hi - lo) / 256;
+      for (let it = 0; it < 40; it++) {
+        const a1 = Math.max(lo, u - h), a2 = Math.min(hi, u + h);
+        const d1 = dist(flat(prof.fn(a1)), q), d2 = dist(flat(prof.fn(a2)), q);
+        if (d1 < bestD) { bestD = d1; u = a1; } else if (d2 < bestD) { bestD = d2; u = a2; } else h *= 0.5;
+      }
+      return [u, dot(sub(p, prof.fn(u)), dir) / mag];
+    },
+    normal: (u, v) => numericNormal(point, u, v, 1e-4 * (hi - lo), 1e-4),
   };
 }
 

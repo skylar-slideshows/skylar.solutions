@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Digital system dev board | Digilog | Skylar Denno</title>
+  <meta name="description" content="Interactive 3D model of Digilog’s digital system dev board: a prototype board laid out like a dev board, with ground pins all over to keep high-speed signal loops small.">
+  <link rel="canonical" href="https://skylar.solutions/digilog/digital/">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ece8fa">
+
+  <!-- Apply the saved (or system) theme before first paint -->
+  <script>
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem("theme"); } catch (e) {}
+      if (theme !== "light" && theme !== "dark") {
+        theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://skylar.solutions/digilog/digital/">
+  <meta property="og:site_name" content="Skylar Denno">
+  <meta property="og:title" content="Digital system dev board | Digilog">
+  <meta property="og:description" content="The digital side of Digilog, in 3D.">
+  <meta property="og:image" content="https://skylar.solutions/assets/img/digital-dev-board.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
+  <link rel="stylesheet" href="../../assets/site.css?v=20261107d">
+  <script src="../../assets/site.js?v=20261107d" defer></script>
+  <script src="../../assets/board-viewer.js?v=20261107d" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <a class="site-header__home" href="../../">Skylar Denno</a>
+    <div class="site-header__end">
+      <a href="mailto:skylar.denno@gmail.com">Email me</a>
+      <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode">
+        <span class="theme-switch__thumb" aria-hidden="true">
+          <svg class="theme-switch__icon theme-switch__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+          </svg>
+          <svg class="theme-switch__icon theme-switch__moon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Drawn as schematic sheet "/digilog/digital/" -->
+  <main class="sheet article" id="main">
+    <div class="sheet-frame" aria-hidden="true"></div>
+
+    <header class="article__intro">
+      <p class="crumbs"><a href="../">Digilog</a></p>
+      <h1 class="article__title">Digital system dev board</h1>
+      <p class="article__meta">The STM32 board that runs Digilog’s digital side</p>
+    </header>
+
+    <!-- Interactive 3D model (assets/board-viewer.js). Rebuild the .bin with tools/step-to-mesh.mjs. -->
+    <figure class="board-figure board-figure--solo">
+      <div class="board-viewer" data-board-viewer data-src="../../assets/models/digital-dev-board.bin?v=20261107d">
+        <img class="board-viewer__poster" src="../../assets/img/digital-dev-board.jpg" width="1600" height="900" alt="3D render of the digital system dev board: a matte black PCB with an STM32 in the middle, four display connectors along one edge, big labeled pin headers, and a barrel jack with power headers">
+        <canvas class="board-viewer__canvas" tabindex="0" role="img"
+                aria-label="Interactive 3D model of the digital system dev board. Arrow keys rotate, Shift with arrows pans, plus and minus zoom, 0 resets the view."></canvas>
+        <p class="board-viewer__status" data-viewer-status role="status" hidden></p>
+        <button class="board-viewer__reset" type="button" data-viewer-reset hidden>Reset view</button>
+      </div>
+      <figcaption class="board-figure__caption">Rendered from its STEP model. Drag to rotate, scroll or pinch to zoom, and right-drag or use two fingers to pan.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h2>So what is this one?</h2>
+
+      <p>This is the brain of the console. It’s the board I used for the digital side of the final console, but it’s really set up like a dev board for our exact purpose: since this is a prototype, we will probably have to move a lot of stuff around, so pretty much every pin I might need is broken out to a labeled header where it’s easy to rewire (there’s even a whole block of currently unused pins, just in case).</p>
+
+      <p>It drives four displays (DISP 0 through 3) over the STM32’s FMC parallel bus, with a little header for probing the display data lines, and it talks to the rest of the console over I2C, SPI and UART. Two DFRobot DFR0570 power modules ride along on the back.</p>
+
+      <p>You’ll notice there are SO many ground pins. That’s on purpose: they keep the loop sizes small for the high-speed signals. Every signal’s current has to come back home on ground, and when the ground is right next to the signal, the loop it makes is tiny, so it radiates less noise and picks up less of it. That matters a lot in a box full of sensitive analog audio!</p>
+    </div>
+
+    <!-- Schematic title block. Update the date and rev when you change the page. -->
+    <footer class="title-block" aria-hidden="true">
+      <p class="title-block__wide"><span>Sheet:</span> /digilog/digital/<br><span>File:</span> digilog/digital/index.html</p>
+      <p class="title-block__wide title-block__title"><span>Title:</span> Digital system dev board</p>
+      <p><span>Size:</span> Responsive</p>
+      <p><span>Date:</span> Nov 2026</p>
+      <p><span>Rev:</span> 01</p>
+      <p class="title-block__wide">Powered by curiosity</p>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <a href="../">Back to Digilog</a>
+  </footer>
+</body>
+</html>
