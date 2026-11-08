@@ -13,6 +13,7 @@
 
   --tol         chordal tolerance in model units (mm). Smaller = smoother, bigger file.
   --mask-shade  darkens the solder mask green (default 0.72; 1 = colours as exported).
+  --parts FILE  also write a JSON list of placed parts (for the add-* patch scripts).
 
   Also writes <output.bin>.js, a script copy of the same model that the viewer
   uses when a page is opened from disk (file://) instead of a web server.
@@ -58,6 +59,10 @@ const shadeFlag = argv.indexOf("--mask-shade");
 // brighter still, so boards read as lime. Green-dominant colours (the mask
 // and the copper under it) are scaled by this. --mask-shade 1 turns it off.
 const MASK_SHADE = shadeFlag >= 0 ? parseFloat(argv[shadeFlag + 1]) : 0.72;
+const partsFlag = argv.indexOf("--parts");
+// --parts list.json: also write every placed part (name, mesh, matrix, world
+// bounds). tools/add-thermistors.py and tools/add-chip-marking.py use it.
+const PARTS_OUT = partsFlag >= 0 ? argv[partsFlag + 1] : null;
 const MIN_STEP = Math.PI / 12; // finest angular step for arcs (15 deg)
 const MAX_STEP = Math.PI / 6;  // coarsest angular step for arcs (30 deg)
 const MAX_NORMAL_TURN = Math.cos(Math.PI / 6); // refine curved faces until normals turn < 30 deg per edge
@@ -1527,13 +1532,24 @@ function geometryItems(rep) {
   }
   return out;
 }
-const instances = [];
-function walk(rep, m, depth) {
-  if (depth > 32) return;
-  if (geometryItems(rep).length) instances.push({ rep, m });
-  for (const c of children.get(rep) || []) walk(c.child, matMul(m, c.m), depth + 1);
+// product names, so parts can be found again later (e.g. "R_Axial_...")
+const productOfRep = new Map();
+for (const [, e] of E) {
+  if (e.type !== "SHAPE_DEFINITION_REPRESENTATION") continue;
+  try {
+    const pd = ent(ent(e.args[0].id).args[2].id);
+    const prod = ent(ent(pd.args[2].id).args[2].id);
+    productOfRep.set(e.args[1].id, prod.args[1] || prod.args[0]);
+  } catch (err) { /* not a product shape */ }
 }
-for (const r of roots) walk(r, IDENTITY, 0);
+const instances = [];
+function walk(rep, m, depth, name) {
+  if (depth > 32) return;
+  const nm = productOfRep.get(rep) || name;
+  if (geometryItems(rep).length) instances.push({ rep, m, name: nm });
+  for (const c of children.get(rep) || []) walk(c.child, matMul(m, c.m), depth + 1, nm);
+}
+for (const r of roots) walk(r, IDENTITY, 0, "");
 console.log(`${roots.length} root representation(s), ${instances.length} placed parts`);
 
 /* ------------------------------------------------------------------------ */
@@ -1669,6 +1685,18 @@ for (const inst of instances) {
   f32(...inst.m);
 }
 
+if (PARTS_OUT) {
+  const list = instances.map((inst) => {
+    const [lo, hi] = meshBounds[meshOfRep.get(inst.rep)];
+    const wlo = [Infinity, Infinity, Infinity], whi = [-Infinity, -Infinity, -Infinity];
+    for (let c = 0; c < 8 && isFinite(lo[0]); c++) {
+      const p = matPoint(inst.m, [c & 1 ? hi[0] : lo[0], c & 2 ? hi[1] : lo[1], c & 4 ? hi[2] : lo[2]]);
+      for (let k = 0; k < 3; k++) { wlo[k] = Math.min(wlo[k], p[k]); whi[k] = Math.max(whi[k], p[k]); }
+    }
+    return { name: inst.name, mesh: meshOfRep.get(inst.rep), m: inst.m, lo: wlo, hi: whi };
+  });
+  writeFileSync(PARTS_OUT, JSON.stringify(list));
+}
 const out = Buffer.concat(parts);
 writeFileSync(OUTPUT, out);
 // Browsers block data requests from pages opened straight from disk, so the
