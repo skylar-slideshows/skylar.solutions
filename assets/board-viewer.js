@@ -235,7 +235,10 @@
     var started = false, ready = false, lost = false;
     var spinning = !reduceMotion, engaged = false;
     var target = [0, 0, 0], home = [0, 0, 0], radius = 1;
-    var azimuth = START_AZIMUTH, elevation = START_ELEVATION, distance = 1, homeDistance = 1;
+    // data-azimuth / data-elevation (radians) override the starting angle, e.g. to start below a board
+    function attrNum(name, fallback) { var x = parseFloat(root.getAttribute(name)); return isNaN(x) ? fallback : x; }
+    var startAzimuth = attrNum("data-azimuth", START_AZIMUTH), startElevation = attrNum("data-elevation", START_ELEVATION);
+    var azimuth = startAzimuth, elevation = startElevation, distance = 1, homeDistance = 1;
     var minDistance = 0.1, maxDistance = 10;
     var viewMatrix = new Float32Array(16), projMatrix = new Float32Array(16), viewProj = new Float32Array(16);
     var raf = 0, lastTime = 0, dirty = true, onScreen = true;
@@ -341,8 +344,8 @@
 
     function resetView() {
       target = home.slice();
-      azimuth = START_AZIMUTH;
-      elevation = START_ELEVATION;
+      azimuth = startAzimuth;
+      elevation = startElevation;
       homeDistance = fitDistance();
       distance = homeDistance;
       requestRender();

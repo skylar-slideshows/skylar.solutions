@@ -27,9 +27,7 @@ SOCKET_TOP = 9.92                     # top of the 8.5 mm 1x04 sockets on the co
 HEADER_BODY = 2.54                    # plastic body of the ring's 1x04 header
 RING_Z = SOCKET_TOP + HEADER_BODY     # ring board underside
 SHAFT_TOP = 32.92                     # top of the EC11 25 mm shafts
-FADER_MTG = 7.472                     # fader mounting surface, as placed on the fader board design:
-                                      # the bodies drop through the board's four slots
-LEVER_TOP = 18.5                      # lever tip above the mounting surface (ALPS drawing)
+LEVER_IN_CAP = 5.0                    # how far the fader lever reaches into its cap
 
 MASK_GREEN, COPPER_GREEN = (58, 89, 78), (86, 125, 90)   # same as the analog cards
 ANODIZED = (34, 34, 38)
@@ -37,6 +35,7 @@ KNOB, KNOB_GROOVE, KNOB_TOP = (31, 31, 34), (16, 16, 18), (240, 240, 236)
 FADER_CAP = (200, 202, 208)
 SWITCH_BODY, SWITCH_CAP = (40, 40, 44), (240, 240, 236)
 ENC_BASE, ENC_METAL, ENC_SHAFT = (46, 70, 58), (192, 193, 198), (212, 213, 217)
+PEM_ZINC, PEM_BORE = (184, 185, 182), (64, 64, 66)
 FRAME_TOP, FRAME_SIDE, FADER_PCB = (204, 205, 210), (168, 169, 174), (92, 66, 48)
 MOTOR_CAN, MOTOR_END, GEARBOX = (192, 194, 200), (54, 54, 58), (42, 42, 46)
 GLASS, BEZEL = (16, 18, 26), (40, 40, 44)
@@ -210,21 +209,34 @@ def nidec_switch(m, cap_top):
 
 
 def fader_cap(m, z0):
-    """Brushed-aluminium fader cap: a saddle profile (raised front and back edges, a ribbed
-    valley between them) run across the slot."""
-    W, D, H = 22.0, 11.0, 11.5
-    yv, depth = D / 2 - 1.9, 2.3
-    prof = [(-D / 2, 0.0), (D / 2, 0.0), (D / 2 - 0.45, H - 0.7), (D / 2 - 0.75, H - 0.15), (D / 2 - 1.2, H)]
-    n = 16
+    """Narrow brushed-aluminium fader cap: longer along the travel than it is tall, with a
+    saddle profile across its width (raised side lips, a ribbed valley) run along its length."""
+    W, L, H = 9.0, 20.0, 10.0
+    xv, depth = W / 2 - 1.3, 1.6
+    prof = [(-W / 2, 0.0), (W / 2, 0.0), (W / 2 - 0.3, H - 0.6), (W / 2 - 0.55, H - 0.12), (W / 2 - 0.95, H)]
+    n = 12
     for k in range(n + 1):
-        y = yv - 2 * yv * k / n
-        rib = 0.12 if k in (3, 5, 11, 13) else 0.0
-        prof.append((y, H - depth * (1 - (y / yv) ** 2) + rib))
-    prof += [(-(D / 2 - 1.2), H), (-(D / 2 - 0.75), H - 0.15), (-(D / 2 - 0.45), H - 0.7)]
-    e = extrude(prof, [], -W / 2, W / 2, colour_index(m, FADER_CAP))
-    e.pos = [(w, u, v + z0) for u, v, w in e.pos]          # profile (y, z), run along x
-    e.nrm = [(w, u, v) for u, v, w in e.nrm]
+        x = xv - 2 * xv * k / n
+        rib = 0.1 if k in (2, 4, 8, 10) else 0.0
+        prof.append((x, H - depth * (1 - (x / xv) ** 2) + rib))
+    prof += [(-(W / 2 - 0.95), H), (-(W / 2 - 0.55), H - 0.12), (-(W / 2 - 0.3), H - 0.6)]
+    e = extrude(prof, [], -L / 2, L / 2, colour_index(m, FADER_CAP))
+    e.pos = [(u, -w, v + z0) for u, v, w in e.pos]         # profile (x, z), run along y
+    e.nrm = [(u, -w, v) for u, v, w in e.nrm]
     return e
+
+
+def pem_standoff(m):
+    """PEM SMTSO-M3 surface-mount standoff on the board's underside (board at z = 0, hanging down):
+    a narrow pilot at the pad, a fine groove, the 5.4 mm body, a chamfered end and an M3 bore."""
+    zinc, bore = colour_index(m, PEM_ZINC), colour_index(m, PEM_BORE)
+    # one profile from the bore's edge out across the end face and up the outside, so every
+    # face points outward or down (lathe() takes its normals from the profile's direction)
+    out = lathe([(1.25, -3.0), (2.45, -3.0), (2.7, -2.75), (2.7, -0.75), (2.55, -0.75),
+                 (2.55, -0.55), (2.2, -0.55), (2.2, 0.0)], zinc, 24)
+    out.add(lathe([(1.25, -0.6), (1.25, -3.0)], bore, 16))          # bore wall, facing in
+    out.add(lathe([(0.0, -0.6), (1.25, -0.6)], bore, 16))           # blind end, facing the opening
+    return out
 
 
 def stretch(m, parts, key, cut, lift):
@@ -273,7 +285,7 @@ def fader_body(m, motor_end):
 
 def fader_knob(m, cap_bottom):
     """Lever and cap above the panel (cap_bottom is relative to the mounting surface)."""
-    out = box((-0.6, -4.5, -2.0), (0.6, 4.5, LEVER_TOP), colour_index(m, FRAME_TOP))
+    out = box((-0.6, -4.5, -2.0), (0.6, 4.5, cap_bottom + LEVER_IN_CAP), colour_index(m, FRAME_TOP))
     out.add(fader_cap(m, cap_bottom))
     return out
 
@@ -301,9 +313,11 @@ def main(ctl_path, fad_path, ring_path, dxf_path, out_path):
     stretch(asm, ctl_parts, 'LED_D3', lambda zs, *_: 3.0, lambda zs: panel_z1 - max(zs))
     # the Nidec switches and the encoders are redrawn
     nidec_at = [((p['lo'][0] + p['hi'][0]) / 2, (p['lo'][1] + p['hi'][1]) / 2) for p in ctl_parts if 'CFPB' in p['name']]
-    redrawn = mesh_ids(ctl_parts, 'CFPB', 'EC11')
+    pem_at = [((p['lo'][0] + p['hi'][0]) / 2, (p['lo'][1] + p['hi'][1]) / 2) for p in ctl_parts if 'SMTSO' in p['name']]
+    redrawn = mesh_ids(ctl_parts, 'CFPB', 'EC11', 'SMTSO')
     remove_instances(asm, {i for i, inst in enumerate(asm.instances) if inst[0] in redrawn})
     place(asm, nidec_switch(asm, nidec_top), [translate(x, y, 0) for x, y in nidec_at], 0)
+    place(asm, pem_standoff(asm), [translate(x, y, 0) for x, y in pem_at], 0)
     place(asm, encoder(asm), [translate(x, y, 0) for x, y in enc], 0)
 
     # fader board, without its placeholder faders
@@ -336,14 +350,15 @@ def main(ctl_path, fad_path, ring_path, dxf_path, out_path):
     box((x0 - 1.5, y0 - 3.5, panel_z0 - 3.0), (x1 + 1.5, y1 + 1.5, panel_z0 - 1.35), colour_index(asm, BEZEL), disp)
     place(asm, disp, [translate(STRIP_X0 + STRIP_PITCH * s, -PANEL_Y0, 0) for s in range(4)], 2)
 
-    # motor faders (group 0): bodies down through the fader board's slots, lever up through
-    # the panel; the motor sits at the end over the fader board's spine (-y)
+    # motor faders (group 0), screwed to the panel: the frame's top plate touches the panel's
+    # underside, the motor hangs through the fader board's slot at the end over its spine (-y)
+    mtg = panel_z0
     fx = [STRIP_X0 + STRIP_PITCH * s + 18.15 for s in range(4)]
     fy = 86.0 - PANEL_Y0                     # slot centre (between the fader screws)
-    place(asm, fader_body(asm, -1), [translate(x, fy, FADER_MTG) for x in fx], 0)
+    place(asm, fader_body(asm, -1), [translate(x, fy, mtg) for x in fx], 0)
     travel = (0.62, 0.48, 0.74, 0.55)        # lever positions, 0 = bottom of the slot
-    lever = fader_knob(asm, panel_z1 + 1.2 - FADER_MTG)
-    place(asm, lever, [translate(x, fy + (t - 0.5) * 100.0, FADER_MTG) for x, t in zip(fx, travel)], 0)
+    lever = fader_knob(asm, panel_z1 + 1.2 - mtg)
+    place(asm, lever, [translate(x, fy + (t - 0.5) * 100.0, mtg) for x, t in zip(fx, travel)], 0)
 
     write_model(asm, out_path)
     drawn = {}

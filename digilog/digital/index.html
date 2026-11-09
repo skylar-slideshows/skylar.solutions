@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Digital system dev board | Digilog | Skylar Denno</title>
-  <meta name="description" content="Interactive 3D model of Digilog’s digital system dev board: a prototype board laid out like a dev board, with ground pins all over to keep high-speed signal loops small.">
+  <title>Digital section | Digilog | Skylar Denno</title>
+  <meta name="description" content="Interactive 3D model of Digilog’s digital section: the control surface with the STM32 logic board and the DAC board mounted underneath it.">
   <link rel="canonical" href="https://skylar.solutions/digilog/digital/">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#ece8fa">
@@ -24,9 +24,9 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://skylar.solutions/digilog/digital/">
   <meta property="og:site_name" content="Skylar Denno">
-  <meta property="og:title" content="Digital system dev board | Digilog">
-  <meta property="og:description" content="The digital side of Digilog, in 3D.">
-  <meta property="og:image" content="https://skylar.solutions/assets/img/digital-dev-board.jpg">
+  <meta property="og:title" content="Digital section | Digilog">
+  <meta property="og:description" content="Digilog’s digital section, in 3D.">
+  <meta property="og:image" content="https://skylar.solutions/assets/img/digital-assembly.jpg">
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
@@ -35,9 +35,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
-  <link rel="stylesheet" href="../../assets/site.css?v=20261109b">
-  <script src="../../assets/site.js?v=20261109b" defer></script>
-  <script src="../../assets/board-viewer.js?v=20261109b" defer></script>
+  <link rel="stylesheet" href="../../assets/site.css?v=20261109d">
+  <script src="../../assets/site.js?v=20261109d" defer></script>
+  <script src="../../assets/board-viewer.js?v=20261109d" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -66,91 +66,56 @@
 
     <header class="article__intro">
       <p class="crumbs"><a href="../">Digilog</a></p>
-      <h1 class="article__title">Digital system dev board</h1>
-      <p class="article__meta">The STM32 board that runs Digilog’s digital side</p>
+      <h1 class="article__title">Digital section</h1>
+      <p class="article__meta">The control surface, with the STM32 logic board and the DAC board mounted under it</p>
     </header>
 
-    <!-- Interactive 3D model (assets/board-viewer.js). Rebuild the .bin with tools/step-to-mesh.mjs. -->
+    <!-- Interactive 3D model (assets/board-viewer.js). Rebuild the .bin with tools/build-digital.py.
+         Instance group 2 = front panel with its knob caps and display glass. Starts below the boards. -->
     <figure class="board-figure board-figure--solo">
-      <div class="board-viewer" data-board-viewer data-src="../../assets/models/digital-dev-board.bin?v=20261109b">
-        <img class="board-viewer__poster" src="../../assets/img/digital-dev-board.jpg" width="1600" height="900" alt="3D render of the digital system dev board: a matte black PCB with an STM32 in the middle, four display connectors along one edge, big labeled pin headers, and a barrel jack with power headers">
+      <div class="board-viewer" data-board-viewer data-zoom="1.1" data-elevation="-0.4" data-azimuth="-0.25" data-src="../../assets/models/digital-assembly.bin?v=20261109d">
+        <img class="board-viewer__poster" src="../../assets/img/digital-assembly.jpg" width="1600" height="900" alt="3D render of Digilog’s digital section from below: the STM32 logic board and the DAC board hanging on white nylon standoffs under the green controls board">
         <canvas class="board-viewer__canvas" tabindex="0" role="img"
-                aria-label="Interactive 3D model of the digital system dev board. Arrow keys rotate, Shift with arrows pans, plus and minus zoom, 0 resets the view."></canvas>
+                aria-label="Interactive 3D model of the digital section. Arrow keys rotate, Shift with arrows pans, plus and minus zoom, 0 resets the view."></canvas>
         <p class="board-viewer__status" data-viewer-status role="status" hidden></p>
         <button class="board-viewer__reset" type="button" data-viewer-reset hidden>Reset view</button>
+        <fieldset class="board-viewer__toggles">
+          <legend class="visually-hidden">Show on the model</legend>
+          <label><input type="checkbox" data-viewer-group="2" checked> Front panel</label>
+        </fieldset>
       </div>
-      <figcaption class="board-figure__caption">Rendered from its STEP model. Drag to rotate, scroll or pinch to zoom, and right-drag or use two fingers to pan.</figcaption>
+      <figcaption class="board-figure__caption">Rendered from the STEP models and the panel drawing, seen from below. Drag to rotate, scroll or pinch to zoom, and right-drag or use two fingers to pan. Untick the box to take the front panel off.</figcaption>
     </figure>
 
     <div class="prose">
       <h2>So what is this one?</h2>
 
-      <p>This is the brain of the console. It’s the board I used for the digital side of the final console, but it’s really set up like a dev board for our exact purpose: since this is a prototype, we will probably have to move a lot of stuff around, so pretty much every pin I might need is broken out to a labeled header where it’s easy to rewire (there’s even a whole block of currently unused pins, just in case).</p>
+      <p>This is the digital half of Digilog, all in one stack. On top is the control surface. Hanging underneath the controls board are the two boards that run it: the STM32 logic board and the DAC board. Each sits on four 20 mm nylon standoffs, screwed into PEM standoffs soldered to the underside of the controls board, where the bottom silkscreen marks out exactly where each board goes. Both boards face up, so their chips point at the controls board above them.</p>
 
-      <p>It drives four displays (DISP 0 through 3) over the STM32’s FMC parallel bus, with a little header for probing the display data lines, and it talks to the rest of the console over I2C, SPI and UART. Two DFRobot DFR0570 power modules ride along on the back.</p>
-
-      <p>You’ll notice there are SO many ground pins. That’s on purpose: they keep the loop sizes small for the high-speed signals. Every signal’s current has to come back home on ground, and when the ground is right next to the signal, the loop it makes is tiny, so it radiates less noise and picks up less of it. That matters a lot in a box full of sensitive analog audio!</p>
+      <p>The DAC board is where the digital side reaches over to the analog one: twenty MCP4728 quad 12-bit DACs on four I2C buses make eighty control voltages for the analog cards, and they leave on eight 20-pin headers, two per channel.</p>
     </div>
 
-    <section class="card-section" aria-labelledby="layers-title">
-      <h2 class="card-section__title" id="layers-title">The copper layers</h2>
-      <p class="card-section__lead">All 6 copper layers of the board, top to bottom, drawn from the KiCad layout: 3 signal layers, 2 ground planes (GND) and a +3.3 V power plane.</p>
-      <ul class="layer-grid layer-grid--wide">
-        <li class="layer">
-          <picture>
-            <source type="image/webp" srcset="../../assets/img/layers/digital-fcu.webp">
-            <img src="../../assets/img/layers/digital-fcu.jpg" width="640" height="460" loading="lazy" alt="Top copper layer (F.Cu) of the digital system dev board. Signal layer: parts, signal traces and +3.3 V, +5 V power traces">
-          </picture>
-          <p class="layer__name"><span class="layer__swatch" style="--sw: #ff6b6b"></span>Top <span class="layer__code">F.Cu</span></p>
-          <p class="layer__what">Signal layer: parts, signal traces and +3.3 V, +5 V power traces</p>
+    <section class="board-cards" aria-labelledby="digital-boards-title">
+      <h2 class="board-cards__title" id="digital-boards-title">The digital boards</h2>
+      <p class="board-cards__lead">The control surface and the STM32 board each open in their own 3D viewer.</p>
+      <ul class="board-cards__grid board-cards__grid--icons">
+        <li>
+          <a class="board-card" href="../controls/">
+            <picture>
+              <source type="image/webp" srcset="../../assets/img/controls-assembly-thumb.webp">
+              <img src="../../assets/img/controls-assembly-thumb.jpg" width="640" height="360" loading="lazy" alt="">
+            </picture>
+            <span>Controls board</span>
+          </a>
         </li>
-        <li class="layer">
-          <picture>
-            <source type="image/webp" srcset="../../assets/img/layers/digital-in1cu.webp">
-            <img src="../../assets/img/layers/digital-in1cu.jpg" width="640" height="460" loading="lazy" alt="Inner 1 copper layer (In1.Cu) of the digital system dev board. Ground plane (GND)">
-          </picture>
-          <p class="layer__name"><span class="layer__swatch" style="--sw: #f6c945"></span>Inner 1 <span class="layer__code">In1.Cu</span></p>
-          <p class="layer__what">Ground plane (GND)</p>
-        </li>
-        <li class="layer">
-          <picture>
-            <source type="image/webp" srcset="../../assets/img/layers/digital-in2cu.webp">
-            <img src="../../assets/img/layers/digital-in2cu.jpg" width="640" height="460" loading="lazy" alt="Inner 2 copper layer (In2.Cu) of the digital system dev board. Power plane: +3.3 V, with a small +5 V area">
-          </picture>
-          <p class="layer__name"><span class="layer__swatch" style="--sw: #5fd39a"></span>Inner 2 <span class="layer__code">In2.Cu</span></p>
-          <p class="layer__what">Power plane: +3.3 V, with a small +5 V area</p>
-        </li>
-        <li class="layer">
-          <picture>
-            <source type="image/webp" srcset="../../assets/img/layers/digital-in3cu.webp">
-            <img src="../../assets/img/layers/digital-in3cu.jpg" width="640" height="460" loading="lazy" alt="Inner 3 copper layer (In3.Cu) of the digital system dev board. Signal layer: signal traces">
-          </picture>
-          <p class="layer__name"><span class="layer__swatch" style="--sw: #c48af0"></span>Inner 3 <span class="layer__code">In3.Cu</span></p>
-          <p class="layer__what">Signal layer: signal traces</p>
-        </li>
-        <li class="layer">
-          <picture>
-            <source type="image/webp" srcset="../../assets/img/layers/digital-in4cu.webp">
-            <img src="../../assets/img/layers/digital-in4cu.jpg" width="640" height="460" loading="lazy" alt="Inner 4 copper layer (In4.Cu) of the digital system dev board. Ground plane (GND)">
-          </picture>
-          <p class="layer__name"><span class="layer__swatch" style="--sw: #ff9f45"></span>Inner 4 <span class="layer__code">In4.Cu</span></p>
-          <p class="layer__what">Ground plane (GND)</p>
-        </li>
-        <li class="layer">
-          <picture>
-            <source type="image/webp" srcset="../../assets/img/layers/digital-bcu.webp">
-            <img src="../../assets/img/layers/digital-bcu.jpg" width="640" height="460" loading="lazy" alt="Bottom copper layer (B.Cu) of the digital system dev board. Signal layer: signal traces and +3.3 V, +5 V power traces">
-          </picture>
-          <p class="layer__name"><span class="layer__swatch" style="--sw: #5aa7ff"></span>Bottom <span class="layer__code">B.Cu</span></p>
-          <p class="layer__what">Signal layer: signal traces and +3.3 V, +5 V power traces</p>
-        </li>
-        <li class="layer">
-          <picture>
-            <source type="image/webp" srcset="../../assets/img/layers/digital-all.webp">
-            <img src="../../assets/img/layers/digital-all.jpg" width="640" height="460" loading="lazy" alt="All copper layers of the digital system dev board stacked together">
-          </picture>
-          <p class="layer__name"><span class="layer__swatch"></span>All layers</p>
-          <p class="layer__what">Every copper layer stacked, top on top</p>
+        <li>
+          <a class="board-card" href="../stm32/">
+            <picture>
+              <source type="image/webp" srcset="../../assets/img/digital-dev-board-thumb.webp">
+              <img src="../../assets/img/digital-dev-board-thumb.jpg" width="640" height="360" loading="lazy" alt="">
+            </picture>
+            <span>Digital system dev board</span>
+          </a>
         </li>
       </ul>
     </section>
@@ -158,7 +123,7 @@
     <!-- Schematic title block. Update the date and rev when you change the page. -->
     <footer class="title-block" aria-hidden="true">
       <p class="title-block__wide"><span>Sheet:</span> /digilog/digital/<br><span>File:</span> digilog/digital/index.html</p>
-      <p class="title-block__wide title-block__title"><span>Title:</span> Digital system dev board</p>
+      <p class="title-block__wide title-block__title"><span>Title:</span> Digital section</p>
       <p><span>Size:</span> Responsive</p>
       <p><span>Date:</span> Nov 2026</p>
       <p><span>Rev:</span> 01</p>

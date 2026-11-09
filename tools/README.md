@@ -30,7 +30,7 @@ edits meshes, so the parts list is still valid for `add-thermistors.py`.
 `--bipolar` takes the references to leave polarized (C5 is the input card's
 big 100 µF), or `-` for none.
 
-## Digital board (chip marking)
+## Digital board (chip marking, for the STM32 page at /digilog/stm32/)
 
     node tools/step-to-mesh.mjs Digital_System_Dev_board.step assets/models/digital-dev-board.bin --tol 0.02 --fill-holes 1.3 --parts digital.json
     python3 tools/add-chip-marking.py assets/models/digital-dev-board.bin digital.json "LQFP-100" "STM32G474" "VET3"
@@ -51,8 +51,8 @@ Positions come from the faceplate: panel (x, y) sits over controls-board KiCad
 (+70, +455) from the controls board (found from its M2 mounting holes). The
 script also redraws parts from their photos (`geom.py` has the shapes): the
 Nidec CFPB switches (caps 3 mm through the panel), the EC11 encoders (threaded
-bushing, D-shaft), the knob caps (fluted, white top) and the ALPS RSA0N11M9
-motor faders with silver caps. The TL2201 caps are stretched up by the same
+bushing, D-shaft), the PEM SMTSO-M3 standoffs on the underside, the knob caps (fluted, white top) and the ALPS RSA0N11M9
+motor faders, screwed to the panel's underside, with narrow silver caps. The TL2201 caps are stretched up by the same
 amount as the Nidec caps, and the 3 mm LEDs go up on longer leads until they
 sit flush with the panel.
 
@@ -77,6 +77,26 @@ piece (`--box-parts`). The fixes and thermistors are applied as usual, with
 
 The card types are instance groups 1 to 5 (input, EQ, comp, sends, output) for
 the analog page's checkboxes.
+
+## Digital assembly
+
+The controls assembly with the STM32 logic board and the DAC board hanging under
+it, each on four 20 mm nylon hex standoffs screwed into the controls board's PEM
+SMTSO-M3 standoffs (the rectangles its bottom silkscreen labels LOGIC BOARD and
+DAC BOARD). Build the controls assembly first. The two boards are converted
+lighter, like the analog cards, and each needs its parts list beside it as
+NAME.parts.json (for the board thickness):
+
+    BOX="$BOX|Box header|L_1206|Ferrite"
+    node tools/step-to-mesh.mjs Digital_System_Dev_board.step lite/logic.bin --tol 0.06 --fill-holes 1.3 --box-small 4 --box-parts "$BOX" --parts lite/logic.parts.json
+    python3 tools/add-chip-marking.py lite/logic.bin lite/logic.parts.json "LQFP-100" "STM32G474" "VET3"
+    node tools/step-to-mesh.mjs CV_DAC.step lite/dac.bin --tol 0.06 --fill-holes 1.3 --box-small 4 --box-parts "$BOX" --parts lite/dac.parts.json
+    python3 tools/build-digital.py assets/models/controls-assembly.bin lite/logic.bin lite/dac.bin assets/models/digital-assembly.bin
+
+The LED rings always show in this model; the front panel (with knobs and display
+glass) is instance group 2, for the digital page's one checkbox. Colours within a
+small distance of one already in the model are merged, to stay inside the
+viewer's 64.
 
 ## Layer images
 
