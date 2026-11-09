@@ -1922,3 +1922,27 @@ a:hover {
 /* Landscape and square boards get wider layer tiles */
 .layer-grid--wide { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
 .layer-grid--square { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+
+/* Two-level breadcrumbs on the card pages */
+.crumbs__sep {
+  margin: 0 0.45rem;
+  font-weight: 400;
+  opacity: 0.55;
+}
+
+/* A short row of links with icons (the Digilog page's other boards) */
+.board-cards__grid--icons { grid-template-columns: repeat(auto-fill, minmax(200px, 260px)); }
+
+/* Narrow screens: keep up to five model checkboxes on one line */
+@media (max-width: 480px) {
+  .board-viewer__toggles {
+    top: 0.4rem;
+    left: 0.4rem;
+    gap: 0.25rem 0.4rem;
+    padding: 0.32rem 0.5rem;
+    border-radius: 14px;
+    font-size: 0.72rem;
+  }
+  .board-viewer__toggles label { gap: 0.25rem; }
+  .board-viewer__toggles input { width: 0.85rem; height: 0.85rem; }
+}

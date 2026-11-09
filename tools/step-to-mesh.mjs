@@ -15,6 +15,7 @@
   --mask-shade  darkens the solder mask green (default 0.72; 1 = colours as exported).
   --parts FILE  also write a JSON list of placed parts (for the add-* patch scripts).
   --box-small D draw parts smaller than D mm across as coloured boxes (default 2; 0 = off).
+  --box-parts RE also box parts whose names match RE, whatever their size (for lighter models).
   --fill-holes D leave drill holes narrower than D mm out of the board body (default 0.6; 0 = off).
 
   Also writes <output.bin>.js, a script copy of the same model that the viewer
@@ -64,6 +65,9 @@ const MASK_SHADE = shadeFlag >= 0 ? parseFloat(argv[shadeFlag + 1]) : 0.72;
 const boxFlag = argv.indexOf("--box-small");
 // parts smaller than this (bounding-box diagonal, mm) become a few coloured boxes
 const BOX_SMALL = boxFlag >= 0 ? parseFloat(argv[boxFlag + 1]) : 2.0;
+const boxPartsFlag = argv.indexOf("--box-parts");
+// parts whose names match this are boxed whatever their size (a lighter level of detail)
+const BOX_PARTS = boxPartsFlag >= 0 ? new RegExp(argv[boxPartsFlag + 1], "i") : null;
 const DECAL_TOL = 2 * TOL;
 const fillFlag = argv.indexOf("--fill-holes");
 // drill holes narrower than this (mm) are left out of the board itself: vias are tented
@@ -1678,7 +1682,7 @@ for (const inst of instances) {
   if (!overlay && BOX_SMALL > 0 && faceBoxes.length) {
     const lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
     for (const f of faceBoxes) for (let k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], f.lo[k]); hi[k] = Math.max(hi[k], f.hi[k]); }
-    if (Math.hypot(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]) < BOX_SMALL) {
+    if (Math.hypot(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]) < BOX_SMALL || (BOX_PARTS && BOX_PARTS.test(inst.name || ""))) {
       const parent = faceBoxes.map((_, i) => i);
       const find = (i) => (parent[i] === i ? i : (parent[i] = find(parent[i])));
       const touch = (a, b) => [0, 1, 2].every((k) => a.lo[k] <= b.hi[k] + 0.01 && b.lo[k] <= a.hi[k] + 0.01);

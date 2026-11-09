@@ -17,7 +17,7 @@ faceplate: panel (x, y) sits over controls-board KiCad (100.1 + x, 580 - y), str
 controls board's (found from its M2 mounting holes).
 """
 import json, math, sys
-from pcb3 import read_model, write_model, add_mesh, colour_index, recolour, mat_mul, translate
+from pcb3 import read_model, write_model, add_mesh, colour_index, recolour, mat_mul, translate, deform, mesh_points, remove_instances
 from geom import Mesh, box, extrude, lathe, cylinder_y, rrect, circle, arc_points
 
 STRIP_X0, STRIP_PITCH, PANEL_Y0 = 100.1, 36.5, 580.0
@@ -33,7 +33,10 @@ LEVER_TOP = 18.5                      # lever tip above the mounting surface (AL
 
 MASK_GREEN, COPPER_GREEN = (58, 89, 78), (86, 125, 90)   # same as the analog cards
 ANODIZED = (34, 34, 38)
-KNOB, KNOB_LINE = (31, 31, 34), (238, 238, 232)
+KNOB, KNOB_GROOVE, KNOB_TOP = (31, 31, 34), (16, 16, 18), (240, 240, 236)
+FADER_CAP = (200, 202, 208)
+SWITCH_BODY, SWITCH_CAP = (40, 40, 44), (240, 240, 236)
+ENC_BASE, ENC_METAL, ENC_SHAFT = (46, 70, 58), (192, 193, 198), (212, 213, 217)
 FRAME_TOP, FRAME_SIDE, FADER_PCB = (204, 205, 210), (168, 169, 174), (92, 66, 48)
 MOTOR_CAN, MOTOR_END, GEARBOX = (192, 194, 200), (54, 54, 58), (42, 42, 46)
 GLASS, BEZEL = (16, 18, 26), (40, 40, 44)
@@ -138,13 +141,113 @@ def tint(mesh, ci):
     return mesh
 
 
-def knob(m, r, height):
-    """Knob cap: slightly tapered body, chamfered top, white pointer line."""
-    body = lathe([(r + 0.25, 0.0), (r + 0.25, 1.0), (r, height - 0.9), (r - 0.9, height), (0.0, height)], colour_index(m, KNOB), 40)
-    line = colour_index(m, KNOB_LINE)
-    body.add(box((-0.35, 1.2, height - 0.04), (0.35, r - 0.55, height + 0.04), line))   # across the top
-    body.add(box((-0.35, r - 0.35, 1.6), (0.35, r + 0.32, height - 0.95), line))       # down the side
-    return body
+def disk(cx, cy, r, z, ci, segs=32, m=None):
+    m = m or Mesh()
+    c = m.vert((cx, cy, z), (0, 0, 1), ci)
+    rim = [m.vert((cx + r * math.cos(2 * math.pi * k / segs), cy + r * math.sin(2 * math.pi * k / segs), z), (0, 0, 1), ci)
+           for k in range(segs)]
+    for k in range(segs): m.tri += [c, rim[k], rim[(k + 1) % segs]]
+    return m
+
+
+def fluted(r0, r1, z0, z1, ci, groove_ci, flutes=8, n=48):
+    """Tapered round body; every n/flutes-th facet is a darker groove, like a moulded knob."""
+    m = Mesh()
+    nz = (r0 - r1) / (z1 - z0)
+    for k in range(n):
+        c = groove_ci if k % (n // flutes) == 0 else ci
+        a0, a1 = 2 * math.pi * k / n, 2 * math.pi * (k + 1) / n
+        v = []
+        for a, r, z in ((a0, r0, z0), (a1, r0, z0), (a1, r1, z1), (a0, r1, z1)):
+            l = math.sqrt(1 + nz * nz)
+            v.append(m.vert((r * math.cos(a), r * math.sin(a), z), (math.cos(a) / l, math.sin(a) / l, nz / l), c))
+        m.tri += [v[0], v[1], v[2], v[0], v[2], v[3]]
+    return m
+
+
+def knob(m, height):
+    """Knob cap after the usual moulded kind: a round skirt, a fluted taper and a white top disk
+    at 80 % of the top face."""
+    black, groove, white = colour_index(m, KNOB), colour_index(m, KNOB_GROOVE), colour_index(m, KNOB_TOP)
+    rs, hs, r0, r1 = 6.4, 3.4, 5.1, 4.35
+    out = lathe([(rs, 0.0), (rs, hs - 0.35), (rs - 0.35, hs), (r0, hs)], black, 40)
+    out.add(fluted(r0, r1, hs, height - 0.6, black, groove))
+    out.add(lathe([(r1, height - 0.6), (r1 - 0.6, height), (0.0, height)], black, 48))
+    disk(0, 0, 0.8 * (r1 - 0.6), height + 0.03, white, 40, out)
+    return out
+
+
+def encoder(m):
+    """EC11 with a threaded M7 bushing and a D-shaft, as in the Alps photo (shaft axis at the origin)."""
+    base, metal, shaft = colour_index(m, ENC_BASE), colour_index(m, ENC_METAL), colour_index(m, ENC_SHAFT)
+    out = box((-6.2, -5.85, 1.6), (6.2, 5.85, 3.2), base)                     # insulator
+    box((-5.95, -5.85, 3.2), (5.95, 5.85, 8.0), metal, out)                  # metal cover
+    for sx in (-1, 1):                                                        # fold-down tabs
+        box((min(sx * 5.95, sx * 6.25), -1.2, 2.2), (max(sx * 5.95, sx * 6.25), 1.2, 8.0), metal, out)
+    thread, z = [(3.0, 8.0), (3.25, 8.0)], 8.0
+    for _ in range(9):                                                        # M7 x 0.75-ish ridges
+        thread += [(3.5, z + 0.39), (3.25, z + 0.78)]; z += 0.78
+    thread += [(3.0, z)]
+    out.add(lathe(thread, metal, 16))
+    out.add(lathe([(3.0, z), (3.0, 25.0)], shaft, 20))
+    flat = 1.5                                                                # D-flat 4.5 mm across
+    a = math.asin(flat / 3.0)
+    d = arc_points(0, 0, 3.0, math.pi - a, 2 * math.pi + a, 18.0)
+    out.add(extrude(d, [], 25.0, SHAFT_TOP, shaft))
+    seg = arc_points(0, 0, 3.0, a, math.pi - a, 18.0)                         # the step where the flat starts
+    out.add(extrude(seg, [], 24.98, 25.0, shaft))
+    return out
+
+
+def nidec_switch(m, cap_top):
+    """Nidec CFPB: black housing with a white square cap, as in its photo."""
+    body, cap = colour_index(m, SWITCH_BODY), colour_index(m, SWITCH_CAP)
+    out = box((-4.95, -4.95, 1.6), (4.95, 4.95, 10.4), body)
+    box((-4.1, -4.1, 10.4), (4.1, 4.1, 11.0), body, out)                     # collar
+    out.add(extrude(rrect(0, 0, 6.0, 6.0, 0.5), [], 11.0, cap_top - 0.35, cap))
+    out.add(extrude(rrect(0, 0, 5.4, 5.4, 0.3), [], cap_top - 0.35, cap_top, cap))
+    return out
+
+
+def fader_cap(m, z0):
+    """Brushed-aluminium fader cap: a saddle profile (raised front and back edges, a ribbed
+    valley between them) run across the slot."""
+    W, D, H = 22.0, 11.0, 11.5
+    yv, depth = D / 2 - 1.9, 2.3
+    prof = [(-D / 2, 0.0), (D / 2, 0.0), (D / 2 - 0.45, H - 0.7), (D / 2 - 0.75, H - 0.15), (D / 2 - 1.2, H)]
+    n = 16
+    for k in range(n + 1):
+        y = yv - 2 * yv * k / n
+        rib = 0.12 if k in (3, 5, 11, 13) else 0.0
+        prof.append((y, H - depth * (1 - (y / yv) ** 2) + rib))
+    prof += [(-(D / 2 - 1.2), H), (-(D / 2 - 0.75), H - 0.15), (-(D / 2 - 0.45), H - 0.7)]
+    e = extrude(prof, [], -W / 2, W / 2, colour_index(m, FADER_CAP))
+    e.pos = [(w, u, v + z0) for u, v, w in e.pos]          # profile (y, z), run along x
+    e.nrm = [(w, u, v) for u, v, w in e.nrm]
+    return e
+
+
+def stretch(m, parts, key, cut, lift):
+    """Lift everything above world height cut(z values) by lift, stretching what crosses it."""
+    for k in mesh_ids(parts, key):
+        M = next(p['m'] for p in parts if p['mesh'] == k)
+        zs = [M[8] * q[0] + M[9] * q[1] + M[10] * q[2] + M[11] for chunk in mesh_points(m, k) for q in chunk]
+        c, dz = cut(zs, m, k, M), lift(zs)
+        R = [M[0], M[1], M[2], M[4], M[5], M[6], M[8], M[9], M[10]]
+        up = [R[6] * dz, R[7] * dz, R[8] * dz]                                 # R^T (0, 0, dz)
+        def fn(q, ci, M=M, c=c, up=up):
+            if M[8] * q[0] + M[9] * q[1] + M[10] * q[2] + M[11] > c:
+                return [q[0] + up[0], q[1] + up[1], q[2] + up[2]]
+            return q
+        deform(m, k, fn)
+
+
+def body_top(zs, m, k, M):
+    """Top of a switch's dark body: the cap starts there."""
+    dark = [M[8] * q[0] + M[9] * q[1] + M[10] * q[2] + M[11]
+            for chunk, (vc, ic, P, N, I) in zip(mesh_points(m, k), m.meshes[k]['chunks'])
+            for v, q in enumerate(chunk) if sum(m.palette[N[v * 4 + 3]]) < 240]
+    return max(dark) + 0.02
 
 
 def fader_body(m, motor_end):
@@ -171,49 +274,59 @@ def fader_body(m, motor_end):
 def fader_knob(m, cap_bottom):
     """Lever and cap above the panel (cap_bottom is relative to the mounting surface)."""
     out = box((-0.6, -4.5, -2.0), (0.6, 4.5, LEVER_TOP), colour_index(m, FRAME_TOP))
-    out.add(extrude(rrect(0, 0, 12.0, 22.0, 2.4), [], cap_bottom, cap_bottom + 10.5, colour_index(m, KNOB)))
-    box((-6.04, -0.45, cap_bottom + 1.0), (6.04, 0.45, cap_bottom + 10.54), colour_index(m, KNOB_LINE), out)
+    out.add(fader_cap(m, cap_bottom))
     return out
 
 
 def main(ctl_path, fad_path, ring_path, dxf_path, out_path):
+    # the panel's height comes from the LED rings, and the switch caps and LEDs follow it
+    layers = read_dxf(dxf_path)
+    enc = [(STRIP_X0 + STRIP_PITCH * s + x, y - PANEL_Y0) for s in range(4) for x, y, r in layers['ENCODER']['circles']]
+    assert len(enc) == 40
+    ring = read_model(ring_path); ring_parts = parts_of(ring_path)
+    hidden = mesh_ids(ring_parts, 'copper top', 'copper bottom', 'pads bottom', 'silkscreen bottom', 'TSSOP')
+    ring_top = max(p['hi'][2] for p in ring_parts if p['mesh'] not in hidden) + RING_Z
+    panel_z0 = ring_top + 0.15                # floats just above the rings
+    panel_z1 = panel_z0 + 1.6
+    nidec_top = panel_z1 + 3.0                # Nidec caps stick 3 mm through the panel
+
     asm = read_model(ctl_path); ctl_parts = parts_of(ctl_path)
     green, copper = colour_index(asm, MASK_GREEN), colour_index(asm, COPPER_GREEN)
     for k in mesh_ids(ctl_parts, '_PCB'): recolour(asm, k, to=green)
     for k in mesh_ids(ctl_parts, 'copper top', 'copper bottom'): recolour(asm, k, to=copper)
     asm.instances = [(mesh, mat, 0) for mesh, mat, *_ in asm.instances]
+    cap_lift = nidec_top - max(p['hi'][2] for p in ctl_parts if 'CFPB' in p['name'])
+    # TL2201 caps rise as much as the Nidec caps; the 3 mm LEDs go up on longer leads to sit flush
+    stretch(asm, ctl_parts, 'TL2201', body_top, lambda zs: cap_lift)
+    stretch(asm, ctl_parts, 'LED_D3', lambda zs, *_: 3.0, lambda zs: panel_z1 - max(zs))
+    # the Nidec switches and the encoders are redrawn
+    nidec_at = [((p['lo'][0] + p['hi'][0]) / 2, (p['lo'][1] + p['hi'][1]) / 2) for p in ctl_parts if 'CFPB' in p['name']]
+    redrawn = mesh_ids(ctl_parts, 'CFPB', 'EC11')
+    remove_instances(asm, {i for i, inst in enumerate(asm.instances) if inst[0] in redrawn})
+    place(asm, nidec_switch(asm, nidec_top), [translate(x, y, 0) for x, y in nidec_at], 0)
+    place(asm, encoder(asm), [translate(x, y, 0) for x, y in enc], 0)
 
     # fader board, without its placeholder faders
     fad = read_model(fad_path); fad_parts = parts_of(fad_path)
     fg, fc = colour_index(fad, MASK_GREEN), colour_index(fad, COPPER_GREEN)
     for k in mesh_ids(fad_parts, '_PCB'): recolour(fad, k, to=fg)
     for k in mesh_ids(fad_parts, 'copper top', 'copper bottom'): recolour(fad, k, to=fc)
+    stretch(fad, fad_parts, 'TL2201', body_top, lambda zs: cap_lift)
+    stretch(fad, fad_parts, 'LED_D3', lambda zs, *_: 3.0, lambda zs: panel_z1 - max(zs))
     placeholder = mesh_ids(fad_parts, 'RSA0N11')
     add_instanced(asm, fad, [translate(FADER_BOARD[0], FADER_BOARD[1], 0)], 0, lambda i: i not in placeholder)
 
-    # panel geometry decides where everything else goes
-    layers = read_dxf(dxf_path)
-    enc = [(STRIP_X0 + STRIP_PITCH * s + x, y - PANEL_Y0) for s in range(4) for x, y, r in layers['ENCODER']['circles']]
-    assert len(enc) == 40
-
     # LED rings: only what shows from above (copper under black mask and the underside are skipped)
-    ring = read_model(ring_path); ring_parts = parts_of(ring_path)
-    hidden = mesh_ids(ring_parts, 'copper top', 'copper bottom', 'pads bottom', 'silkscreen bottom', 'TSSOP')
-    ring_top = max(p['hi'][2] for p in ring_parts if p['mesh'] not in hidden) + RING_Z
     add_instanced(asm, ring, [translate(x - RING_CENTRE[0], y - RING_CENTRE[1], RING_Z) for x, y in enc], 1,
                   lambda i: i not in hidden)
-
-    panel_z0 = ring_top + 0.15                # floats just above the rings
-    panel_z1 = panel_z0 + 1.6
 
     # faceplate strips (group 2)
     plate = tint(faceplate(layers, panel_z0, panel_z1), colour_index(asm, ANODIZED))
     place(asm, plate, [translate(STRIP_X0 + STRIP_PITCH * s, -PANEL_Y0, 0) for s in range(4)], 2)
 
-    # knob caps on the encoder shafts (group 2): pointer angles vary a little
-    kn = knob(asm, 6.3, SHAFT_TOP + 0.8 - (panel_z1 + 0.6))
-    angles = [math.radians(a) for a in (-120, -60, 0, 45, 100, -30, 75, -90, 20, 135)]
-    place(asm, kn, [rot_z(-angles[i % 10], x, y, panel_z1 + 0.6) for i, (x, y) in enumerate(enc)], 2)
+    # knob caps on the encoder shafts (group 2)
+    kn = knob(asm, SHAFT_TOP + 0.8 - (panel_z1 + 0.6))
+    place(asm, kn, [translate(x, y, panel_z1 + 0.6) for x, y in enc], 2)
 
     # display glass behind each window (group 2)
     dx = [p for path in layers['DISPLAY']['paths'] for p in path]

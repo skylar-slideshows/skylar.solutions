@@ -10,10 +10,6 @@ across (0402s, 0201s) become a few coloured boxes, and pin holes under 1.3 mm
 (with `--fill-holes 1.3`) are left out of the board itself, since a pin or a
 tented via fills them anyway. Cards use `--tol 0.02`; the big boards `--tol 0.03`.
 
-## Plain boards (motherboard)
-
-    node tools/step-to-mesh.mjs BUCKET_ROUTING_board.step assets/models/bucket-routing-board.bin --tol 0.03 --fill-holes 1.3
-
 ## Cards (input, EQ, comp, sends, output)
 
 Convert with `--parts`, then run `fix-cards.py` (grey film caps where the
@@ -53,7 +49,34 @@ group 2, which the page's checkboxes switch on and off.
 Positions come from the faceplate: panel (x, y) sits over controls-board KiCad
 (100.1 + x, 580 − y), strips 36.5 mm apart, and the fader board is offset
 (+70, +455) from the controls board (found from its M2 mounting holes). The
-faders are drawn from the ALPS RSA0N11M9 drawing (`geom.py` has the shapes).
+script also redraws parts from their photos (`geom.py` has the shapes): the
+Nidec CFPB switches (caps 3 mm through the panel), the EC11 encoders (threaded
+bushing, D-shaft), the knob caps (fluted, white top) and the ALPS RSA0N11M9
+motor faders with silver caps. The TL2201 caps are stretched up by the same
+amount as the Nidec caps, and the 3 mm LEDs go up on longer leads until they
+sit flush with the panel.
+
+## Analog assembly
+
+The routing board with four channels of cards (20 in all), placed the way the
+full assembly STEP has them. Only the assembly's board bodies are used, to
+find each card's spot; the boards themselves are our own models. Because the
+assembly shows 21 boards at once, they are converted lighter: coarser curves,
+and ICs, sockets, headers and other boxy parts drawn as one box per coloured
+piece (`--box-parts`). The fixes and thermistors are applied as usual, with
+`--lite` for coarser thermistors.
+
+    node tools/step-to-mesh.mjs bucket_routing_assembly.step asm.bin --tol 0.03 --parts asm.parts.json
+    BOX="SOIC|TSSOP|SOT|MSOP|SSOP|DIP|PinHeader|PinSocket|QFN|DFN|HTSOP|SIP|Relay|Potentiometer|D_SOD|D_SMA|D_SMB|C_1206|C_1210|C_0805|R_1206|R_2010|R_0805|C_Rect|Crystal|TO-"
+    node tools/step-to-mesh.mjs BUCKET_ROUTING_board.step lite/routing.bin --tol 0.06 --fill-holes 1.3 --box-small 4 --box-parts "$BOX" --parts lite/routing.json
+    node tools/step-to-mesh.mjs EQ_card.step lite/eq.bin --tol 0.06 --fill-holes 1.3 --box-small 4 --box-parts "$BOX" --parts lite/eq.json
+    python3 tools/fix-cards.py EQ/EQ.kicad_pcb lite/eq.bin lite/eq.json --film --bipolar -
+    python3 tools/add-thermistors.py EQ/EQ.kicad_pcb lite/eq.bin lite/eq.json --lite
+    (the same for input, comp, sends and output, with the options from the cards section)
+    python3 tools/build-analog.py asm.parts.json lite/routing.bin lite/input.bin lite/eq.bin lite/comp.bin lite/sends.bin lite/output.bin assets/models/analog-assembly.bin
+
+The card types are instance groups 1 to 5 (input, EQ, comp, sends, output) for
+the analog page's checkboxes.
 
 ## Layer images
 

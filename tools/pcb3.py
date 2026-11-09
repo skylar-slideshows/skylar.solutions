@@ -147,3 +147,30 @@ def merge(dst, src, transform=None, group=0, keep=None):
         if keep is not None and not keep(i): continue
         mat = mat_mul(transform, inst[1]) if transform else inst[1]
         dst.instances.append((remap[inst[0]], mat, group))
+
+
+def mesh_points(m, k):
+    """Decoded local vertex positions of mesh k, one list per chunk."""
+    mesh = m.meshes[k]
+    out = []
+    for vc, ic, P, N, I in mesh["chunks"]:
+        q = struct.unpack(f"<{vc * 3}H", P)
+        out.append([[mesh["qmin"][a] + q[v * 3 + a] * mesh["qstep"][a] for a in range(3)] for v in range(vc)])
+    return out
+
+
+def deform(m, k, fn):
+    """Move mesh k's vertices: fn(point, colour index) -> new point (local coordinates).
+    Triangles and normals stay as they are; positions are re-quantized."""
+    mesh = m.meshes[k]
+    pts = mesh_points(m, k)
+    new = [[fn(p, N[v * 4 + 3]) for v, p in enumerate(chunk)] for chunk, (vc, ic, P, N, I) in zip(pts, mesh["chunks"])]
+    flat = [p for chunk in new for p in chunk]
+    lo = [min(p[a] for p in flat) for a in range(3)]
+    hi = [max(p[a] for p in flat) for a in range(3)]
+    step = [max(hi[a] - lo[a], 1e-9) / 65535 for a in range(3)]
+    chunks = []
+    for chunk, (vc, ic, P, N, I) in zip(new, mesh["chunks"]):
+        P2 = b"".join(struct.pack("<3H", *[round((p[a] - lo[a]) / step[a]) for a in range(3)]) for p in chunk)
+        chunks.append((vc, ic, P2, N, I))
+    mesh.update(qmin=lo, qstep=step, chunks=chunks)

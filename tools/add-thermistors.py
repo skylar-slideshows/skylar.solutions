@@ -98,7 +98,12 @@ def contact(th, chip, parts):
     return point, up, axis
 
 
-def bead(center, axis, normal, colours, pos, nrm, col, tri, rings=6, seg=18, size=BEAD):
+# mesh resolution (python3 tools/add-thermistors.py ... --lite halves it)
+RES = {'rings': 6, 'seg': 18, 'tube': 10, 'curve': 24}
+
+
+def bead(center, axis, normal, colours, pos, nrm, col, tri, rings=None, seg=None, size=BEAD):
+    rings, seg = rings or RES['rings'], seg or RES['seg']
     a, b, c = size
     w = norm(cross(axis, normal))
     for t0, t1, rgb in BANDS:
@@ -121,7 +126,8 @@ def bead(center, axis, normal, colours, pos, nrm, col, tri, rings=6, seg=18, siz
                 tri += [p0, p1, p0 + seg, p1, p1 + seg, p0 + seg]
 
 
-def tube(path, colour, pos, nrm, col, tri, seg=10):
+def tube(path, colour, pos, nrm, col, tri, seg=None):
+    seg = seg or RES['tube']
     start = len(pos)
     d0 = norm(sub(path[1], path[0]))
     u = norm(cross(d0, [0, 0, 1] if abs(d0[2]) < 0.9 else [1, 0, 0]))
@@ -192,7 +198,7 @@ def main(pcb_path, bin_path, parts_path):
             under = [px, py, (BOARD_BOTTOM - 1.0) if out > 0 else (BOARD_TOP + 1.0)]
             exitp = [px, py, surface + out * 1.2]
             L = math.dist(exitp, end)
-            curve = bezier(exitp, add(exitp, [0, 0, out * min(L * 0.3, 3.0)]), add(end, mul(axis, -min(L * 0.35, 4.0))), end, n=24)
+            curve = bezier(exitp, add(exitp, [0, 0, out * min(L * 0.3, 3.0)]), add(end, mul(axis, -min(L * 0.35, 4.0))), end, n=RES['curve'])
             tube([under] + curve, lead_ci, pos, nrm, col, tri)
         print(f"  {th['ref']:6s} ({th['side']}) -> {chip['ref']} {chip['val']}: bead at "
               f"({centre_[0]:.1f}, {centre_[1]:.1f}, {centre_[2]:.1f}), leads {L:.1f} mm")
@@ -203,6 +209,9 @@ def main(pcb_path, bin_path, parts_path):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
+    args = [a for a in sys.argv[1:] if a != "--lite"]
+    if "--lite" in sys.argv[1:]:          # coarser beads and leads, for the full analog assembly
+        RES.update(rings=4, seg=10, tube=6, curve=10)
+    if len(args) != 3:
         sys.exit(__doc__)
-    main(*sys.argv[1:])
+    main(*args)
