@@ -14,6 +14,8 @@
   --tol         chordal tolerance in model units (mm). Smaller = smoother, bigger file.
   --mask-shade  darkens the solder mask green (default 0.72; 1 = colours as exported).
   --parts FILE  also write a JSON list of placed parts (for the add-* patch scripts).
+  --box-small D draw parts smaller than D mm across as coloured boxes (default 2; 0 = off).
+  --fill-holes D leave drill holes narrower than D mm out of the board body (default 0.6; 0 = off).
 
   Also writes <output.bin>.js, a script copy of the same model that the viewer
   uses when a page is opened from disk (file://) instead of a web server.
@@ -59,6 +61,13 @@ const shadeFlag = argv.indexOf("--mask-shade");
 // brighter still, so boards read as lime. Green-dominant colours (the mask
 // and the copper under it) are scaled by this. --mask-shade 1 turns it off.
 const MASK_SHADE = shadeFlag >= 0 ? parseFloat(argv[shadeFlag + 1]) : 0.72;
+const boxFlag = argv.indexOf("--box-small");
+// parts smaller than this (bounding-box diagonal, mm) become a few coloured boxes
+const BOX_SMALL = boxFlag >= 0 ? parseFloat(argv[boxFlag + 1]) : 2.0;
+const DECAL_TOL = 2 * TOL;
+const fillFlag = argv.indexOf("--fill-holes");
+// drill holes narrower than this (mm) are left out of the board itself: vias are tented
+const FILL_HOLES = fillFlag >= 0 ? parseFloat(argv[fillFlag + 1]) : 0.6; // copper/pad/silkscreen outlines are simplified to within this (mm)
 const partsFlag = argv.indexOf("--parts");
 // --parts list.json: also write every placed part (name, mesh, matrix, world
 // bounds). tools/add-thermistors.py and tools/add-chip-marking.py use it.
@@ -293,9 +302,10 @@ function placementMatrix(id) {
 /* ------------------------------------------------------------------------ */
 /* Curves                                                                   */
 /* ------------------------------------------------------------------------ */
+const ARC_MAX_STEP = Math.PI / 4; // tiny circles (vias, pins) can get away with 8 sides
 function arcStep(r) {
-  const s = r > TOL ? 2 * Math.acos(1 - TOL / r) : MAX_STEP;
-  return Math.min(MAX_STEP, Math.max(MIN_STEP, s));
+  const s = r > TOL ? 2 * Math.acos(1 - TOL / r) : ARC_MAX_STEP;
+  return Math.min(ARC_MAX_STEP, Math.max(MIN_STEP, s));
 }
 
 // Expanded knot vector from multiplicities
@@ -1149,17 +1159,62 @@ function faceLoops(bounds) {
   return loops;
 }
 
+// Douglas-Peucker on a closed loop, anchored at the two farthest-apart points
+function simplifyLoop(L, tol) {
+  const n = L.uv.length;
+  if (n < 8) return;
+  const keep = new Uint8Array(n);
+  let far = 0, fd = -1;
+  for (let i = 1; i < n; i++) {
+    const d = (L.uv[i][0] - L.uv[0][0]) ** 2 + (L.uv[i][1] - L.uv[0][1]) ** 2;
+    if (d > fd) { fd = d; far = i; }
+  }
+  keep[0] = keep[far] = 1;
+  const stack = [[0, far], [far, n]];
+  while (stack.length) {
+    const [a, b] = stack.pop();
+    const A = L.uv[a], B = L.uv[b % n];
+    const dx = B[0] - A[0], dy = B[1] - A[1], ll = Math.hypot(dx, dy) || 1e-12;
+    let best = -1, bd = tol;
+    for (let i = a + 1; i < b; i++) {
+      const d = Math.abs((L.uv[i][0] - A[0]) * dy - (L.uv[i][1] - A[1]) * dx) / ll;
+      if (d > bd) { bd = d; best = i; }
+    }
+    if (best >= 0) { keep[best] = 1; stack.push([a, best], [best, b]); }
+  }
+  const pts = [], uv = [];
+  for (let i = 0; i < n; i++) if (keep[i]) { pts.push(L.pts[i]); uv.push(L.uv[i]); }
+  if (pts.length >= 3) { L.pts = pts; L.uv = uv; }
+}
+
 // Returns { pos: [[x,y,z]], nrm: [[x,y,z]], tri: [i,j,k,...] } or null
-function tessellateFace(fid) {
+function tessellateFace(fid, decal = false, board = false) {
   const a = args(fid); // ADVANCED_FACE(name, bounds, surface, same_sense)
   const sense = a[3] === ".T.";
   const surf = surfaceOf(a[2].id);
   if (!surf) { warn("unsupported surface " + (typeOf(a[2].id) || "complex")); return null; }
   const loops = faceLoops(a[1]);
   if (!loops.length) return null;
+  if (board && FILL_HOLES > 0) {
+    // vias: drop the tiny bore and its openings in the board's faces
+    if (surf.kind === "cylinder" && surf.scaleU < FILL_HOLES / 2) return { skip: true };
+    if (surf.planar) {
+      for (let i = loops.length - 1; i >= 0; i--) {
+        const P = loops[i].pts;
+        let ext = 0;
+        for (let k = 0; k < 3; k++) {
+          let lo = Infinity, hi = -Infinity;
+          for (const q of P) { lo = Math.min(lo, q[k]); hi = Math.max(hi, q[k]); }
+          ext = Math.max(ext, hi - lo);
+        }
+        if (ext < FILL_HOLES && loops.length > 1) loops.splice(i, 1);
+      }
+    }
+  }
 
   // parameter-space polygons
   for (const L of loops) L.uv = L.pts.map((p) => surf.param(p));
+  if (decal && surf.planar) for (const L of loops) simplifyLoop(L, DECAL_TOL);
   if (surf.isPole) {
     for (const L of loops) {
       const n = L.pts.length;
@@ -1565,15 +1620,37 @@ function shellFaces(item) {
   return faces;
 }
 
+function appendBox(lo, hi, ci, pos, nrm, col, idx, skipBottom = false) {
+  // shrink a hair so neighbouring boxes don't fight over the same faces
+  const e = [0, 1, 2].map((k) => Math.min(0.004, (hi[k] - lo[k]) * 0.02));
+  const a = lo.map((v, k) => v + e[k]), b = hi.map((v, k) => v - e[k]);
+  const faces = [
+    [[1, 0, 0], [[b[0], a[1], a[2]], [b[0], b[1], a[2]], [b[0], b[1], b[2]], [b[0], a[1], b[2]]]],
+    [[-1, 0, 0], [[a[0], b[1], a[2]], [a[0], a[1], a[2]], [a[0], a[1], b[2]], [a[0], b[1], b[2]]]],
+    [[0, 1, 0], [[b[0], b[1], a[2]], [a[0], b[1], a[2]], [a[0], b[1], b[2]], [b[0], b[1], b[2]]]],
+    [[0, -1, 0], [[a[0], a[1], a[2]], [b[0], a[1], a[2]], [b[0], a[1], b[2]], [a[0], a[1], b[2]]]],
+    [[0, 0, 1], [[a[0], a[1], b[2]], [b[0], a[1], b[2]], [b[0], b[1], b[2]], [a[0], b[1], b[2]]]],
+    [[0, 0, -1], [[a[0], b[1], a[2]], [b[0], b[1], a[2]], [b[0], a[1], a[2]], [a[0], a[1], a[2]]]],
+  ];
+  for (const [n, q] of faces) {
+    if (skipBottom && n[2] === -1) continue;
+    const base = pos.length / 3;
+    for (const v of q) { pos.push(v[0], v[1], v[2]); nrm.push(n[0], n[1], n[2]); col.push(ci); }
+    idx.push(base, base + 1, base + 2, base, base + 2, base + 3);
+  }
+}
+
 const meshes = [];
 const meshOfRep = new Map();
 let faceCount = 0, failed = 0;
 const tTess = Date.now();
 for (const inst of instances) {
   if (meshOfRep.has(inst.rep)) continue;
-  const pos = [], nrm = [], col = [], idx = [];
+  let pos = [], nrm = [], col = [], idx = [];
+  const faceBoxes = [];
   let overlay = false;
   const repName = String(args(inst.rep)[0] || "");
+  const isBoard = /(^|[_\s])pcb$/i.test(inst.name || "");
   const layer = /silk/i.test(repName) ? 3 : /pad|mask|paste/i.test(repName) ? 2 : /copper|\bcu\b/i.test(repName) ? 1 : 3;
   for (const item of geometryItems(inst.rep)) {
     if (typeOf(item) === "SHELL_BASED_SURFACE_MODEL") overlay = true;
@@ -1582,15 +1659,41 @@ for (const inst of instances) {
       const c = faceColour.get(face) || itemColour.get(shell) || itemColour.get(item) || DEFAULT_COLOUR;
       const ci = colourIndex(c);
       let res = null;
-      try { res = tessellateFace(face); } catch (err) { warn("face failed: " + err.message); }
+      try { res = tessellateFace(face, overlay, isBoard); } catch (err) { warn("face failed: " + err.message); }
+      if (res && res.skip) continue;
       if (!res || !res.tri.length) { failed++; continue; }
       const base = pos.length / 3;
+      const flo = [Infinity, Infinity, Infinity], fhi = [-Infinity, -Infinity, -Infinity];
+      for (const q of res.pos) for (let k = 0; k < 3; k++) { flo[k] = Math.min(flo[k], q[k]); fhi[k] = Math.max(fhi[k], q[k]); }
+      faceBoxes.push({ ci, lo: flo, hi: fhi });
       for (let i = 0; i < res.pos.length; i++) {
         pos.push(res.pos[i][0], res.pos[i][1], res.pos[i][2]);
         nrm.push(res.nrm[i][0], res.nrm[i][1], res.nrm[i][2]);
         col.push(ci);
       }
       for (const k of res.tri) idx.push(base + k);
+    }
+  }
+  // A tiny part (0402s, 0201s...) is drawn as one box per same-coloured region.
+  if (!overlay && BOX_SMALL > 0 && faceBoxes.length) {
+    const lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
+    for (const f of faceBoxes) for (let k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], f.lo[k]); hi[k] = Math.max(hi[k], f.hi[k]); }
+    if (Math.hypot(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]) < BOX_SMALL) {
+      const parent = faceBoxes.map((_, i) => i);
+      const find = (i) => (parent[i] === i ? i : (parent[i] = find(parent[i])));
+      const touch = (a, b) => [0, 1, 2].every((k) => a.lo[k] <= b.hi[k] + 0.01 && b.lo[k] <= a.hi[k] + 0.01);
+      for (let i = 0; i < faceBoxes.length; i++) for (let j = i + 1; j < faceBoxes.length; j++)
+        if (faceBoxes[i].ci === faceBoxes[j].ci && touch(faceBoxes[i], faceBoxes[j])) parent[find(i)] = find(j);
+      const groups = new Map();
+      faceBoxes.forEach((f, i) => {
+        const r = find(i);
+        const g = groups.get(r) || { ci: f.ci, lo: [...f.lo], hi: [...f.hi] };
+        for (let k = 0; k < 3; k++) { g.lo[k] = Math.min(g.lo[k], f.lo[k]); g.hi[k] = Math.max(g.hi[k], f.hi[k]); }
+        groups.set(r, g);
+      });
+      pos = []; nrm = []; col = []; idx = [];
+      // faces resting on the board can never be seen
+      for (const g of groups.values()) appendBox(g.lo, g.hi, g.ci, pos, nrm, col, idx, g.lo[2] - lo[2] < 0.02);
     }
   }
   meshOfRep.set(inst.rep, meshes.length);

@@ -35,7 +35,7 @@
     "uniform vec3 u_qmin;",
     "uniform vec3 u_qsize;",
     "uniform vec3 u_eye;",
-    "uniform vec3 u_palette[32];",
+    "uniform vec3 u_palette[64];",
     "varying vec3 v_normal;",
     "varying vec3 v_colour;",
     "varying vec3 v_view;",
@@ -120,9 +120,9 @@
     o = 4;
     u32(); // version
     var colourCount = u32();
-    var palette = new Float32Array(32 * 3);
+    var palette = new Float32Array(64 * 3);
     for (var i = 0; i < colourCount; i++) {
-      if (i < 32) {
+      if (i < 64) {
         palette[i * 3] = dv.getUint8(o) / 255;
         palette[i * 3 + 1] = dv.getUint8(o + 1) / 255;
         palette[i * 3 + 2] = dv.getUint8(o + 2) / 255;
@@ -161,16 +161,18 @@
     }
     var instanceCount = u32();
     for (var k = 0; k < instanceCount; k++) {
-      var meshIndex = u32();
+      var raw = u32();
+      var meshIndex = raw & 0xffffff;
+      var group = raw >>> 24;          // 0 = always shown; others can be toggled
       var r = [];
       for (var j = 0; j < 12; j++) r.push(f32());
       if (!meshes[meshIndex]) continue;
-      meshes[meshIndex].instances.push(new Float32Array([
+      meshes[meshIndex].instances.push({ g: group, m: new Float32Array([
         r[0], r[4], r[8], 0,
         r[1], r[5], r[9], 0,
         r[2], r[6], r[10], 0,
         r[3], r[7], r[11], 1
-      ]));
+      ]) });
     }
     return { palette: palette, min: min, max: max, meshes: meshes };
   }
@@ -229,6 +231,7 @@
     var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     var gl = null, program = null, loc = {}, model = null, buffer = null;
+    var hidden = {};   // instance groups switched off with the viewer's checkboxes
     var started = false, ready = false, lost = false;
     var spinning = !reduceMotion, engaged = false;
     var target = [0, 0, 0], home = [0, 0, 0], radius = 1;
@@ -331,7 +334,9 @@
       var fovX = 2 * Math.atan(Math.tan(FOV / 2) * aspect);
       // wide frames can crop in closer; narrow (phone) frames back off so the long board fits
       var k = 0.7 + 0.25 * Math.max(0, Math.min(1, (1.78 - aspect) / 0.6));
-      return (radius / Math.sin(Math.min(FOV, fovX) / 2)) * k;
+      // data-zoom="1.3" frames a long assembly tighter than its bounding sphere would
+      var zoom = parseFloat(root.getAttribute("data-zoom")) || 1;
+      return (radius / Math.sin(Math.min(FOV, fovX) / 2)) * k / zoom;
     }
 
     function resetView() {
@@ -342,6 +347,15 @@
       distance = homeDistance;
       requestRender();
     }
+
+    // For scripted screenshots: element.boardViewer.setView([x, y, z], distance, azimuth, elevation)
+    root.boardViewer = {
+      setView: function (t, d, az, el) {
+        spinning = false;
+        target = t.slice(); distance = d; azimuth = az; elevation = el;
+        requestRender();
+      }
+    };
 
     function eye() {
       var ce = Math.cos(elevation);
@@ -434,7 +448,8 @@
           gl.vertexAttribPointer(1, 4, gl.BYTE, false, 0, 0);
           gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ch.ib);
           for (var i = 0; i < mesh.instances.length; i++) {
-            gl.uniformMatrix4fv(loc.u_model, false, mesh.instances[i]);
+            if (hidden[mesh.instances[i].g]) continue;
+            gl.uniformMatrix4fv(loc.u_model, false, mesh.instances[i].m);
             gl.drawElements(gl.TRIANGLES, ch.count, gl.UNSIGNED_SHORT, 0);
           }
         }
@@ -543,6 +558,16 @@
       }, true);
 
       if (resetButton) resetButton.addEventListener("click", reset);
+
+      // show/hide checkboxes: <input type="checkbox" data-viewer-group="1" checked>
+      var toggles = root.querySelectorAll("[data-viewer-group]");
+      for (var t = 0; t < toggles.length; t++) {
+        (function (box) {
+          var g = parseInt(box.getAttribute("data-viewer-group"), 10);
+          hidden[g] = !box.checked;
+          box.addEventListener("change", function () { hidden[g] = !box.checked; requestRender(); });
+        })(toggles[t]);
+      }
     }
 
     function reset() {

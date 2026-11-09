@@ -32,7 +32,7 @@ def read_model(path):
             chunks.append((vc, ic, pos, nc, idx))
         m.meshes.append({"flags": flags, "qmin": qmin, "qstep": qstep, "chunks": chunks})
     for _ in range(u32()):
-        mesh = u32(); m.instances.append((mesh, f32s(12)))
+        raw = u32(); m.instances.append((raw & 0xFFFFFF, f32s(12), raw >> 24))
     return m
 
 def colour_index(m, rgb):
@@ -40,10 +40,10 @@ def colour_index(m, rgb):
     if rgb not in m.palette:
         m.palette.append(rgb)
     i = m.palette.index(rgb)
-    assert i < 32, "the viewer supports up to 32 colours per model"
+    assert i < 64, "the viewer supports up to 64 colours per model"
     return i
 
-def add_mesh(m, pos, nrm, col, tri, flags=0):
+def add_mesh(m, pos, nrm, col, tri, flags=0, group=0, instance=True):
     """pos/nrm: lists of (x, y, z); col: palette index per vertex; tri: flat index list."""
     lo = [min(p[k] for p in pos) for k in range(3)]
     hi = [max(p[k] for p in pos) for k in range(3)]
@@ -65,20 +65,21 @@ def add_mesh(m, pos, nrm, col, tri, flags=0):
             ind.append(vmap[g])
     flush()
     m.meshes.append({"flags": flags, "qmin": lo, "qstep": step, "chunks": chunks})
-    m.instances.append((len(m.meshes) - 1, [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0]))
+    if instance:
+        m.instances.append((len(m.meshes) - 1, [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0], group))
     return len(m.meshes) - 1
 
 def remove_instances(m, indices):
     drop = set(indices)
     m.instances = [inst for i, inst in enumerate(m.instances) if i not in drop]
-    used = sorted({mesh for mesh, _ in m.instances})
+    used = sorted({inst[0] for inst in m.instances})
     remap = {old: new for new, old in enumerate(used)}
     m.meshes = [m.meshes[i] for i in used]
-    m.instances = [(remap[mesh], mat) for mesh, mat in m.instances]
+    m.instances = [(remap[inst[0]], inst[1], inst[2] if len(inst) > 2 else 0) for inst in m.instances]
 
 def write_model(m, path):
     lo, hi = [1e30] * 3, [-1e30] * 3
-    for mesh, mat in m.instances:
+    for mesh, mat, *_ in m.instances:
         q, s = m.meshes[mesh]["qmin"], m.meshes[mesh]["qstep"]
         for c in range(8):
             p = [q[k] + (s[k] * 65535 if c >> k & 1 else 0) for k in range(3)]
@@ -95,8 +96,54 @@ def write_model(m, path):
             out += N + I
             out += b"\0" * (-len(out) % 4)
     out += struct.pack("<I", len(m.instances))
-    for mesh, mat in m.instances:
-        out += struct.pack("<I12f", mesh, *mat)
+    for inst in m.instances:
+        group = inst[2] if len(inst) > 2 else 0
+        out += struct.pack("<I12f", inst[0] | (group << 24), *inst[1])
     open(path, "wb").write(out)
     key = os.path.basename(path)
     open(path + ".js", "w").write('(window.__boardModels=window.__boardModels||{})["%s"]="%s";\n' % (key, base64.b64encode(out).decode()))
+
+
+def mat_mul(a, b):
+    """3x4 row-major rigid transforms: a after b."""
+    o = [0.0] * 12
+    for r in range(3):
+        for c in range(4):
+            o[r * 4 + c] = a[r * 4] * b[c] + a[r * 4 + 1] * b[4 + c] + a[r * 4 + 2] * b[8 + c] + (a[r * 4 + 3] if c == 3 else 0)
+    return o
+
+def translate(x, y, z):
+    return [1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z]
+
+def recolour(m, mesh_index, mapping=None, to=None):
+    """Change vertex colours of one mesh: mapping {old index: new index}, or everything to `to`."""
+    mesh = m.meshes[mesh_index]
+    chunks = []
+    for vc, ic, P, N, I in mesh["chunks"]:
+        n = bytearray(N)
+        for v in range(vc):
+            c = n[v * 4 + 3]
+            if to is not None: n[v * 4 + 3] = to
+            elif mapping and c in mapping: n[v * 4 + 3] = mapping[c]
+        chunks.append((vc, ic, P, bytes(n), I))
+    mesh["chunks"] = chunks
+
+def merge(dst, src, transform=None, group=0, keep=None):
+    """Add src's meshes and instances to dst. keep(instance_index) can filter instances."""
+    pal = {i: colour_index(dst, c) for i, c in enumerate(src.palette)}
+    base = len(dst.meshes)
+    used = sorted({inst[0] for i, inst in enumerate(src.instances) if keep is None or keep(i)})
+    remap = {old: base + k for k, old in enumerate(used)}
+    for old in used:
+        mesh = dict(src.meshes[old])
+        chunks = []
+        for vc, ic, P, N, I in mesh["chunks"]:
+            n = bytearray(N)
+            for v in range(vc): n[v * 4 + 3] = pal[n[v * 4 + 3]]
+            chunks.append((vc, ic, P, bytes(n), I))
+        mesh["chunks"] = chunks
+        dst.meshes.append(mesh)
+    for i, inst in enumerate(src.instances):
+        if keep is not None and not keep(i): continue
+        mat = mat_mul(transform, inst[1]) if transform else inst[1]
+        dst.instances.append((remap[inst[0]], mat, group))

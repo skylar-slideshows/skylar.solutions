@@ -35,9 +35,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
-  <link rel="stylesheet" href="../../assets/site.css?v=20261107e">
-  <script src="../../assets/site.js?v=20261107e" defer></script>
-  <script src="../../assets/board-viewer.js?v=20261107e" defer></script>
+  <link rel="stylesheet" href="../../assets/site.css?v=20261109a">
+  <script src="../../assets/site.js?v=20261109a" defer></script>
+  <script src="../../assets/board-viewer.js?v=20261109a" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -72,7 +72,7 @@
 
     <!-- Interactive 3D model (assets/board-viewer.js). Rebuild the .bin with tools/step-to-mesh.mjs. -->
     <figure class="board-figure board-figure--solo">
-      <div class="board-viewer" data-board-viewer data-src="../../assets/models/digital-dev-board.bin?v=20261107e">
+      <div class="board-viewer" data-board-viewer data-src="../../assets/models/digital-dev-board.bin?v=20261109a">
         <img class="board-viewer__poster" src="../../assets/img/digital-dev-board.jpg" width="1600" height="900" alt="3D render of the digital system dev board: a matte black PCB with an STM32 in the middle, four display connectors along one edge, big labeled pin headers, and a barrel jack with power headers">
         <canvas class="board-viewer__canvas" tabindex="0" role="img"
                 aria-label="Interactive 3D model of the digital system dev board. Arrow keys rotate, Shift with arrows pans, plus and minus zoom, 0 resets the view."></canvas>
@@ -91,6 +91,69 @@
 
       <p>You’ll notice there are SO many ground pins. That’s on purpose: they keep the loop sizes small for the high-speed signals. Every signal’s current has to come back home on ground, and when the ground is right next to the signal, the loop it makes is tiny, so it radiates less noise and picks up less of it. That matters a lot in a box full of sensitive analog audio!</p>
     </div>
+
+    <section class="card-section" aria-labelledby="layers-title">
+      <h2 class="card-section__title" id="layers-title">The copper layers</h2>
+      <p class="card-section__lead">All 6 copper layers of the board, top to bottom, drawn from the KiCad layout: 3 signal layers, 2 ground planes (GND) and a +3.3 V power plane.</p>
+      <ul class="layer-grid layer-grid--wide">
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/digital-fcu.webp">
+            <img src="../../assets/img/layers/digital-fcu.jpg" width="640" height="460" loading="lazy" alt="Top copper layer (F.Cu) of the digital system dev board. Signal layer: parts, signal traces and +3.3 V, +5 V power traces">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #ff6b6b"></span>Top <span class="layer__code">F.Cu</span></p>
+          <p class="layer__what">Signal layer: parts, signal traces and +3.3 V, +5 V power traces</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/digital-in1cu.webp">
+            <img src="../../assets/img/layers/digital-in1cu.jpg" width="640" height="460" loading="lazy" alt="Inner 1 copper layer (In1.Cu) of the digital system dev board. Ground plane (GND)">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #f6c945"></span>Inner 1 <span class="layer__code">In1.Cu</span></p>
+          <p class="layer__what">Ground plane (GND)</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/digital-in2cu.webp">
+            <img src="../../assets/img/layers/digital-in2cu.jpg" width="640" height="460" loading="lazy" alt="Inner 2 copper layer (In2.Cu) of the digital system dev board. Power plane: +3.3 V, with a small +5 V area">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #5fd39a"></span>Inner 2 <span class="layer__code">In2.Cu</span></p>
+          <p class="layer__what">Power plane: +3.3 V, with a small +5 V area</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/digital-in3cu.webp">
+            <img src="../../assets/img/layers/digital-in3cu.jpg" width="640" height="460" loading="lazy" alt="Inner 3 copper layer (In3.Cu) of the digital system dev board. Signal layer: signal traces">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #c48af0"></span>Inner 3 <span class="layer__code">In3.Cu</span></p>
+          <p class="layer__what">Signal layer: signal traces</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/digital-in4cu.webp">
+            <img src="../../assets/img/layers/digital-in4cu.jpg" width="640" height="460" loading="lazy" alt="Inner 4 copper layer (In4.Cu) of the digital system dev board. Ground plane (GND)">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #ff9f45"></span>Inner 4 <span class="layer__code">In4.Cu</span></p>
+          <p class="layer__what">Ground plane (GND)</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/digital-bcu.webp">
+            <img src="../../assets/img/layers/digital-bcu.jpg" width="640" height="460" loading="lazy" alt="Bottom copper layer (B.Cu) of the digital system dev board. Signal layer: signal traces and +3.3 V, +5 V power traces">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #5aa7ff"></span>Bottom <span class="layer__code">B.Cu</span></p>
+          <p class="layer__what">Signal layer: signal traces and +3.3 V, +5 V power traces</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/digital-all.webp">
+            <img src="../../assets/img/layers/digital-all.jpg" width="640" height="460" loading="lazy" alt="All copper layers of the digital system dev board stacked together">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch"></span>All layers</p>
+          <p class="layer__what">Every copper layer stacked, top on top</p>
+        </li>
+      </ul>
+    </section>
 
     <!-- Schematic title block. Update the date and rev when you change the page. -->
     <footer class="title-block" aria-hidden="true">

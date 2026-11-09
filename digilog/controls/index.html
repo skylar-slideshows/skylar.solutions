@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Controls board | Digilog | Skylar Denno</title>
+  <meta name="description" content="Interactive 3D model of Digilog’s control surface: forty encoders with LED rings, forty buttons, four motorized faders and the front panel, for four channel strips.">
+  <link rel="canonical" href="https://skylar.solutions/digilog/controls/">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ece8fa">
+
+  <!-- Apply the saved (or system) theme before first paint -->
+  <script>
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem("theme"); } catch (e) {}
+      if (theme !== "light" && theme !== "dark") {
+        theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://skylar.solutions/digilog/controls/">
+  <meta property="og:site_name" content="Skylar Denno">
+  <meta property="og:title" content="Controls board | Digilog">
+  <meta property="og:description" content="Every knob, button and fader on Digilog, in 3D.">
+  <meta property="og:image" content="https://skylar.solutions/assets/img/controls-assembly.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
+  <link rel="stylesheet" href="../../assets/site.css?v=20261109a">
+  <script src="../../assets/site.js?v=20261109a" defer></script>
+  <script src="../../assets/board-viewer.js?v=20261109a" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <a class="site-header__home" href="../../">Skylar Denno</a>
+    <div class="site-header__end">
+      <a href="mailto:skylar.denno@gmail.com">Email me</a>
+      <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode">
+        <span class="theme-switch__thumb" aria-hidden="true">
+          <svg class="theme-switch__icon theme-switch__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+          </svg>
+          <svg class="theme-switch__icon theme-switch__moon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Drawn as schematic sheet "/digilog/controls/" -->
+  <main class="sheet article" id="main">
+    <div class="sheet-frame" aria-hidden="true"></div>
+
+    <header class="article__intro">
+      <p class="crumbs"><a href="../">Digilog</a></p>
+      <h1 class="article__title">Controls board</h1>
+      <p class="article__meta">The knobs, buttons and faders for four channel strips</p>
+    </header>
+
+    <!-- Interactive 3D model (assets/board-viewer.js). Rebuild the .bin with tools/build-controls.py.
+         Instance groups: 1 = LED rings, 2 = front panel with its knob caps and display glass. -->
+    <figure class="board-figure board-figure--solo">
+      <div class="board-viewer" data-board-viewer data-zoom="1.12" data-src="../../assets/models/controls-assembly.bin?v=20261109a">
+        <img class="board-viewer__poster" src="../../assets/img/controls-assembly.jpg" width="1600" height="900" alt="3D render of the Digilog control surface: four black anodized panel strips with forty knobs, four fader caps and four display windows, over the green controls and fader boards">
+        <canvas class="board-viewer__canvas" tabindex="0" role="img"
+                aria-label="Interactive 3D model of the controls board assembly. Arrow keys rotate, Shift with arrows pans, plus and minus zoom, 0 resets the view."></canvas>
+        <p class="board-viewer__status" data-viewer-status role="status" hidden></p>
+        <button class="board-viewer__reset" type="button" data-viewer-reset hidden>Reset view</button>
+        <fieldset class="board-viewer__toggles">
+          <legend class="visually-hidden">Show on the model</legend>
+          <label><input type="checkbox" data-viewer-group="1" checked> LED rings</label>
+          <label><input type="checkbox" data-viewer-group="2" checked> Front panel</label>
+        </fieldset>
+      </div>
+      <figcaption class="board-figure__caption">Rendered from the STEP models and the panel drawing. Drag to rotate, scroll or pinch to zoom, and right-drag or use two fingers to pan. Untick the boxes to take off the front panel or the LED rings and see the boards underneath.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h2>So what is this one?</h2>
+
+      <p>This is everything you actually touch on Digilog. Each of the four channel strips gets ten encoders, ten buttons, a display and a 100 mm motorized fader, and the model is the whole stack: the controls board, the fader board at the bottom of the strips, forty little LED ring boards, and the front panel on top.</p>
+
+      <p>The controls board reads all of it. Every encoder goes through an RC debounce filter so the switch bounce never reaches the logic, then into one of twelve MCP23017 I/O expanders, three per channel strip, with each strip on its own I2C bus. Eight 74HCT595 shift registers handle the LEDs, and each strip has two connectors for its display.</p>
+
+      <p>Each encoder wears its own LED ring: a 24 mm, four-layer board with 32 white 0201 LEDs, each with its own 560 Ω resistor, driven by four 74HCT595s on the back. It plugs into two sockets on the controls board, one for power and one for data, so the shaft comes up through the middle and the LEDs sit right under the ring-shaped window in the panel.</p>
+
+      <p>The faders are ALPS RSA0N11M9s, 100 mm motorized faders with a touch-sense track. On the fader board, each one gets a DRV8871 H-bridge to drive its motor and an AT42QT1011 to feel for a finger on the lever, so the console knows when someone is holding a fader and the motor should leave it alone. The board is a comb, so the fader bodies drop right through it.</p>
+
+      <p>On top is the front panel, 1.6 mm black anodized aluminium, one strip per channel.</p>
+    </div>
+
+    <section class="card-section" aria-labelledby="layers-controls">
+      <h2 class="card-section__title" id="layers-controls">The copper layers</h2>
+      <p class="card-section__lead">All 6 copper layers of the controls board, top to bottom, drawn from the KiCad layout: 4 signal layers and 2 ground planes, labeled GND.</p>
+      <ul class="layer-grid">
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/controls-fcu.webp">
+            <img src="../../assets/img/layers/controls-fcu.jpg" width="468" height="1015" loading="lazy" alt="Top copper layer (F.Cu) of the controls board. Signal layer: parts, signal traces and +3.3 V, +5 V power traces">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #ff6b6b"></span>Top <span class="layer__code">F.Cu</span></p>
+          <p class="layer__what">Signal layer: parts, signal traces and +3.3 V, +5 V power traces</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/controls-in1cu.webp">
+            <img src="../../assets/img/layers/controls-in1cu.jpg" width="468" height="1015" loading="lazy" alt="Inner 1 copper layer (In1.Cu) of the controls board. Ground plane (GND)">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #f6c945"></span>Inner 1 <span class="layer__code">In1.Cu</span></p>
+          <p class="layer__what">Ground plane (GND)</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/controls-in2cu.webp">
+            <img src="../../assets/img/layers/controls-in2cu.jpg" width="468" height="1015" loading="lazy" alt="Inner 2 copper layer (In2.Cu) of the controls board. Ground plane (GND)">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #5fd39a"></span>Inner 2 <span class="layer__code">In2.Cu</span></p>
+          <p class="layer__what">Ground plane (GND)</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/controls-in3cu.webp">
+            <img src="../../assets/img/layers/controls-in3cu.jpg" width="468" height="1015" loading="lazy" alt="Inner 3 copper layer (In3.Cu) of the controls board. Signal layer: signal traces and +3.3 V, +5 V power traces">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #c48af0"></span>Inner 3 <span class="layer__code">In3.Cu</span></p>
+          <p class="layer__what">Signal layer: signal traces and +3.3 V, +5 V power traces</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/controls-in4cu.webp">
+            <img src="../../assets/img/layers/controls-in4cu.jpg" width="468" height="1015" loading="lazy" alt="Inner 4 copper layer (In4.Cu) of the controls board. Signal layer: signal traces and +3.3 V, +5 V power traces">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #ff9f45"></span>Inner 4 <span class="layer__code">In4.Cu</span></p>
+          <p class="layer__what">Signal layer: signal traces and +3.3 V, +5 V power traces</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/controls-bcu.webp">
+            <img src="../../assets/img/layers/controls-bcu.jpg" width="468" height="1015" loading="lazy" alt="Bottom copper layer (B.Cu) of the controls board. Signal layer: a few short traces">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #5aa7ff"></span>Bottom <span class="layer__code">B.Cu</span></p>
+          <p class="layer__what">Signal layer: a few short traces</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/controls-all.webp">
+            <img src="../../assets/img/layers/controls-all.jpg" width="468" height="1015" loading="lazy" alt="All copper layers of the controls board stacked together">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch"></span>All layers</p>
+          <p class="layer__what">Every copper layer stacked, top on top</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="card-section" aria-labelledby="layers-fader">
+      <h2 class="card-section__title" id="layers-fader">The fader board</h2>
+      <p class="card-section__lead">Its 4 copper layers: 2 signal layers and 2 ground planes, labeled GND. The four long slots are where the fader bodies drop through.</p>
+      <ul class="layer-grid layer-grid--wide">
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/faderboard-fcu.webp">
+            <img src="../../assets/img/layers/faderboard-fcu.jpg" width="640" height="455" loading="lazy" alt="Top copper layer (F.Cu) of the fader board. Signal layer: parts, signal traces and +3.3 V power traces">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #ff6b6b"></span>Top <span class="layer__code">F.Cu</span></p>
+          <p class="layer__what">Signal layer: parts, signal traces and +3.3 V power traces</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/faderboard-in1cu.webp">
+            <img src="../../assets/img/layers/faderboard-in1cu.jpg" width="640" height="455" loading="lazy" alt="Inner 1 copper layer (In1.Cu) of the fader board. Ground plane (GND)">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #f6c945"></span>Inner 1 <span class="layer__code">In1.Cu</span></p>
+          <p class="layer__what">Ground plane (GND)</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/faderboard-in2cu.webp">
+            <img src="../../assets/img/layers/faderboard-in2cu.jpg" width="640" height="455" loading="lazy" alt="Inner 2 copper layer (In2.Cu) of the fader board. Ground plane (GND)">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #5fd39a"></span>Inner 2 <span class="layer__code">In2.Cu</span></p>
+          <p class="layer__what">Ground plane (GND)</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/faderboard-bcu.webp">
+            <img src="../../assets/img/layers/faderboard-bcu.jpg" width="640" height="455" loading="lazy" alt="Bottom copper layer (B.Cu) of the fader board. Signal layer: signal traces and +3.3 V power traces">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #5aa7ff"></span>Bottom <span class="layer__code">B.Cu</span></p>
+          <p class="layer__what">Signal layer: signal traces and +3.3 V power traces</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/faderboard-all.webp">
+            <img src="../../assets/img/layers/faderboard-all.jpg" width="640" height="455" loading="lazy" alt="All copper layers of the fader board stacked together">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch"></span>All layers</p>
+          <p class="layer__what">Every copper layer stacked, top on top</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="card-section" aria-labelledby="layers-ring">
+      <h2 class="card-section__title" id="layers-ring">An LED ring board</h2>
+      <p class="card-section__lead">One of the forty LED rings. It’s only 24 mm across, so all 4 of its layers carry signals.</p>
+      <ul class="layer-grid layer-grid--square">
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/ledring-fcu.webp">
+            <img src="../../assets/img/layers/ledring-fcu.jpg" width="400" height="400" loading="lazy" alt="Top copper layer (F.Cu) of the LED ring board. Signal layer: the 32 LEDs and their resistors">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #ff6b6b"></span>Top <span class="layer__code">F.Cu</span></p>
+          <p class="layer__what">Signal layer: the 32 LEDs and their resistors</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/ledring-in1cu.webp">
+            <img src="../../assets/img/layers/ledring-in1cu.jpg" width="400" height="400" loading="lazy" alt="Inner 1 copper layer (In1.Cu) of the LED ring board. Signal layer: signal traces and a VCC pour">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #f6c945"></span>Inner 1 <span class="layer__code">In1.Cu</span></p>
+          <p class="layer__what">Signal layer: signal traces and a VCC pour</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/ledring-in2cu.webp">
+            <img src="../../assets/img/layers/ledring-in2cu.jpg" width="400" height="400" loading="lazy" alt="Inner 2 copper layer (In2.Cu) of the LED ring board. Signal layer: signal traces and a ground pour">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #5fd39a"></span>Inner 2 <span class="layer__code">In2.Cu</span></p>
+          <p class="layer__what">Signal layer: signal traces and a ground pour</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/ledring-bcu.webp">
+            <img src="../../assets/img/layers/ledring-bcu.jpg" width="400" height="400" loading="lazy" alt="Bottom copper layer (B.Cu) of the LED ring board. Signal layer: the four shift registers and their traces">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch" style="--sw: #5aa7ff"></span>Bottom <span class="layer__code">B.Cu</span></p>
+          <p class="layer__what">Signal layer: the four shift registers and their traces</p>
+        </li>
+        <li class="layer">
+          <picture>
+            <source type="image/webp" srcset="../../assets/img/layers/ledring-all.webp">
+            <img src="../../assets/img/layers/ledring-all.jpg" width="400" height="400" loading="lazy" alt="All copper layers of the LED ring board stacked together">
+          </picture>
+          <p class="layer__name"><span class="layer__swatch"></span>All layers</p>
+          <p class="layer__what">Every copper layer stacked, top on top</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Schematic title block. Update the date and rev when you change the page. -->
+    <footer class="title-block" aria-hidden="true">
+      <p class="title-block__wide"><span>Sheet:</span> /digilog/controls/<br><span>File:</span> digilog/controls/index.html</p>
+      <p class="title-block__wide title-block__title"><span>Title:</span> Controls board</p>
+      <p><span>Size:</span> Responsive</p>
+      <p><span>Date:</span> Nov 2026</p>
+      <p><span>Rev:</span> 01</p>
+      <p class="title-block__wide">Powered by curiosity</p>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <a href="../">Back to Digilog</a>
+  </footer>
+</body>
+</html>
