@@ -34,10 +34,10 @@
   <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
-  <link rel="stylesheet" href="../../assets/site.css?v=20261109e">
-  <script src="../../assets/site.js?v=20261109e" defer></script>
-  <script src="../../assets/board-viewer.js?v=20261109e" defer></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400..900&family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
+  <link rel="stylesheet" href="../../assets/site.css?v=20261109f">
+  <script src="../../assets/site.js?v=20261109f" defer></script>
+  <script src="../../assets/board-viewer.js?v=20261109f" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -73,7 +73,7 @@
     <!-- Interactive 3D model (assets/board-viewer.js). Rebuild the .bin with tools/build-analog.py.
          Instance groups: 1 input, 2 EQ, 3 comp, 4 sends, 5 output cards. -->
     <figure class="board-figure board-figure--solo">
-      <div class="board-viewer" data-board-viewer data-src="../../assets/models/analog-assembly.bin?v=20261109e">
+      <div class="board-viewer" data-board-viewer data-src="../../assets/models/analog-assembly.bin?v=20261109f">
         <img class="board-viewer__poster" src="../../assets/img/analog-assembly.jpg" width="1600" height="900" alt="3D render of Digilog’s analog section: the green routing motherboard with four channels of plug-in cards stacked on it">
         <canvas class="board-viewer__canvas" tabindex="0" role="img"
                 aria-label="Interactive 3D model of the analog section. Arrow keys rotate, Shift with arrows pans, plus and minus zoom, 0 resets the view."></canvas>
@@ -90,6 +90,14 @@
       </div>
       <figcaption class="board-figure__caption">Rendered from the STEP models, with every card where the full assembly puts it. Drag to rotate, scroll or pinch to zoom, and right-drag or use two fingers to pan. Untick a card to pull all four of it out; with every box unticked, it’s just the routing board.</figcaption>
     </figure>
+
+    <section class="card-section" aria-labelledby="flow-title">
+      <h2 class="card-section__title" id="flow-title">Signal flow</h2>
+      <p class="card-section__lead">One channel strip at block level; the routing board holds four. Dashed lines are control voltages from the digital section.</p>
+      <figure class="schematic">
+        <svg class="sch" viewBox="0 0 1100 500" role="img" aria-labelledby="sch-t sch-d"><title id="sch-t">Analog section, signal flow of one channel strip</title><desc id="sch-d">Block diagram of one channel strip. The input card (mic, line or Hi-Z preamps and a gain VCA) feeds the EQ card. After the EQ the signal goes three ways: to the output card, whose insert and fader-and-pan VCAs drive the balanced mix bus to the master; to the comp card&#x27;s level detector, whose gain decision comes back through the STM32 to the output card&#x27;s VCAs; and to the sends card&#x27;s seven VCAs, which feed the four aux buses. Control voltages and logic lines from the digital section set every card.</desc><defs><marker id="sch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="currentColor"/></marker></defs><text class="sch-s" x="470" y="36" text-anchor="middle">control voltages and logic lines from the digital section</text><path class="sch-cv" d="M250 52 L710 52"/><path class="sch-cv" d="M250 52 L250 102" marker-end="url(#sch-arrow)"/><path class="sch-cv" d="M460 52 L460 102" marker-end="url(#sch-arrow)"/><path class="sch-cv" d="M710 52 L710 102" marker-end="url(#sch-arrow)"/><path class="sch-port" d="M20.9 137 L150 137 L160 150 L150 163 L20.9 163Z"/><text class="sch-pt" x="30.9" y="154.5" text-anchor="start">Mic, line, Hi-Z</text><path class="sch-w" d="M160 150 L170 150"/><rect class="sch-p" x="170" y="104" width="160" height="92" rx="10"/><text class="sch-t" x="250" y="150" text-anchor="middle">Input card</text><text class="sch-s" x="250" y="166" text-anchor="middle">preamps, gain VCA</text><path class="sch-w" d="M330 150 L380 150" marker-end="url(#sch-arrow)"/><rect class="sch-p" x="380" y="104" width="160" height="92" rx="10"/><path class="sch-icon" d="M428 142.496 L442.08 142.496 C453.6 142.496 453.6 123.68 460 123.68 C466.4 123.68 466.4 142.496 477.92 142.496 L492 142.496"/><path class="sch-axis" d="M428 153.56 L492 153.56"/><text class="sch-t" x="460" y="170.24" text-anchor="middle">EQ card</text><text class="sch-s" x="460" y="186.24" text-anchor="middle">four bands</text><path class="sch-w" d="M540 150 L620 150" marker-end="url(#sch-arrow)"/><circle class="sch-dot" cx="580" cy="150" r="4.5"/><rect class="sch-p" x="620" y="104" width="180" height="92" rx="10"/><text class="sch-t" x="710" y="150" text-anchor="middle">Output card</text><text class="sch-s" x="710" y="166" text-anchor="middle">insert, fader + pan VCAs</text><path class="sch-w" d="M800 134 L850 134"/><path class="sch-port" d="M850 121 L903.7 121 L913.7 134 L903.7 147 L850 147Z"/><text class="sch-pt" x="860" y="138.5" text-anchor="start">Mix L</text><path class="sch-w" d="M800 166 L850 166"/><path class="sch-port" d="M850 153 L903.7 153 L913.7 166 L903.7 179 L850 179Z"/><text class="sch-pt" x="860" y="170.5" text-anchor="start">Mix R</text><text class="sch-s" x="960" y="202" text-anchor="middle">balanced mix bus,</text><text class="sch-s" x="960" y="218" text-anchor="middle">to the master</text><path class="sch-w" d="M580 150 L580 410"/><circle class="sch-dot" cx="580" cy="306" r="4.5"/><path class="sch-w" d="M580 306 L620 306" marker-end="url(#sch-arrow)"/><rect class="sch-p" x="620" y="262" width="180" height="88" rx="10"/><path class="sch-icon" d="M678 307.12 Q686 270.832 694 307.12 Q702 270.832 710 307.12 Q718 270.832 726 307.12 Q734 270.832 742 307.12"/><text class="sch-t" x="710" y="325.36" text-anchor="middle">Comp card</text><text class="sch-s" x="710" y="341.36" text-anchor="middle">level detector</text><path class="sch-cv" d="M710 262 L710 198" marker-end="url(#sch-arrow)"/><text class="sch-s" x="722" y="234" text-anchor="start">gain, set by the STM32</text><path class="sch-w" d="M580 410 L620 410" marker-end="url(#sch-arrow)"/><rect class="sch-p" x="620" y="376" width="180" height="68" rx="10"/><text class="sch-t" x="710" y="410" text-anchor="middle">Sends card</text><text class="sch-s" x="710" y="426" text-anchor="middle">seven VCAs</text><path class="sch-w" d="M800 410 L850 410"/><path class="sch-port" d="M850 397 L941.4 397 L951.4 410 L941.4 423 L850 423Z"/><text class="sch-pt" x="860" y="414.5" text-anchor="start">Aux 1 to 4</text><path class="sch-cv" d="M710 492 L710 444" marker-end="url(#sch-arrow)"/><text class="sch-s" x="722" y="480" text-anchor="start">send CVs</text></svg>
+      </figure>
+    </section>
 
     <div class="prose">
       <h2>Design notes</h2>

@@ -2016,3 +2016,29 @@ a:hover {
   padding-left: 0;
 }
 .prose .notes-list li { margin: 0; }
+
+/* Headings and titles: Figtree, a clean sans that still feels friendly.
+   (Body text stays in Recursive's straight style; the casual axis is gone from titles.) */
+:root {
+  --font-display: "Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+h1, h2, h3, h4,
+.article__title,
+.section__title,
+.card-section__title,
+.board-cards__title,
+.board-feature__title,
+.project-feature__title,
+.project-card__title,
+.title-block__title,
+.about__hello,
+.talk__title,
+.talk__text,
+.listen__title,
+.version__title,
+.profile__name,
+.award__name {
+  font-family: var(--font-display);
+  font-variation-settings: normal;
+  letter-spacing: -0.01em;
+}

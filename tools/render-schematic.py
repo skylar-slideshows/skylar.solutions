@@ -83,13 +83,22 @@ def effects_of(node):
     return dict(size=size, bold=bold, italic=italic, hj=hj, vj=vj, hide=hide)
 
 
+NARROW, WIDE = set("ijlI1.,:;'|!()[]{}/\\ft "), set("MWmw@%")
 def text_width(s, size, bold=False):
-    return max(1, len(s)) * size * (0.66 if not bold else 0.7)
+    """Rough width of a line in a typical sans-serif (the drawings use system fonts)."""
+    em = 0.0
+    for ch in s:
+        if ch in NARROW: em += 0.28
+        elif ch in WIDE: em += 0.86
+        elif ch.isupper() or ch.isdigit() or ch in "_#&+-=<>~": em += 0.64
+        else: em += 0.52
+    return max(em, 0.5) * size * (1.06 if bold else 1.0)
 
 
 class SVG:
     def __init__(self):
         self.out, self.lo, self.hi = [], [math.inf, math.inf], [-math.inf, -math.inf]
+        self.dropped = []      # labels connected to nothing, left out of the drawing
 
     def grow(self, x, y, pad=0.0):
         self.lo[0] = min(self.lo[0], x - pad); self.lo[1] = min(self.lo[1], y - pad)
@@ -302,9 +311,10 @@ def label_shape(shape, L, hh):
     return [(0, -hh), (L, -hh), (L, hh), (0, hh)], 0.0
 
 
-def draw_labels(svg, sch, anchors):
+def draw_labels(svg, sch, anchors, connected):
     for lb in kids(sch, "label"):
         at = kid(lb, "at"); x, y, a = num(at[1]), num(at[2]), num(at[3]) if len(at) > 3 else 0
+        if not connected(x, y): svg.dropped.append(lb[1]); continue
         e = effects_of(lb); anchors.append((x, y))
         a = int(round(a)) % 360
         horizontal = a in (0, 180)
@@ -316,6 +326,7 @@ def draw_labels(svg, sch, anchors):
     for kind, cls in (("global_label", "gl"), ("hierarchical_label", "hl")):
         for lb in kids(sch, kind):
             at = kid(lb, "at"); x, y, a = num(at[1]), num(at[2]), num(at[3]) if len(at) > 3 else 0
+            if not connected(x, y): svg.dropped.append(lb[1]); continue
             e = effects_of(lb); anchors.append((x, y))
             shape = val(lb, "shape") or "passive"
             a = int(round(a)) % 360
@@ -408,8 +419,6 @@ def render(path, check=False, bipolar=()):
         at = kid(nc, "at"); x, y = num(at[1]), num(at[2]); s = 0.6
         svg.path([(x - s, y - s), (x + s, y + s)], "nc"); svg.path([(x - s, y + s), (x + s, y - s)], "nc")
         anchors.append((x, y))
-    draw_labels(svg, sch, anchors)
-
     for sym in kids(sch, "symbol"):
         lib = libs.get(val(sym, "lib_id"))
         if lib is None: continue
@@ -458,6 +467,15 @@ def render(path, check=False, bipolar=()):
             if xs and ys:
                 x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
                 svg.path([(x0, y0), (x1, y1)], "dnp"); svg.path([(x0, y1), (x1, y0)], "dnp")
+
+    # labels last, once every pin end is known; a label touching nothing is a stray
+    wire_pts = {(round(x, 2), round(y, 2)) for w in wires for x, y in w}
+    near = {(round(x, 2), round(y, 2)) for x, y in ends + anchors} | wire_pts
+    def connected(x, y):
+        return (round(x, 2), round(y, 2)) in near or on_wire((round(x, 2), round(y, 2)), wires)
+    draw_labels(svg, sch, anchors, connected)
+    if svg.dropped:
+        print(f"{path}: left out {len(svg.dropped)} label(s) connected to nothing: {', '.join(svg.dropped)}")
 
     if check:
         pts = set()

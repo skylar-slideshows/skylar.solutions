@@ -122,8 +122,17 @@ from the KiCad files, one SVG per sheet, in the site's colours on light paper:
     python3 tools/render-schematic.py SENDS/SENDS.kicad_sch assets/schematics/sends.svg
 
 `--check` reports how many pin ends land on a wire, junction, label or pin (a
-quick test of the symbol transforms). `--bipolar` lists electrolytics drawn with a
+quick test of the symbol transforms). Labels connected to nothing are left out of
+the drawing (the tool lists them), so a stray label can't stretch the page. `--bipolar` lists electrolytics drawn with a
 polarized symbol that are really bipolar; they're drawn without the "+".
+
+## STEP export
+
+Any model can go back out as a STEP file (AP242 tessellated geometry, in mm, with
+colours; each part stored once and placed by an assembly structure, with the
+show/hide groups as named sub-assemblies):
+
+    python3 tools/bin-to-step.py assets/models/controls-assembly.bin digilog-controls-assembly.step "Digilog controls assembly" "1=LED rings" "2=Front panel, knobs and display glass"
 
 After rebuilding anything, bump the `?v=` number on the pages so browsers
 fetch the new files.
