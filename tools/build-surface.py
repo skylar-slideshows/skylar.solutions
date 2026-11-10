@@ -87,6 +87,23 @@ def main(dxf, ctl_parts_path, fad_parts_path, out):
         kind = min(switches, key=lambda s: math.hypot(s[0] - cx, s[1] - cy))
         buttons.append({"d": svg_path(loop), "x": round(cx, 2), "y": round(PANEL_H - cy, 2),
                         "kind": kind[2] if math.hypot(kind[0] - cx, kind[1] - cy) < 2.5 else "small"})
+    # what each button and status LED does, by position: centres from the silkscreen art's
+    # reference layer (points, y down), matched to the nearest DXF hole
+    PT = 25.4 / 72
+    BUTTON_ROLES = {"source": (19.04, 76.27), "phase": (17.79, 193.96), "p48": (51.24, 193.77), "hpf": (84.69, 193.49),
+                    "eq": (17.76, 242.50), "comp": (51.24, 242.53), "sends": (84.69, 242.53),
+                    "solo": (17.79, 860.05), "mute": (51.24, 860.05), "sel": (84.69, 860.05),
+                    "ins": (14.74, 1239.20), "pre": (14.74, 1308.44)}
+    LED_ROLES = {"mic": (49.82, 76.27), "line": (70.88, 76.27), "hiz": (91.86, 76.27),
+                 "phase": (17.21, 174.78), "p48": (51.24, 174.50), "hpf": (85.26, 174.22),
+                 "ins": (15.96, 1216.52), "pre": (15.96, 1285.23)}
+    def role(x, y, table):
+        name, (px, py) = min(table.items(), key=lambda kv: math.hypot(kv[1][0] * PT - x, kv[1][1] * PT - y))
+        assert math.hypot(px * PT - x, py * PT - y) < 2.0, (name, x, y)
+        return name
+    for b in buttons:
+        b["role"] = role(b["x"], b["y"], BUTTON_ROLES)
+    assert len({b["role"] for b in buttons}) == len(buttons) == 12
     display = chain(L["DISPLAY"]["paths"])[0]
     dxs, dys = [p[0] for p in display], [PANEL_H - p[1] for p in display]
     data = {
@@ -95,7 +112,7 @@ def main(dxf, ctl_parts_path, fad_parts_path, out):
         "encoders": [[round(x, 2), round(y, 2)] for x, y in enc],
         "rings": rings,
         "buttons": buttons,
-        "leds": [[round(x, 2), round(PANEL_H - y, 2)] for x, y, r in L["LED"]["circles"]],
+        "leds": [[round(x, 2), round(PANEL_H - y, 2), role(x, PANEL_H - y, LED_ROLES)] for x, y, r in L["LED"]["circles"]],
         "display": {"d": svg_path(display), "x": round(min(dxs), 2), "y": round(min(dys), 2)},
         "fader": svg_path(chain(L["FADER"]["paths"])[0]),
         "faderX": 18.15, "faderTravel": [0.62, 0.48, 0.74, 0.55],
@@ -103,8 +120,9 @@ def main(dxf, ctl_parts_path, fad_parts_path, out):
                    for name in ("CHASSIS_SCREW", "FADER_SCREW", "PCB_MOUNT") for x, y, r in L[name]["circles"]],
     }
     import silkscreen
-    texts, boxes = silkscreen.parse(__file__.rsplit("/", 1)[0] + "/faceplate-silkscreen.svg")
-    data["silk"] = {"texts": [[round(t["x"], 3), round(t["y"], 3), round(t["size"], 3), t["colour"], t["text"]] for t in texts],
+    texts, boxes, lines = silkscreen.parse(__file__.rsplit("/", 1)[0] + "/faceplate-silkscreen.svg")
+    data["silk"] = {"texts": [[round(t["x"], 3), round(t["y"], 3), round(t["size"], 3), t["colour"], t["text"], round(t["stroke"], 3)] for t in texts],
+                    "lines": [[round(l["x1"], 3), round(l["y1"], 3), round(l["x2"], 3), round(l["y2"], 3), round(l["stroke"], 3)] for l in lines],
                     "boxes": [[round(b["x"], 3), round(b["y"], 3), round(b["w"], 3), round(b["h"], 3), round(b["r"], 3), b["kind"],
                                round(b["stroke"], 3)] for b in boxes]}
     js = open(__file__.rsplit("/", 1)[0] + "/surface.template.js").read().replace("/*DATA*/null", json.dumps(data, separators=(",", ":")))

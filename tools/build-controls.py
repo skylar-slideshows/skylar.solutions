@@ -33,6 +33,8 @@ LEVER_IN_CAP = 5.0                    # how far the fader lever reaches into its
 MASK_GREEN, COPPER_GREEN = (58, 89, 78), (86, 125, 90)   # same as the analog cards
 ANODIZED = (34, 34, 38)
 SILK_WHITE, SILK_GREY = (238, 238, 232), (74, 74, 74)
+LED_WHITE = (236, 236, 230)
+P48_LED = (51.24 * 25.4 / 72, 500 - 174.50 * 25.4 / 72)   # +48 V LED hole, panel mm (y up), from the silkscreen art
 KNOB, KNOB_GROOVE, KNOB_TOP = (34, 34, 37), (22, 22, 24), (240, 240, 236)
 # cap colours per strip, top knob first: red, a group of eight in pairs, purple next to the fader
 CAP_COLOURS = [(214, 43, 48), (240, 128, 34), (240, 128, 34), (245, 198, 44), (245, 198, 44),
@@ -268,6 +270,21 @@ def stretch(m, parts, key, cut, lift):
         deform(m, k, fn)
 
 
+def white_leds(m, parts, red_at):
+    """Recolour the red LED lenses white; LEDs centred near a point in red_at keep a red copy."""
+    white = colour_index(m, LED_WHITE)
+    for k in mesh_ids(parts, 'LED_D3'):
+        reds = {i for i, c in enumerate(m.palette) if c[0] > 140 and c[1] < 80 and c[2] < 80}
+        if red_at:
+            m.meshes.append(dict(m.meshes[k])); kr = len(m.meshes) - 1      # red copy for the +48 V LEDs
+            spots = [(p['m'][3], p['m'][7]) for p in parts if p['mesh'] == k and any(
+                math.hypot((p['lo'][0] + p['hi'][0]) / 2 - x, (p['lo'][1] + p['hi'][1]) / 2 - y) < 2.0 for x, y in red_at)]
+            def is_red(inst):   # the model stores matrices as 32-bit floats, so compare positions loosely
+                return inst[0] == k and any(abs(inst[1][3] - sx) < 0.01 and abs(inst[1][7] - sy) < 0.01 for sx, sy in spots)
+            m.instances = [((kr,) + tuple(inst[1:])) if is_red(inst) else inst for inst in m.instances]
+        recolour(m, k, mapping={i: white for i in reds})
+
+
 def body_top(zs, m, k, M):
     """Top of a switch's dark body: the cap starts there."""
     dark = [M[8] * q[0] + M[9] * q[1] + M[10] * q[2] + M[11]
@@ -327,6 +344,8 @@ def main(ctl_path, fad_path, ring_path, dxf_path, out_path):
     # TL2201 caps rise as much as the Nidec caps; the 3 mm LEDs go up on longer leads to sit flush
     stretch(asm, ctl_parts, 'TL2201', body_top, lambda zs: cap_lift)
     stretch(asm, ctl_parts, 'LED_D3', lambda zs, *_: 3.0, lambda zs: panel_z1 - max(zs))
+    # the 3 mm status LEDs are white, except +48 V's, which is red
+    white_leds(asm, ctl_parts, red_at=[(STRIP_X0 + STRIP_PITCH * s + P48_LED[0], P48_LED[1] - PANEL_Y0) for s in range(4)])
     # the Nidec switches and the encoders are redrawn
     nidec_at = [((p['lo'][0] + p['hi'][0]) / 2, (p['lo'][1] + p['hi'][1]) / 2) for p in ctl_parts if 'CFPB' in p['name']]
     pem_at = [((p['lo'][0] + p['hi'][0]) / 2, (p['lo'][1] + p['hi'][1]) / 2) for p in ctl_parts if 'SMTSO' in p['name']]
@@ -345,6 +364,7 @@ def main(ctl_path, fad_path, ring_path, dxf_path, out_path):
     for k in mesh_ids(fad_parts, 'copper top', 'copper bottom'): recolour(fad, k, to=fc)
     stretch(fad, fad_parts, 'TL2201', body_top, lambda zs: cap_lift)
     stretch(fad, fad_parts, 'LED_D3', lambda zs, *_: 3.0, lambda zs: panel_z1 - max(zs))
+    white_leds(fad, fad_parts, red_at=[])
     placeholder = mesh_ids(fad_parts, 'RSA0N11')
     add_instanced(asm, fad, [translate(FADER_BOARD[0], FADER_BOARD[1], 0)], 0, lambda i: i not in placeholder)
 

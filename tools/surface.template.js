@@ -10,6 +10,16 @@
   var STEP = Math.floor(S_MAX / 32);          // one detent; half while the knob's switch is held (Shift)
   var FIRST_ANGLE = 225.13, LED_PITCH = 8.4716, LED_RADIUS = 7.6;   // D1 at ~7:30, clockwise
   var PX_PER_DETENT = 5, WHEEL_PER_DETENT = 40;
+  var NAMES = { source: "input source", phase: "phase", p48: "+48 V phantom power", hpf: "high-pass filter",
+                eq: "EQ mode", comp: "compressor mode", sends: "sends mode", solo: "solo", mute: "mute",
+                sel: "select", ins: "insert", pre: "pre-fader" };
+  var SOURCES = ["mic", "line", "hiz"], SOURCE_NAMES = ["mic", "line", "Hi-Z"], MODES = ["eq", "comp", "sends"];
+  var TOGGLES = ["phase", "p48", "hpf", "solo", "mute", "ins", "pre"];
+  var PT = 25.4 / 72;
+  // the fader scale in the silkscreen: [mark position (pt, y down), dB]
+  var FADER_MARKS = [[1016.21, 12], [1056.46, 6], [1116.84, 0], [1177.22, -6], [1217.47, -12], [1243.7, -20],
+                     [1268.72, -30], [1288.47, -40], [1304.81, -50], [1318.73, -60]];
+  var FADER_LOW = 36, FADER_RANGE = 100, FADER_UNITY = (500 - 1116.84 * PT - 36) / 100;   // lever travel, mm from the bottom
   // per strip, top to bottom: cap colour, ring scale, default value, name
   var KNOBS = [
     ["#d62b30", "left", 20480, "red knob, input gain"],      // 10 LEDs: up to 10 o'clock
@@ -73,6 +83,9 @@
       var c = el("clipPath", { id: "sf-slit-" + k }, d);
       el("path", { d: ring }, c);
     });
+    var red = el("radialGradient", { id: "sf-glow-red" }, d);
+    el("stop", { offset: "0", "stop-color": "#ff4a3d", "stop-opacity": "0.9" }, red);
+    el("stop", { offset: "1", "stop-color": "#ff4a3d", "stop-opacity": "0" }, red);
     var fader = el("linearGradient", { id: "sf-fader", x1: "0", y1: "0", x2: "0", y2: "1" }, d);
     [["0", "#eceef2"], ["0.12", "#c9ccd2"], ["0.5", "#8f939b"], ["0.88", "#c9ccd2"], ["1", "#eceef2"]].forEach(function (s) {
       el("stop", { offset: s[0], "stop-color": s[1] }, fader);
@@ -186,6 +199,154 @@
     render();
   }
 
+  // pointer and keyboard handling shared by buttons: down/up hooks, and click on release
+  function pressable(node, hooks) {
+    var down = false;
+    function press() { if (down) return; down = true; if (hooks.down) hooks.down(); }
+    function release(fire) { if (!down) return; down = false; if (hooks.up) hooks.up(); if (fire && hooks.click) hooks.click(); }
+    node.addEventListener("pointerdown", function (e) {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      e.preventDefault(); node.setPointerCapture(e.pointerId); press();
+    });
+    node.addEventListener("pointerup", function () { release(true); });
+    node.addEventListener("pointercancel", function () { release(false); });
+    node.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); if (!e.repeat) press(); }
+    });
+    node.addEventListener("keyup", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); release(true); }
+    });
+  }
+
+  function makeLed(g, x, y) {
+    var glow = el("circle", { cx: x, cy: y, r: "3", "class": "sf-ledglow", fill: "url(#sf-glow)" }, g);
+    el("circle", { cx: x, cy: y, r: "1.6", "class": "sf-hole" }, g);
+    var dot = el("circle", { cx: x, cy: y, r: "1.4", "class": "sf-statusled" }, g);
+    return { set: function (on, red) {
+      dot.setAttribute("class", "sf-statusled" + (on ? (red ? " is-on is-red" : " is-on") : ""));
+      glow.setAttribute("class", "sf-ledglow" + (on ? " is-on" : ""));
+      glow.setAttribute("fill", red ? "url(#sf-glow-red)" : "url(#sf-glow)");
+    } };
+  }
+
+  function makeButton(g, strip, b) {
+    var big = b.kind === "big", w = big ? 6 : 4;
+    var node = el("g", { "class": "sf-btn", tabindex: "0", role: "button" }, g);
+    el("path", { d: b.d, "class": "sf-hole" }, node);
+    var halo = el("rect", { x: (b.x - w / 2 - 1.6).toFixed(2), y: (b.y - w / 2 - 1.6).toFixed(2), width: w + 3.2, height: w + 3.2,
+                            rx: "2.2", "class": "sf-halo" }, node);
+    var cap = el("rect", { x: (b.x - w / 2).toFixed(2), y: (b.y - w / 2).toFixed(2), width: w, height: w,
+                           rx: big ? "0.6" : "0.4", "class": big ? "sf-cap-big" : "sf-cap-small" }, node);
+    var base = big ? "sf-cap-big" : "sf-cap-small", lit = false, red = false, isDown = false;
+    function paint() {
+      cap.setAttribute("class", base + (lit ? " is-lit" : "") + (lit && red ? " is-red" : "") + (isDown ? " is-down" : ""));
+      halo.setAttribute("class", "sf-halo" + (lit ? " is-on" : "") + (lit && red ? " is-red" : ""));
+    }
+    node.setAttribute("aria-label", "Channel " + (strip + 1) + " " + NAMES[b.role]);
+    return {
+      node: node,
+      lit: function (on, isRed) { lit = on; red = !!isRed; paint(); },
+      down: function (on) { isDown = on; paint(); }
+    };
+  }
+
+  function addButtons(g, strip, shared) {
+    var state = { source: 0, mode: "eq", on: {} };
+    var leds = {}, buttons = {};
+    DATA.leds.forEach(function (c) { leds[c[2]] = makeLed(g, c[0], c[1]); });
+    DATA.buttons.forEach(function (b) { buttons[b.role] = makeButton(g, strip, b); });
+    function paint() {
+      SOURCES.forEach(function (src, i) { leds[src].set(state.source === i, false); });
+      ["phase", "p48", "hpf", "ins", "pre"].forEach(function (r) { leds[r].set(!!state.on[r], r === "p48"); });
+      MODES.forEach(function (m) { buttons[m].lit(state.mode === m); });
+      buttons.solo.lit(!!state.on.solo);
+      buttons.mute.lit(!!state.on.mute, true);
+      buttons.sel.lit(shared.sel === strip);
+      TOGGLES.forEach(function (r) { buttons[r].node.setAttribute("aria-pressed", state.on[r] ? "true" : "false"); });
+      MODES.forEach(function (m) { buttons[m].node.setAttribute("aria-pressed", state.mode === m ? "true" : "false"); });
+      buttons.sel.node.setAttribute("aria-pressed", shared.sel === strip ? "true" : "false");
+      buttons.source.node.setAttribute("aria-label", "Channel " + (strip + 1) + " input source: " + SOURCE_NAMES[state.source]);
+    }
+    Object.keys(buttons).forEach(function (role) {
+      var btn = buttons[role];
+      var hooks = { down: function () { btn.down(true); }, up: function () { btn.down(false); } };
+      if (role === "source") {
+        // lit only while held; each press steps mic -> line -> Hi-Z
+        hooks.down = function () { btn.down(true); state.source = (state.source + 1) % SOURCES.length; paint(); btn.lit(true); };
+        hooks.up = function () { btn.down(false); btn.lit(false); };
+      } else if (MODES.indexOf(role) >= 0) {
+        hooks.click = function () { state.mode = role; paint(); };
+      } else if (role === "sel") {
+        hooks.click = function () { shared.sel = strip; shared.repaint(); };
+      } else {
+        hooks.click = function () { state.on[role] = !state.on[role]; paint(); };
+      }
+      pressable(btn.node, hooks);
+    });
+    shared.painters.push(paint);
+    shared.resets.push(function () { state.source = 0; state.mode = "eq"; state.on = {}; });
+    paint();
+  }
+
+  function faderDb(travel) {
+    if (travel <= 0.004) return "\u2212\u221e dB";
+    var y = (500 - (FADER_LOW + FADER_RANGE * travel)) / PT;        // cap centre, in the scale's points
+    var m = FADER_MARKS, db;
+    if (y <= m[0][0]) db = m[0][1];
+    else if (y >= m[m.length - 1][0]) db = m[m.length - 1][1];
+    else for (var i = 1; i < m.length; i++) if (y <= m[i][0]) { db = m[i - 1][1] + (m[i][1] - m[i - 1][1]) * (y - m[i - 1][0]) / (m[i][0] - m[i - 1][0]); break; }
+    return (db > 0.05 ? "+" : db < -0.05 ? "\u2212" : "") + Math.abs(db).toFixed(1) + " dB";
+  }
+
+  function addFader(svg, g, strip, shared) {
+    var travel = DATA.faderTravel[strip], start = travel;
+    var node = el("g", { "class": "sf-fader", tabindex: "0", role: "slider", "aria-label": "Channel " + (strip + 1) + " fader",
+                         "aria-valuemin": "0", "aria-valuemax": "100" }, g);
+    var cap = el("rect", { x: (DATA.faderX - 4.5).toFixed(2), width: "9", height: "20", rx: "0.8", fill: "url(#sf-fader)", "class": "sf-fadercap" }, node);
+    function paint() {
+      cap.setAttribute("y", (500 - (FADER_LOW + FADER_RANGE * travel) - 10).toFixed(2));
+      node.setAttribute("aria-valuenow", String(Math.round(travel * 100)));
+      node.setAttribute("aria-valuetext", faderDb(travel));
+    }
+    function set(t) { travel = Math.max(0, Math.min(1, t)); paint(); }
+    var drag = null, lastTap = 0;
+    node.addEventListener("pointerdown", function (e) {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      e.preventDefault(); node.setPointerCapture(e.pointerId);
+      try { node.focus({ preventScroll: true }); } catch (err) { node.focus(); }
+      drag = { y: e.clientY, t: travel, moved: 0, scale: svg.getScreenCTM().d };
+    });
+    node.addEventListener("pointermove", function (e) {
+      if (!drag) return;
+      drag.moved = Math.max(drag.moved, Math.abs(e.clientY - drag.y));
+      set(drag.t - (e.clientY - drag.y) / drag.scale / FADER_RANGE);       // up the screen is up the fader
+    });
+    function end(e) {
+      if (drag && drag.moved < 4 && e.pointerType !== "mouse") {
+        var now = Date.now();
+        if (now - lastTap < 320) { set(FADER_UNITY); lastTap = 0; } else lastTap = now;
+      }
+      drag = null;
+    }
+    node.addEventListener("pointerup", end);
+    node.addEventListener("pointercancel", end);
+    node.addEventListener("dblclick", function (e) { e.preventDefault(); set(FADER_UNITY); });
+    node.addEventListener("keydown", function (e) {
+      var k = e.key, step = e.shiftKey ? 0.0025 : 0.01;
+      if (k === "ArrowUp" || k === "ArrowRight") set(travel + step);
+      else if (k === "ArrowDown" || k === "ArrowLeft") set(travel - step);
+      else if (k === "PageUp") set(travel + 0.1);
+      else if (k === "PageDown") set(travel - 0.1);
+      else if (k === "Home") set(0);
+      else if (k === "End") set(1);
+      else if (k === "Delete" || k === "Backspace" || k === "0") set(FADER_UNITY);
+      else return;
+      e.preventDefault();
+    });
+    shared.resets.push(function () { set(start); });
+    paint();
+  }
+
   function build(root) {
     var sw = DATA.strip[0], sh = DATA.strip[1];
     var W = DATA.pitch * (DATA.strips - 1) + sw;
@@ -193,6 +354,8 @@
                           role: "group", "aria-label": "Control surface, four channel strips, seen from above" });
     defs(svg);
     var resets = [];
+    var shared = { sel: null, painters: [], resets: [],
+                   repaint: function () { shared.painters.forEach(function (p) { p(); }); } };
     for (var s = 0; s < DATA.strips; s++) {
       var g = el("g", { transform: "translate(" + (s * DATA.pitch) + " 0)" }, svg);
       el("path", { d: DATA.outline, "class": "sf-panel" }, g);
@@ -201,8 +364,12 @@
         el("rect", { x: b[0], y: b[1], width: b[2], height: b[3], rx: b[4],
                      "class": b[5] === "fill" ? "sf-silk-box" : "sf-silk-outline", "stroke-width": b[5] === "fill" ? null : b[6] }, g);
       });
+      DATA.silk.lines.forEach(function (l) {
+        el("line", { x1: l[0], y1: l[1], x2: l[2], y2: l[3], "stroke-width": l[4], "class": "sf-silk-outline" }, g);
+      });
       DATA.silk.texts.forEach(function (t) {
-        var tx = el("text", { x: t[0], y: t[1], "font-size": t[2], "class": t[3] === "grey" ? "sf-silk-text sf-silk-dark" : "sf-silk-text" }, g);
+        var tx = el("text", { x: t[0], y: t[1], "font-size": t[2], "class": t[3] === "grey" ? "sf-silk-text sf-silk-dark" : "sf-silk-text",
+                              "stroke-width": t[5] ? t[5] : null, stroke: t[5] ? "#eeeee8" : null, "stroke-linejoin": t[5] ? "round" : null }, g);
         tx.textContent = t[4];
       });
       DATA.screws.forEach(function (c) {
@@ -213,29 +380,21 @@
       el("path", { d: DATA.display.d, "class": "sf-screen" }, g);
       var label = el("text", { x: (DATA.display.x + 1.6).toFixed(2), y: (DATA.display.y + 4.2).toFixed(2), "class": "sf-screen-text" }, g);
       label.textContent = "0" + (s + 1);
-      // fader slot and cap
+      // fader slot; the cap is added last so it sits on top
       el("path", { d: DATA.fader, "class": "sf-hole" }, g);
-      var fy = sh - (86 + (DATA.faderTravel[s] - 0.5) * 100);
-      el("rect", { x: (DATA.faderX - 4.5).toFixed(2), y: (fy - 10).toFixed(2), width: "9", height: "20", rx: "0.8",
-                   fill: "url(#sf-fader)", "class": "sf-fadercap" }, g);
-      // status LEDs and buttons (not interactive yet)
-      DATA.leds.forEach(function (c) {
-        el("circle", { cx: c[0], cy: c[1], r: "1.6", "class": "sf-hole" }, g);
-        el("circle", { cx: c[0], cy: c[1], r: "1.4", "class": "sf-statusled" }, g);
-      });
-      DATA.buttons.forEach(function (b) {
-        el("path", { d: b.d, "class": "sf-hole" }, g);
-        var w = b.kind === "big" ? 6 : 4;
-        el("rect", { x: (b.x - w / 2).toFixed(2), y: (b.y - w / 2).toFixed(2), width: w, height: w, rx: b.kind === "big" ? "0.6" : "0.4",
-                     "class": b.kind === "big" ? "sf-cap-big" : "sf-cap-small" }, g);
-      });
+      addButtons(g, s, shared);
       for (var k = 0; k < DATA.encoders.length; k++) addKnob(g, s, k, DATA.encoders[k][0], DATA.encoders[k][1], resets);
+      addFader(svg, g, s, shared);
     }
     root.appendChild(svg);
     var btn = root.parentNode && root.parentNode.querySelector("[data-surface-reset]");
     if (btn) {
       btn.hidden = false;
-      btn.addEventListener("click", function () { resets.forEach(function (r) { r(); }); });
+      btn.addEventListener("click", function () {
+        resets.forEach(function (r) { r(); });
+        shared.resets.forEach(function (r) { r(); });
+        shared.sel = null; shared.repaint();
+      });
     }
   }
 

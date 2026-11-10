@@ -2109,3 +2109,22 @@ h1, h2, h3, h4,
 
 /* The Digilog page's two section links: big icons, two across */
 .board-cards__grid--sections { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1rem; }
+
+/* Surface buttons, status LEDs and faders */
+.sf-btn { cursor: pointer; outline: none; touch-action: manipulation; }
+.sf-halo { fill: #fff6e0; opacity: 0; }
+.sf-halo.is-on { opacity: 0.3; }
+.sf-halo.is-red { fill: #ff4a3d; opacity: 0.45; }
+.sf-cap-big { fill: #d6d5d0; stroke: #a6a5a0; }
+.sf-cap-big.is-lit { fill: #fffdf6; stroke: #ffffff; }
+.sf-cap-big.is-red { fill: #ff4f43; stroke: #ff9a8f; }
+.sf-cap-big, .sf-cap-small { transform-box: fill-box; transform-origin: center; }
+.sf-cap-big.is-down, .sf-cap-small.is-down { transform: scale(0.93); filter: brightness(0.82); }
+.sf-btn:focus-visible .sf-cap-big, .sf-btn:focus-visible .sf-cap-small { stroke: #9d93ff; stroke-width: 0.5; }
+.sf-statusled { fill: #46464c; }
+.sf-statusled.is-on { fill: #ffffff; }
+.sf-statusled.is-red { fill: #ff3b30; }
+.sf-ledglow { opacity: 0; }
+.sf-ledglow.is-on { opacity: 0.9; }
+.sf-fader { cursor: ns-resize; outline: none; touch-action: none; }
+.sf-fader:focus-visible .sf-fadercap { stroke: #9d93ff; stroke-width: 0.5; }

@@ -11,10 +11,6 @@ from geom import Mesh, earcut, rrect
 
 PT = 25.4 / 72
 FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf"
-# the art's classes: text size (pt) and colour, or box fill / outline width (pt)
-TEXT = {"st0": (3.97, "grey"), "st1": (3.83, "white"), "st2": (4.54, "white"), "st3": (3.97, "white"),
-        "st4": (6.24, "white"), "st5": (6.24, "grey"), "st6": (7.37, "white")}
-BOX = {"st8": ("fill", 0.0), "st9": ("outline", 0.71), "st10": ("outline", 0.57)}
 # Arial Bold advance widths per 1000 em (metric-compatible with Helvetica Bold)
 ARIAL_BOLD = dict(zip(" ABCDEFGHIJKLMNOPQRSTUVWXYZ", [278, 722, 722, 722, 722, 667, 611, 778, 722, 278, 556, 722, 611, 833,
                                                        722, 778, 667, 778, 722, 667, 611, 722, 667, 944, 667, 667, 611]))
@@ -24,20 +20,50 @@ ARIAL_BOLD.update({c: 556 for c in "0123456789"})
 ARIAL_BOLD.update({".": 278, ":": 333, "/": 278, "-": 333, "+": 584, "\u2212": 584, "\u221e": 713})
 
 
+def _styles(svg):
+    """Each class's declarations, from the art's own <style> block."""
+    css = re.search(r"<style>(.*?)</style>", svg, re.S).group(1)
+    props = {}
+    for sel, body in re.findall(r"([^{}]+)\{([^}]*)\}", css):
+        decl = {k.strip(): v.strip() for k, v in (d.split(":", 1) for d in body.split(";") if ":" in d)}
+        for cls in re.findall(r"\.(st\d+)", sel):
+            props.setdefault(cls, {}).update(decl)
+    return props
+
+
+def _num(v):
+    return float(re.sub(r"px$", "", v))
+
+
+def _colour(v):
+    return "grey" if v.lower() in ("#4a4a4a",) else "white"
+
+
 def parse(path):
+    """Labels, boxes and lines of the art, in millimetres (y down)."""
     svg = open(path, encoding="utf-8").read()
-    texts, boxes = [], []
+    st = _styles(svg)
+    texts, boxes, lines = [], [], []
     for m in re.finditer(r'<text[^>]*class="(st\d+)"[^>]*transform="translate\(([-\d.]+) ([-\d.]+)\)"[^>]*>\s*<tspan[^>]*>([^<]*)</tspan>', svg):
-        cls, x, y, s = m.group(1), float(m.group(2)), float(m.group(3)), m.group(4)
-        size, colour = TEXT[cls]
-        texts.append({"x": x * PT, "y": y * PT, "size": size * PT, "colour": colour, "text": s,
-                      "width": sum(ARIAL_BOLD.get(c, 556) for c in s) / 1000 * size * PT})
+        p = st[m.group(1)]
+        x, y, s = float(m.group(2)), float(m.group(3)), m.group(4)
+        size = _num(p["font-size"])
+        stroke = _num(p.get("stroke-width", "0")) if p.get("stroke", "none") != "none" else 0.0
+        texts.append({"x": x * PT, "y": y * PT, "size": size * PT, "colour": _colour(p.get("fill", "#fff")), "text": s,
+                      "stroke": stroke * PT, "width": sum(ARIAL_BOLD.get(c, 556) for c in s) / 1000 * size * PT})
     for m in re.finditer(r'<rect[^>]*class="(st\d+)"([^>]*)/>', svg):
+        p = st[m.group(1)]
         a = dict(re.findall(r'(\w+)="([-\d.]+)"', m.group(2)))
-        kind, sw = BOX[m.group(1)]
+        filled = p.get("fill", "none") != "none" and p.get("stroke", "none") == "none"
         boxes.append({"x": float(a["x"]) * PT, "y": float(a["y"]) * PT, "w": float(a["width"]) * PT,
-                      "h": float(a["height"]) * PT, "r": float(a.get("rx", 0)) * PT, "kind": kind, "stroke": sw * PT})
-    return texts, boxes
+                      "h": float(a["height"]) * PT, "r": float(a.get("rx", 0)) * PT, "kind": "fill" if filled else "outline",
+                      "stroke": 0.0 if filled else _num(p.get("stroke-width", "1")) * PT})
+    for m in re.finditer(r'<line[^>]*class="(st\d+)"([^>]*)/>', svg):
+        p = st[m.group(1)]
+        a = dict(re.findall(r'(\w+)="([-\d.]+)"', m.group(2)))
+        lines.append({"x1": float(a["x1"]) * PT, "y1": float(a["y1"]) * PT, "x2": float(a["x2"]) * PT, "y2": float(a["y2"]) * PT,
+                      "stroke": _num(p.get("stroke-width", "1")) * PT})
+    return texts, boxes, lines
 
 
 def _flat(m, outer, holes, z, ci):
@@ -107,8 +133,13 @@ def mesh(path, colours, z, height=500.0):
     from fontTools.ttLib import TTFont
     font = TTFont(FONT)
     upem = font["head"].unitsPerEm
-    texts, boxes = parse(path)
+    texts, boxes, lines = parse(path)
     m = Mesh()
+    for l in lines:
+        x1, y1, x2, y2 = l["x1"], height - l["y1"], l["x2"], height - l["y2"]
+        d = math.hypot(x2 - x1, y2 - y1) or 1.0
+        nx, ny = -(y2 - y1) / d * l["stroke"] / 2, (x2 - x1) / d * l["stroke"] / 2
+        _flat(m, [(x1 - nx, y1 - ny), (x2 - nx, y2 - ny), (x2 + nx, y2 + ny), (x1 + nx, y1 + ny)], [], z, colours["white"])
     for b in boxes:
         cx, cy = b["x"] + b["w"] / 2, height - (b["y"] + b["h"] / 2)
         if b["kind"] == "fill":
@@ -135,4 +166,4 @@ def mesh(path, colours, z, height=500.0):
                 mine = [h for h in holes if _inside(h[0], o)]
                 _flat(m, o[::-1], [h[::-1] for h in mine], tz, colours[t["colour"]])
             pen_x += adv * scale
-    return m, len(texts), len(boxes)
+    return m, len(texts), len(boxes) + len(lines)

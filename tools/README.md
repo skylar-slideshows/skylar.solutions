@@ -66,7 +66,16 @@ page's top-down control surface draws it too:
 
     python3 tools/build-surface.py channel_strip_faceplate_v2.dxf controls.parts.json fader.parts.json assets/surface.js
 
-`surface.js` is built from `surface.template.js`; its LED rings follow the firmware
+The art's own <style> block sets each label's size, colour and outline, so a revised
+export only needs swapping in. The 3 mm status LEDs in the model are white, with each
+strip's +48 V LED red.
+
+`surface.js` is built from `surface.template.js`. Its buttons work like the console's:
+the source button lights while held and steps MIC, LINE, HI-Z; PHASE, +48V (red LED),
+HPF, SOLO, MUTE (red), INS and PRE toggle; EQ, COMP and SENDS are a radio group per
+strip; SEL is a radio group across all four strips (the bottom row is SOLO, MUTE, SEL
+left to right, as in the firmware). The faders drag along their 100 mm travel and read
+out in dB from the silkscreen's scale. Its LED rings follow the firmware
 (`led_driver.c` and `knob_control.c`): 32 LEDs from D1 at 7:30 clockwise to D32 at 4:30,
 left rings fill from LED 0 (0 = dark), centre rings always light LED 16 and grow either
 way, and a detent is 1/32 of full scale (half with Shift, like holding the knob's switch).
