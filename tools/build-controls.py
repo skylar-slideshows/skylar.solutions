@@ -26,11 +26,13 @@ RING_CENTRE = (130.0, -60.0)          # LED ring centre in its own STEP coordina
 SOCKET_TOP = 9.92                     # top of the 8.5 mm 1x04 sockets on the controls board
 HEADER_BODY = 2.54                    # plastic body of the ring's 1x04 header
 RING_Z = SOCKET_TOP + HEADER_BODY     # ring board underside
-SHAFT_TOP = 32.92                     # top of the EC11 25 mm shafts
+KNOB_SCALE = 0.85                     # knob size relative to the 11.6 mm Sifam-style first version
+KNOB_H = 15.22 * KNOB_SCALE           # knob body height; the encoder shafts are cut to fit under it
 LEVER_IN_CAP = 5.0                    # how far the fader lever reaches into its cap
 
 MASK_GREEN, COPPER_GREEN = (58, 89, 78), (86, 125, 90)   # same as the analog cards
 ANODIZED = (34, 34, 38)
+SILK_WHITE, SILK_GREY = (238, 238, 232), (74, 74, 74)
 KNOB, KNOB_GROOVE, KNOB_TOP = (34, 34, 37), (22, 22, 24), (240, 240, 236)
 # cap colours per strip, top knob first: red, a group of eight in pairs, purple next to the fader
 CAP_COLOURS = [(214, 43, 48), (240, 128, 34), (240, 128, 34), (245, 198, 44), (245, 198, 44),
@@ -171,19 +173,23 @@ def knob(m, height):
     """Sifam-style mini collet knob for a 6 mm shaft: a slightly tapered black body with fine
     flutes, a rim around the top and a recess that the coloured cap presses into."""
     black, groove = colour_index(m, KNOB), colour_index(m, KNOB_GROOVE)
-    rb, rt = 5.8, 5.25
-    out = lathe([(rb, 0.0), (rb, 0.4)], black, 48)
-    out.add(fluted(rb, rt, 0.4, height - 0.5, black, groove, flutes=16, n=48))
-    out.add(lathe([(rt, height - 0.5), (rt - 0.3, height), (4.75, height), (4.75, height - 0.4), (0.0, height - 0.4)], black, 48))
+    k = KNOB_SCALE
+    rb, rt = 5.8 * k, 5.25 * k
+    out = lathe([(rb, 0.0), (rb, 0.4 * k)], black, 48)
+    out.add(fluted(rb, rt, 0.4 * k, height - 0.5 * k, black, groove, flutes=16, n=48))
+    out.add(lathe([(rt, height - 0.5 * k), (rt - 0.3 * k, height), (4.75 * k, height), (4.75 * k, height - 0.4 * k),
+                   (0.0, height - 0.4 * k)], black, 48))
     return out
 
 
 def knob_cap(m, height, rgb):
     """The coloured cap: a shallow disc with a rounded edge, sitting in the knob's top recess."""
-    return lathe([(4.6, height - 0.4), (4.6, height + 0.3), (4.35, height + 0.62), (0.0, height + 0.7)], colour_index(m, rgb), 40)
+    k = KNOB_SCALE
+    return lathe([(4.6 * k, height - 0.4 * k), (4.6 * k, height + 0.3 * k), (4.35 * k, height + 0.62 * k),
+                  (0.0, height + 0.7 * k)], colour_index(m, rgb), 40)
 
 
-def encoder(m):
+def encoder(m, shaft_top):
     """EC11 with a threaded M7 bushing and a D-shaft, as in the Alps photo (shaft axis at the origin)."""
     base, metal, shaft = colour_index(m, ENC_BASE), colour_index(m, ENC_METAL), colour_index(m, ENC_SHAFT)
     out = box((-6.2, -5.85, 1.6), (6.2, 5.85, 3.2), base)                     # insulator
@@ -199,7 +205,7 @@ def encoder(m):
     flat = 1.5                                                                # D-flat 4.5 mm across
     a = math.asin(flat / 3.0)
     d = arc_points(0, 0, 3.0, math.pi - a, 2 * math.pi + a, 18.0)
-    out.add(extrude(d, [], 25.0, SHAFT_TOP, shaft))
+    out.add(extrude(d, [], 25.0, shaft_top, shaft))
     seg = arc_points(0, 0, 3.0, a, math.pi - a, 18.0)                         # the step where the flat starts
     out.add(extrude(seg, [], 24.98, 25.0, shaft))
     return out
@@ -328,7 +334,9 @@ def main(ctl_path, fad_path, ring_path, dxf_path, out_path):
     remove_instances(asm, {i for i, inst in enumerate(asm.instances) if inst[0] in redrawn})
     place(asm, nidec_switch(asm, nidec_top), [translate(x, y, 0) for x, y in nidec_at], 0)
     place(asm, pem_standoff(asm), [translate(x, y, 0) for x, y in pem_at], 0)
-    place(asm, encoder(asm), [translate(x, y, 0) for x, y in enc], 0)
+    knob_base = panel_z1 + 0.6
+    shaft_top = knob_base + KNOB_H - 0.6       # shafts cut to sit just under the knob's top recess
+    place(asm, encoder(asm, shaft_top), [translate(x, y, 0) for x, y in enc], 0)
 
     # fader board, without its placeholder faders
     fad = read_model(fad_path); fad_parts = parts_of(fad_path)
@@ -348,12 +356,18 @@ def main(ctl_path, fad_path, ring_path, dxf_path, out_path):
     plate = tint(faceplate(layers, panel_z0, panel_z1), colour_index(asm, ANODIZED))
     place(asm, plate, [translate(STRIP_X0 + STRIP_PITCH * s, -PANEL_Y0, 0) for s in range(4)], 2)
 
+    # the silkscreen, printed on each strip
+    import silkscreen
+    art = __file__.rsplit("/", 1)[0] + "/faceplate-silkscreen.svg"
+    silk, n_text, n_box = silkscreen.mesh(art, {"white": colour_index(asm, SILK_WHITE), "grey": colour_index(asm, SILK_GREY)}, panel_z1 + 0.012)
+    place(asm, silk, [translate(STRIP_X0 + STRIP_PITCH * s, -PANEL_Y0, 0) for s in range(4)], 2)
+
     # knob caps on the encoder shafts (group 2)
-    kh = SHAFT_TOP + 0.1 - (panel_z1 + 0.6)
-    place(asm, knob(asm, kh), [translate(x, y, panel_z1 + 0.6) for x, y in enc], 2)
+    kh = KNOB_H
+    place(asm, knob(asm, kh), [translate(x, y, knob_base) for x, y in enc], 2)
     per_strip = len(enc) // 4                  # the DXF lists each strip's encoders top to bottom
     for rgb in sorted(set(CAP_COLOURS), key=CAP_COLOURS.index):
-        spots = [translate(x, y, panel_z1 + 0.6) for i, (x, y) in enumerate(enc) if CAP_COLOURS[i % per_strip] == rgb]
+        spots = [translate(x, y, knob_base) for i, (x, y) in enumerate(enc) if CAP_COLOURS[i % per_strip] == rgb]
         place(asm, knob_cap(asm, kh, rgb), spots, 2)
 
     # display glass behind each window (group 2)

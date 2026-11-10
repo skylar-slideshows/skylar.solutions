@@ -51,10 +51,25 @@ Positions come from the faceplate: panel (x, y) sits over controls-board KiCad
 (+70, +455) from the controls board (found from its M2 mounting holes). The
 script also redraws parts from their photos (`geom.py` has the shapes): the
 Nidec CFPB switches (caps 3 mm through the panel), the EC11 encoders (threaded
-bushing, D-shaft), the PEM SMTSO-M3 standoffs on the underside, the knob caps (fluted, white top) and the ALPS RSA0N11M9
+bushing, D-shaft), the PEM SMTSO-M3 standoffs on the underside, the knob caps (Sifam-style mini knobs at 85 % size, with coloured caps; the shafts are
+cut to fit under them) and the ALPS RSA0N11M9
 motor faders, screwed to the panel's underside, with narrow silver caps. The TL2201 caps are stretched up by the same
 amount as the Nidec caps, and the 3 mm LEDs go up on longer leads until they
 sit flush with the panel.
+
+## Faceplate silkscreen and the interactive surface
+
+`faceplate-silkscreen.svg` is the panel art for one strip (in points, from Illustrator).
+`build-controls.py` prints it on all four panel strips of the 3D model (glyph outlines
+from DejaVu Sans Condensed Bold, stretched to Arial Bold's widths), and the controls
+page's top-down control surface draws it too:
+
+    python3 tools/build-surface.py channel_strip_faceplate_v2.dxf controls.parts.json fader.parts.json assets/surface.js
+
+`surface.js` is built from `surface.template.js`; its LED rings follow the firmware
+(`led_driver.c` and `knob_control.c`): 32 LEDs from D1 at 7:30 clockwise to D32 at 4:30,
+left rings fill from LED 0 (0 = dark), centre rings always light LED 16 and grow either
+way, and a detent is 1/32 of full scale (half with Shift, like holding the knob's switch).
 
 ## Analog assembly
 

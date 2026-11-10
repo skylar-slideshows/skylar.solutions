@@ -2042,3 +2042,70 @@ h1, h2, h3, h4,
   font-variation-settings: normal;
   letter-spacing: -0.01em;
 }
+
+/* Interactive control surface (controls page): the faceplate seen from above.
+   The panel is black anodized aluminium in both themes, like the 3D model. */
+.surface__window {
+  max-width: 600px;
+  margin: 1.25rem auto 0;
+  padding: clamp(0.6rem, 2.5vw, 1.25rem);
+  border-radius: var(--radius-card);
+  background: #141418;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), 0 12px 32px rgba(20, 10, 60, 0.18);
+}
+.surface__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.surface__reset {
+  display: block;
+  margin: 0.9rem auto 0;
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--sunk);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.surface__reset:hover { border-color: var(--accent); }
+.surface__reset:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.sf-panel { fill: #202024; }
+.sf-hole { fill: #09090b; }
+.sf-screw { fill: #3a3a40; }
+.sf-screen { fill: #0c0e15; stroke: #2c2c34; stroke-width: 0.25; }
+.sf-screen-text {
+  font-family: "Recursive", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variation-settings: "MONO" 1;
+  font-size: 3.4px;
+  font-weight: 600;
+  fill: #e9e6f6;
+}
+.sf-fadercap { stroke: #6f737b; stroke-width: 0.15; }
+.sf-statusled { fill: #5a1517; }
+.sf-cap-big { fill: #ecebe6; stroke: #b8b7b2; stroke-width: 0.15; }
+.sf-cap-small { fill: #c9c9cd; stroke: #9a9aa0; stroke-width: 0.15; }
+.sf-window { fill: #17171c; }                       /* frosted resin over the black ring board */
+.sf-led { fill: #34343b; }                          /* an unlit LED: a faint spot under the resin */
+.sf-led.is-on { fill: #fff6e2; }
+.sf-glow { fill: #fff1d6; opacity: 0; }
+.sf-glow.is-on { opacity: 0.35; }
+.sf-resin { fill: rgba(214, 208, 228, 0.1); stroke: rgba(0, 0, 0, 0.55); stroke-width: 0.12; }
+.sf-knob { cursor: ns-resize; outline: none; touch-action: none; }
+.sf-focus { fill: none; stroke: #9d93ff; stroke-width: 0.45; opacity: 0; }
+.sf-knob:focus-visible .sf-focus { opacity: 1; }
+.sf-shadow { fill: #000; opacity: 0.5; }
+.sf-body { fill: #1a1a1d; }
+.sf-flute { stroke: #050506; stroke-width: 0.3; }
+.sf-rim { fill: #28282c; }
+.sf-silk-text { font-family: Arial, Helvetica, "Liberation Sans", sans-serif; font-weight: 700; fill: #eeeee8; }
+.sf-silk-dark { fill: #4a4a4a; }
+.sf-silk-box { fill: #eeeee8; }
+.sf-silk-outline { fill: none; stroke: #eeeee8; }
+
+/* The Digilog page's two section links: big icons, two across */
+.board-cards__grid--sections { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1rem; }

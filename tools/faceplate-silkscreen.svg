@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Faceplate silkscreen for one channel strip (36.3 x 500 mm drawn as 102.9 x 1417.323 pt,
+     y down from the top-left corner). Exported from Illustrator; trimmed to the printed layers. -->
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 102.9 1417.323">
+  <defs>
+    <style>
+      .st0, .st1, .st2, .st3, .st4, .st5, .st6 { font-family: Arial-BoldMT, Arial; font-weight: 700; isolation: isolate; }
+      .st0, .st3 { font-size: 3.97px; }
+      .st0, .st7, .st5 { fill: #4a4a4a; }
+      .st1 { font-size: 3.83px; }
+      .st1, .st2, .st3, .st8, .st4, .st6 { fill: #fff; }
+      .st2 { font-size: 4.54px; }
+      .st9 { stroke-width: .71px; }
+      .st9, .st10 { fill: none; stroke: #fff; }
+      .st10 { stroke-width: .57px; }
+      .st4, .st5 { font-size: 6.24px; }
+      .st6 { font-size: 7.37px; }
+    </style>
+  </defs>
+  <g id="FX_1A">
+    <g id="FX_1A_EQ_normal">
+      <text id="FX_1A_EQ_HF" class="st6" transform="translate(73.32 302.343)"><tspan x="0" y="0">HF</tspan></text>
+      <text id="FX_1A_EQ_press_for_Q" class="st1" transform="translate(60.048 306.363)"><tspan x="0" y="0">Press: SHELF/BELL</tspan></text>
+    </g>
+    <g id="FX_1A_COMP_knockout">
+      <rect id="FX_1A_COMP_box" class="st8" x="62.65" y="308.913" width="31.18" height="9.35" rx="1.28" ry="1.28"/>
+      <text id="FX_1A_COMP_INPUT" class="st5" transform="translate(68.88 315.823)"><tspan x="0" y="0">INPUT</tspan></text>
+    </g>
+    <g id="FX_1A_SEND_outline">
+      <rect id="FX_1A_SEND_box" class="st9" x="63" y="320.883" width="30.47" height="8.65" rx="1.28" ry="1.28"/>
+      <text id="FX_1A_SEND_AUX_1" class="st4" transform="translate(69.05 327.443)"><tspan x="0" y="0">AUX 1</tspan></text>
+    </g>
+    <g id="FX_1A_end_values">
+      <g id="FX_1A_end_L">
+        <text id="FX_1A_end_L_EQ" class="st2" transform="translate(15.63 334.783)"><tspan x="0" y="0">−15</tspan></text>
+        <rect id="FX_1A_end_L_COMP_box" class="st8" x="14.09" y="335.923" width="10.77" height="5.39" rx=".85" ry=".85"/>
+        <text id="FX_1A_end_L_COMP" class="st0" transform="translate(18.371 340.033)"><tspan x="0" y="0">0</tspan></text>
+        <rect id="FX_1A_end_L_SEND_box" class="st10" x="14.38" y="342.443" width="10.2" height="4.82" rx=".85" ry=".85"/>
+        <text id="FX_1A_end_L_SEND" class="st3" transform="translate(16.91 346.273)"><tspan x="0" y="0">−∞</tspan></text>
+      </g>
+      <g id="FX_1A_end_R">
+        <text id="FX_1A_end_R_EQ" class="st2" transform="translate(38.31 334.643)"><tspan x="0" y="0">+15</tspan></text>
+        <rect id="FX_1A_end_R_COMP_box" class="st8" x="36.77" y="335.783" width="10.77" height="5.39" rx=".85" ry=".85"/>
+        <text id="FX_1A_end_R_COMP" class="st0" transform="translate(38.788 339.893)"><tspan x="0" y="0">+20</tspan></text>
+        <rect id="FX_1A_end_R_SEND_box" class="st10" x="37.05" y="342.293" width="10.2" height="4.82" rx=".85" ry=".85"/>
+        <text id="FX_1A_end_R_SEND" class="st3" transform="translate(38.79 346.133)"><tspan x="0" y="0">+10</tspan></text>
+      </g>
+    </g>
+  </g>
+  <g id="FX_1B">
+    <g id="FX_1B_EQ_normal">
+      <text id="FX_1B_EQ_FREQ" class="st6" transform="translate(14.42 358.723)"><tspan x="0" y="0">FREQ</tspan></text>
+    </g>
+    <g id="FX_1B_COMP_knockout">
+      <rect id="FX_1B_COMP_box" class="st8" x="9.07" y="361.273" width="31.18" height="9.35" rx="1.28" ry="1.28"/>
+      <text id="FX_1B_COMP_ATK" class="st5" transform="translate(18.48 368.183)"><tspan x="0" y="0">ATK</tspan></text>
+    </g>
+    <g id="FX_1B_SEND_outline">
+      <rect id="FX_1B_SEND_box" class="st9" x="9.43" y="373.253" width="30.47" height="8.65" rx="1.28" ry="1.28"/>
+      <text id="FX_1B_SEND_PAN" class="st4" transform="translate(18.31 379.813)"><tspan x="0" y="0">PAN</tspan></text>
+    </g>
+    <g id="FX_1B_end_values">
+      <g id="FX_1B_end_L">
+        <text id="FX_1B_end_L_EQ" class="st2" transform="translate(55.04 394.823)"><tspan x="0" y="0">1.5k</tspan></text>
+        <rect id="FX_1B_end_L_COMP_box" class="st8" x="51.493" y="395.963" width="14.737" height="5.39" rx=".85" ry=".85"/>
+        <text id="FX_1B_end_L_COMP" class="st0" transform="translate(53.233 400.073)"><tspan x="0" y="0">0.1ms</tspan></text>
+        <rect id="FX_1B_end_L_SEND_box" class="st10" x="55.75" y="402.483" width="10.2" height="4.82" rx=".85" ry=".85"/>
+        <text id="FX_1B_end_L_SEND" class="st3" transform="translate(59.64 406.313)"><tspan x="0" y="0">L</tspan></text>
+      </g>
+      <g id="FX_1B_end_R">
+        <text id="FX_1B_end_R_EQ" class="st2" transform="translate(80.5 394.683)"><tspan x="0" y="0">13k</tspan></text>
+        <rect id="FX_1B_end_R_COMP_box" class="st8" x="78.14" y="395.823" width="15.842" height="5.39" rx=".85" ry=".85"/>
+        <text id="FX_1B_end_R_COMP" class="st0" transform="translate(79.88 399.933)"><tspan x="0" y="0">100ms</tspan></text>
+        <rect id="FX_1B_end_R_SEND_box" class="st10" x="78.42" y="402.343" width="10.2" height="4.82" rx=".85" ry=".85"/>
+        <text id="FX_1B_end_R_SEND" class="st3" transform="translate(82.09 406.163)"><tspan x="0" y="0">R</tspan></text>
+      </g>
+    </g>
+  </g>
+  <g id="FX_2A">
+    <g id="FX_2A_EQ_normal">
+      <text id="FX_2A_EQ_HMF" class="st6" transform="translate(70.25 422.403)"><tspan x="0" y="0">HMF</tspan></text>
+      <text id="FX_2A_EQ_press_for_Q" class="st1" transform="translate(67.92 426.413)"><tspan x="0" y="0">Press for Q</tspan></text>
+    </g>
+    <g id="FX_2A_COMP_knockout">
+      <rect id="FX_2A_COMP_box" class="st8" x="62.65" y="428.963" width="31.18" height="9.35" rx="1.28" ry="1.28"/>
+      <text id="FX_2A_COMP_THRESH" class="st5" transform="translate(65.42 435.873)"><tspan x="0" y="0">THRESH</tspan></text>
+    </g>
+    <g id="FX_2A_SEND_outline">
+      <rect id="FX_2A_SEND_box" class="st9" x="63" y="440.943" width="30.47" height="8.65" rx="1.28" ry="1.28"/>
+      <text id="FX_2A_SEND_AUX_2" class="st4" transform="translate(69.05 447.493)"><tspan x="0" y="0">AUX 2</tspan></text>
+    </g>
+    <g id="FX_2A_end_values">
+      <g id="FX_2A_end_L">
+        <text id="FX_2A_end_L_EQ" class="st2" transform="translate(15.57 454.843)"><tspan x="0" y="0">−15</tspan></text>
+        <rect id="FX_2A_end_L_COMP_box" class="st8" x="14.03" y="455.973" width="10.77" height="5.39" rx=".85" ry=".85"/>
+        <text id="FX_2A_end_L_COMP" class="st0" transform="translate(16.048 460.093)"><tspan x="0" y="0">−30</tspan></text>
+        <rect id="FX_2A_end_L_SEND_box" class="st10" x="14.31" y="462.493" width="10.2" height="4.82" rx=".85" ry=".85"/>
+        <text id="FX_2A_end_L_SEND" class="st3" transform="translate(16.84 466.323)"><tspan x="0" y="0">−∞</tspan></text>
+      </g>
+      <g id="FX_2A_end_R">
+        <text id="FX_2A_end_R_EQ" class="st2" transform="translate(38.25 454.703)"><tspan x="0" y="0">+15</tspan></text>
+        <rect id="FX_2A_end_R_COMP_box" class="st8" x="36.71" y="455.833" width="10.77" height="5.39" rx=".85" ry=".85"/>
+        <text id="FX_2A_end_R_COMP" class="st0" transform="translate(38.728 459.943)"><tspan x="0" y="0">+20</tspan></text>
+        <rect id="FX_2A_end_R_SEND_box" class="st10" x="36.99" y="462.353" width="10.2" height="4.82" rx=".85" ry=".85"/>
+        <text id="FX_2A_end_R_SEND" class="st3" transform="translate(38.73 466.183)"><tspan x="0" y="0">+10</tspan></text>
+      </g>
+    </g>
+  </g>
+  <g id="FX_2B">
+    <g id="FX_2B_EQ_normal">
+      <text id="FX_2B_EQ_FREQ" class="st6" transform="translate(14.42 478.833)"><tspan x="0" y="0">FREQ</tspan></text>
+    </g>
+    <g id="FX_2B_COMP_knockout">
+      <rect id="FX_2B_COMP_box" class="st8" x="9.07" y="481.383" width="31.18" height="9.35" rx="1.28" ry="1.28"/>
+      <text id="FX_2B_COMP_REL" class="st5" transform="translate(18.42 488.293)"><tspan x="0" y="0">REL</tspan></text>
+    </g>
+    <g id="FX_2B_SEND_outline">
+      <rect id="FX_2B_SEND_box" class="st9" x="9.43" y="493.363" width="30.47" height="8.65" rx="1.28" ry="1.28"/>
+      <text id="FX_2B_SEND_PAN" class="st4" transform="translate(18.31 499.913)"><tspan x="0" y="0">PAN</tspan></text>
+    </g>
+    <g id="FX_2B_end_values">
+      <g id="FX_2B_end_L">
+        <text id="FX_2B_end_L_EQ" class="st2" transform="translate(56.241 514.933)"><tspan x="0" y="0">500</tspan></text>
+        <rect id="FX_2B_end_L_COMP_box" class="st8" x="52.536" y="516.063" width="13.634" height="5.39" rx=".85" ry=".85"/>
+        <text id="FX_2B_end_L_COMP" class="st0" transform="translate(54.276 520.183)"><tspan x="0" y="0">10ms</tspan></text>
+        <rect id="FX_2B_end_L_SEND_box" class="st10" x="55.68" y="522.583" width="10.2" height="4.82" rx=".85" ry=".85"/>
+        <text id="FX_2B_end_L_SEND" class="st3" transform="translate(59.57 526.413)"><tspan x="0" y="0">L</tspan></text>
+      </g>
+      <g id="FX_2B_end_R">
+        <text id="FX_2B_end_R_EQ" class="st2" transform="translate(80.44 514.793)"><tspan x="0" y="0">7k</tspan></text>
+        <rect id="FX_2B_end_R_COMP_box" class="st8" x="78.07" y="515.923" width="10.77" height="5.39" rx=".85" ry=".85"/>
+        <text id="FX_2B_end_R_COMP" class="st0" transform="translate(81.247 520.043)"><tspan x="0" y="0">2s</tspan></text>
+        <rect id="FX_2B_end_R_SEND_box" class="st10" x="78.36" y="522.443" width="10.2" height="4.82" rx=".85" ry=".85"/>
+        <text id="FX_2B_end_R_SEND" class="st3" transform="translate(82.03 526.273)"><tspan x="0" y="0">R</tspan></text>
+      </g>
+    </g>
+  </g>
+  <g id="FX_3A">
+    <g id="FX_3A_EQ_normal">
+      <text id="FX_3A_EQ_LMF" class="st6" transform="translate(70.66 542.553)"><tspan x="0" y="0">LMF</tspan></text>
+      <text id="FX_3A_EQ_press_for_Q" class="st1" transform="translate(67.92 546.573)"><tspan x="0" y="0">Press for Q</tspan></text>
+    </g>
+    <g id="FX_3A_COMP_knockout">
+      <rect id="FX_3A_COMP_box" class="st8" x="62.65" y="549.123" width="31.18" height="9.35" rx="1.28" ry="1.28"/>
+      <text id="FX_3A_COMP_OUTPUT" class="st5" transform="translate(65.42 556.033)"><tspan x="0" y="0">OUTPUT</tspan></text>
+    </g>
+    <g id="FX_3A_SEND_outline">
+      <rect id="FX_3A_SEND_box" class="st9" x="63" y="561.093" width="30.47" height="8.65" rx="1.28" ry="1.28"/>
+      <text id="FX_3A_SEND_AUX_3" class="st4" transform="translate(69.05 567.653)"><tspan x="0" y="0">AUX 3</tspan></text>
+    </g>
+    <g id="FX_3A_end_values">
+      <g id="FX_3A_end_L">
+        <text id="FX_3A_end_L_EQ" class="st2" transform="translate(15.62 574.993)"><tspan x="0" y="0">−15</tspan></text>
+        <rect id="FX_3A_end_L_COMP_box" class="st8" x="14.08" y="576.123" width="10.77" height="5.39" rx=".85" ry=".85"/>
+        <text id="FX_3A_end_L_COMP" class="st0" transform="translate(18.361 580.243)"><tspan x="0" y="0">0</tspan></text>
+        <rect id="FX_3A_end_L_SEND_box" class="st10" x="14.36" y="582.643" width="10.2" height="4.82" rx=".85" ry=".85"/>
+        <text id="FX_3A_end_L_SEND" class="st3" transform="translate(16.89 586.483)"><tspan x="0" y="0">−∞</tspan></text>
+      </g>
+      <g id="FX_3A_end_R">
+        <text id="FX_3A_end_R_EQ" class="st2" transform="translate(38.3 574.853)"><tspan x="0" y="0">+15</tspan></text>
+        <rect id="FX_3A_end_R_COMP_box" class="st8" x="36.76" y="575.983" width="10.77" height="5.39" rx=".85" ry=".85"/>
+        <text id="FX_3A_end_R_COMP" class="st0" transform="translate(38.778 580.103)"><tspan x="0" y="0">+20</tspan></text>
+        <rect id="FX_3A_end_R_SEND_box" class="st10" x="37.04" y="582.503" width="10.2" height="4.82" rx=".85" ry=".85"/>
+        <text id="FX_3A_end_R_SEND" class="st3" transform="translate(38.78 586.333)"><tspan x="0" y="0">+10</tspan></text>
+      </g>
+    </g>
+  </g>
+  <g id="FX_3B">
+    <g id="FX_3B_EQ_normal">
+      <text id="FX_3B_EQ_FREQ" class="st6" transform="translate(14.42 599.023)"><tspan x="0" y="0">FREQ</tspan></text>
+    </g>
+    <g id="FX_3B_COMP_knockout">
+      <rect id="FX_3B_COMP_box" class="st8" x="9.07" y="601.573" width="31.18" height="9.35" rx="1.28" ry="1.28"/>
+      <text id="FX_3B_COMP_RATIO" class="st5" transform="translate(15.19 608.483)"><tspan x="0" y="0">RATIO</tspan></text>
+    </g>
+    <g id="FX_3B_SEND_outline">
+      <rect id="FX_3B_SEND_box" class="st9" x="9.43" y="613.553" width="30.47" height="8.65" rx="1.28" ry="1.28"/>
+      <text id="FX_3B_SEND_PAN" class="st4" transform="translate(18.31 620.103)"><tspan x="0" y="0">PAN</tspan></text>
+    </g>
+    <g id="FX_3B_end_values">
+      <g id="FX_3B_end_L">
+        <text id="FX_3B_end_L_EQ" class="st2" transform="translate(56.291 635.123)"><tspan x="0" y="0">180</tspan></text>
+        <rect id="FX_3B_end_L_COMP_box" class="st8" x="55.45" y="636.263" width="10.77" height="5.39" rx=".85" ry=".85"/>
+        <text id="FX_3B_end_L_COMP" class="st0" transform="translate(57.966 640.373)"><tspan x="0" y="0">1:1</tspan></text>
+        <rect id="FX_3B_end_L_SEND_box" class="st10" x="55.73" y="642.783" width="10.2" height="4.82" rx=".85" ry=".85"/>
+        <text id="FX_3B_end_L_SEND" class="st3" transform="translate(59.62 646.613)"><tspan x="0" y="0">L</tspan></text>
+      </g>
+      <g id="FX_3B_end_R">
+        <text id="FX_3B_end_R_EQ" class="st2" transform="translate(80.48 634.983)"><tspan x="0" y="0">2.5k</tspan></text>
+        <rect id="FX_3B_end_R_COMP_box" class="st8" x="78.12" y="636.113" width="10.77" height="5.39" rx=".85" ry=".85"/>
+        <text id="FX_3B_end_R_COMP" class="st0" transform="translate(80.325 640.233)"><tspan x="0" y="0">∞:1</tspan></text>
+        <rect id="FX_3B_end_R_SEND_box" class="st10" x="78.41" y="642.633" width="10.2" height="4.82" rx=".85" ry=".85"/>
+        <text id="FX_3B_end_R_SEND" class="st3" transform="translate(82.08 646.463)"><tspan x="0" y="0">R</tspan></text>
+      </g>
+    </g>
+  </g>
+  <g id="FX_4A">
+    <g id="FX_4A_EQ_normal">
+      <text id="FX_4A_EQ_LF" class="st6" transform="translate(73.73 662.773)"><tspan x="0" y="0">LF</tspan></text>
+      <text id="FX_4A_EQ_press_for_Q" class="st1" transform="translate(60.048 666.793)"><tspan x="0" y="0">Press: SHELF/BELL</tspan></text>
+    </g>
+    <g id="FX_4A_COMP_knockout">
+      <rect id="FX_4A_COMP_box" class="st8" x="62.65" y="669.343" width="31.18" height="9.35" rx="1.28" ry="1.28"/>
+      <text id="FX_4A_COMP_DE_ESS" class="st5" transform="translate(66.63 676.253)"><tspan x="0" y="0">DE-ESS</tspan></text>
+    </g>
+    <g id="FX_4A_SEND_outline">
+      <rect id="FX_4A_SEND_box" class="st9" x="63" y="681.323" width="30.47" height="8.65" rx="1.28" ry="1.28"/>
+      <text id="FX_4A_SEND_AUX_4" class="st4" transform="translate(69.05 687.873)"><tspan x="0" y="0">AUX 4</tspan></text>
+    </g>
+    <g id="FX_4A_end_values">
+      <g id="FX_4A_end_L">
+        <text id="FX_4A_end_L_EQ" class="st2" transform="translate(15.51 695.223)"><tspan x="0" y="0">−15</tspan></text>
+        <rect id="FX_4A_end_L_COMP_box" class="st8" x="13.97" y="696.353" width="10.77" height="5.39" rx=".85" ry=".85"/>
+        <text id="FX_4A_end_L_COMP" class="st0" transform="translate(18.251 700.463)"><tspan x="0" y="0">0</tspan></text>
+        <rect id="FX_4A_end_L_SEND_box" class="st10" x="14.26" y="702.873" width="10.2" height="4.82" rx=".85" ry=".85"/>
+        <text id="FX_4A_end_L_SEND" class="st3" transform="translate(16.78 706.703)"><tspan x="0" y="0">−∞</tspan></text>
+      </g>
+      <g id="FX_4A_end_R">
+        <text id="FX_4A_end_R_EQ" class="st2" transform="translate(38.19 695.073)"><tspan x="0" y="0">+15</tspan></text>
+        <rect id="FX_4A_end_R_COMP_box" class="st8" x="36.65" y="696.213" width="10.77" height="5.39" rx=".85" ry=".85"/>
+        <text id="FX_4A_end_R_COMP" class="st0" transform="translate(39.827 700.323)"><tspan x="0" y="0">20</tspan></text>
+        <rect id="FX_4A_end_R_SEND_box" class="st10" x="36.93" y="702.733" width="10.2" height="4.82" rx=".85" ry=".85"/>
+        <text id="FX_4A_end_R_SEND" class="st3" transform="translate(38.67 706.563)"><tspan x="0" y="0">+10</tspan></text>
+      </g>
+    </g>
+  </g>
+  <g id="FX_4B">
+    <g id="FX_4B_EQ_normal">
+      <text id="FX_4B_EQ_FREQ" class="st6" transform="translate(14.42 719.213)"><tspan x="0" y="0">FREQ</tspan></text>
+    </g>
+    <g id="FX_4B_end_values">
+      <g id="FX_4B_end_L">
+        <text id="FX_4B_end_L_EQ" class="st2" transform="translate(58.706 755.313)"><tspan x="0" y="0">65</tspan></text>
+      </g>
+      <g id="FX_4B_end_R">
+        <text id="FX_4B_end_R_EQ" class="st2" transform="translate(80.38 755.173)"><tspan x="0" y="0">550</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>
