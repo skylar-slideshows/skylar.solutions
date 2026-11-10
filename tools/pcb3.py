@@ -174,3 +174,22 @@ def deform(m, k, fn):
         P2 = b"".join(struct.pack("<3H", *[round((p[a] - lo[a]) / step[a]) for a in range(3)]) for p in chunk)
         chunks.append((vc, ic, P2, N, I))
     mesh.update(qmin=lo, qstep=step, chunks=chunks)
+
+
+def compact_palette(m):
+    """Drop palette colours no vertex uses (recolouring leaves the old ones behind)."""
+    used = set()
+    for mesh in m.meshes:
+        for vc, ic, P, N, I in mesh["chunks"]:
+            used.update(N[v * 4 + 3] for v in range(vc))
+    keep = sorted(used)
+    remap = {old: new for new, old in enumerate(keep)}
+    m.palette = [m.palette[i] for i in keep]
+    for mesh in m.meshes:
+        chunks = []
+        for vc, ic, P, N, I in mesh["chunks"]:
+            n = bytearray(N)
+            for v in range(vc): n[v * 4 + 3] = remap[n[v * 4 + 3]]
+            chunks.append((vc, ic, P, bytes(n), I))
+        mesh["chunks"] = chunks
+    return m

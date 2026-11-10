@@ -21,7 +21,7 @@ The LED rings always show here (instance group 0); the front panel with its knob
 display glass keeps group 2, for the page's one checkbox.
 """
 import json, math, sys
-from pcb3 import read_model, write_model, colour_index, mat_mul, translate, add_mesh
+from pcb3 import read_model, write_model, colour_index, mat_mul, translate, add_mesh, compact_palette
 from geom import extrude, lathe
 
 LOGIC_HOLES = [(124.90, 337.70), (124.90, 272.70), (220.90, 272.70), (220.90, 337.70)]
@@ -69,7 +69,7 @@ def place(dst, mesh, spots):
 
 
 def main(controls_path, logic_path, dac_path, out_path):
-    asm = read_model(controls_path)
+    asm = compact_palette(read_model(controls_path))
     # LED rings always on here; their checkbox lives on the controls board page
     asm.instances = [(mesh, mat, 0 if len(rest) == 0 or rest[0] == 1 else rest[0]) for mesh, mat, *rest in asm.instances]
 
@@ -92,6 +92,7 @@ def main(controls_path, logic_path, dac_path, out_path):
     head = lathe([(0.0, -2.0), (2.2, -1.85), (2.75, -1.2), (2.75, 0.0)], white, 20)
     place(asm, head, screws)
 
+    compact_palette(asm)
     write_model(asm, out_path)
     drawn = {}
     for mesh, mat, g in asm.instances:

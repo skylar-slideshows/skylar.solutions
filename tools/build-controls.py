@@ -17,7 +17,7 @@ faceplate: panel (x, y) sits over controls-board KiCad (100.1 + x, 580 - y), str
 controls board's (found from its M2 mounting holes).
 """
 import json, math, sys
-from pcb3 import read_model, write_model, add_mesh, colour_index, recolour, mat_mul, translate, deform, mesh_points, remove_instances
+from pcb3 import read_model, write_model, add_mesh, colour_index, recolour, mat_mul, translate, deform, mesh_points, remove_instances, compact_palette
 from geom import Mesh, box, extrude, lathe, cylinder_y, rrect, circle, arc_points
 
 STRIP_X0, STRIP_PITCH, PANEL_Y0 = 100.1, 36.5, 580.0
@@ -31,7 +31,10 @@ LEVER_IN_CAP = 5.0                    # how far the fader lever reaches into its
 
 MASK_GREEN, COPPER_GREEN = (58, 89, 78), (86, 125, 90)   # same as the analog cards
 ANODIZED = (34, 34, 38)
-KNOB, KNOB_GROOVE, KNOB_TOP = (31, 31, 34), (16, 16, 18), (240, 240, 236)
+KNOB, KNOB_GROOVE, KNOB_TOP = (34, 34, 37), (22, 22, 24), (240, 240, 236)
+# cap colours per strip, top knob first: red, a group of eight in pairs, purple next to the fader
+CAP_COLOURS = [(214, 43, 48), (240, 128, 34), (240, 128, 34), (245, 198, 44), (245, 198, 44),
+               (64, 168, 84), (64, 168, 84), (52, 112, 214), (52, 112, 214), (132, 74, 204)]
 FADER_CAP = (200, 202, 208)
 SWITCH_BODY, SWITCH_CAP = (40, 40, 44), (240, 240, 236)
 ENC_BASE, ENC_METAL, ENC_SHAFT = (46, 70, 58), (192, 193, 198), (212, 213, 217)
@@ -165,15 +168,19 @@ def fluted(r0, r1, z0, z1, ci, groove_ci, flutes=8, n=48):
 
 
 def knob(m, height):
-    """Knob cap after the usual moulded kind: a round skirt, a fluted taper and a white top disk
-    at 80 % of the top face."""
-    black, groove, white = colour_index(m, KNOB), colour_index(m, KNOB_GROOVE), colour_index(m, KNOB_TOP)
-    rs, hs, r0, r1 = 6.4, 3.4, 5.1, 4.35
-    out = lathe([(rs, 0.0), (rs, hs - 0.35), (rs - 0.35, hs), (r0, hs)], black, 40)
-    out.add(fluted(r0, r1, hs, height - 0.6, black, groove))
-    out.add(lathe([(r1, height - 0.6), (r1 - 0.6, height), (0.0, height)], black, 48))
-    disk(0, 0, 0.8 * (r1 - 0.6), height + 0.03, white, 40, out)
+    """Sifam-style mini collet knob for a 6 mm shaft: a slightly tapered black body with fine
+    flutes, a rim around the top and a recess that the coloured cap presses into."""
+    black, groove = colour_index(m, KNOB), colour_index(m, KNOB_GROOVE)
+    rb, rt = 5.8, 5.25
+    out = lathe([(rb, 0.0), (rb, 0.4)], black, 48)
+    out.add(fluted(rb, rt, 0.4, height - 0.5, black, groove, flutes=16, n=48))
+    out.add(lathe([(rt, height - 0.5), (rt - 0.3, height), (4.75, height), (4.75, height - 0.4), (0.0, height - 0.4)], black, 48))
     return out
+
+
+def knob_cap(m, height, rgb):
+    """The coloured cap: a shallow disc with a rounded edge, sitting in the knob's top recess."""
+    return lathe([(4.6, height - 0.4), (4.6, height + 0.3), (4.35, height + 0.62), (0.0, height + 0.7)], colour_index(m, rgb), 40)
 
 
 def encoder(m):
@@ -209,20 +216,21 @@ def nidec_switch(m, cap_top):
 
 
 def fader_cap(m, z0):
-    """Narrow brushed-aluminium fader cap: longer along the travel than it is tall, with a
-    saddle profile across its width (raised side lips, a ribbed valley) run along its length."""
+    """Narrow brushed-aluminium fader cap, 9 mm across the slot and 20 mm along it. Its top
+    rises at the two ends of its length and dips to its lowest point across the middle,
+    with a few fine ribs on the slopes."""
     W, L, H = 9.0, 20.0, 10.0
-    xv, depth = W / 2 - 1.3, 1.6
-    prof = [(-W / 2, 0.0), (W / 2, 0.0), (W / 2 - 0.3, H - 0.6), (W / 2 - 0.55, H - 0.12), (W / 2 - 0.95, H)]
-    n = 12
+    yv, depth = L / 2 - 1.4, 2.2
+    prof = [(-L / 2, 0.0), (L / 2, 0.0), (L / 2 - 0.3, H - 0.6), (L / 2 - 0.55, H - 0.12), (L / 2 - 0.95, H)]
+    n = 16
     for k in range(n + 1):
-        x = xv - 2 * xv * k / n
-        rib = 0.1 if k in (2, 4, 8, 10) else 0.0
-        prof.append((x, H - depth * (1 - (x / xv) ** 2) + rib))
-    prof += [(-(W / 2 - 0.95), H), (-(W / 2 - 0.55), H - 0.12), (-(W / 2 - 0.3), H - 0.6)]
-    e = extrude(prof, [], -L / 2, L / 2, colour_index(m, FADER_CAP))
-    e.pos = [(u, -w, v + z0) for u, v, w in e.pos]         # profile (x, z), run along y
-    e.nrm = [(u, -w, v) for u, v, w in e.nrm]
+        y = yv - 2 * yv * k / n
+        rib = 0.1 if k in (2, 4, 12, 14) else 0.0
+        prof.append((y, H - depth * (1 - (y / yv) ** 2) + rib))
+    prof += [(-(L / 2 - 0.95), H), (-(L / 2 - 0.55), H - 0.12), (-(L / 2 - 0.3), H - 0.6)]
+    e = extrude(prof, [], -W / 2, W / 2, colour_index(m, FADER_CAP))
+    e.pos = [(w, u, v + z0) for u, v, w in e.pos]          # profile (y, z), run across the slot (x)
+    e.nrm = [(w, u, v) for u, v, w in e.nrm]
     return e
 
 
@@ -274,10 +282,12 @@ def fader_body(m, motor_end):
     box((-5.3, -64.0, -11.8), (5.3, 64.0, -0.8), colour_index(m, FRAME_SIDE), out)       # frame channel
     box((-1.2, -52.0, -0.9), (1.2, 52.0, -0.7), colour_index(m, GEARBOX), out)           # dark track under the slot
     box((-5.0, -62.0, -13.8), (5.0, 62.0, -11.8), colour_index(m, FADER_PCB), out)       # resistor board + terminals
-    y0, y1 = sorted((s * 11.0, s * 38.4))
-    out.add(cylinder_y(0.0, -15.0, 6.0, y0 + 1.6, y1 - 1.6, colour_index(m, MOTOR_CAN), 24))
-    out.add(cylinder_y(0.0, -15.0, 5.6, y0, y0 + 1.6, colour_index(m, MOTOR_END), 24))
-    out.add(cylinder_y(0.0, -15.0, 5.6, y1 - 1.6, y1, colour_index(m, MOTOR_END), 24))
+    # the motor hangs under the black gearbox block at the end of the fader
+    y0, y1 = sorted((s * 44.1, s * 71.5))
+    mz = -16.0 - 6.0 - 0.2
+    out.add(cylinder_y(0.0, mz, 6.0, y0 + 1.6, y1 - 1.6, colour_index(m, MOTOR_CAN), 24))
+    out.add(cylinder_y(0.0, mz, 5.6, y0, y0 + 1.6, colour_index(m, MOTOR_END), 24))
+    out.add(cylinder_y(0.0, mz, 5.6, y1 - 1.6, y1, colour_index(m, MOTOR_END), 24))
     g0, g1 = sorted((s * 52.0, s * 69.0))
     box((-4.6, g0, -16.0), (4.6, g1, -11.8), colour_index(m, GEARBOX), out)              # belt pulley housing
     return out
@@ -339,8 +349,12 @@ def main(ctl_path, fad_path, ring_path, dxf_path, out_path):
     place(asm, plate, [translate(STRIP_X0 + STRIP_PITCH * s, -PANEL_Y0, 0) for s in range(4)], 2)
 
     # knob caps on the encoder shafts (group 2)
-    kn = knob(asm, SHAFT_TOP + 0.8 - (panel_z1 + 0.6))
-    place(asm, kn, [translate(x, y, panel_z1 + 0.6) for x, y in enc], 2)
+    kh = SHAFT_TOP + 0.1 - (panel_z1 + 0.6)
+    place(asm, knob(asm, kh), [translate(x, y, panel_z1 + 0.6) for x, y in enc], 2)
+    per_strip = len(enc) // 4                  # the DXF lists each strip's encoders top to bottom
+    for rgb in sorted(set(CAP_COLOURS), key=CAP_COLOURS.index):
+        spots = [translate(x, y, panel_z1 + 0.6) for i, (x, y) in enumerate(enc) if CAP_COLOURS[i % per_strip] == rgb]
+        place(asm, knob_cap(asm, kh, rgb), spots, 2)
 
     # display glass behind each window (group 2)
     dx = [p for path in layers['DISPLAY']['paths'] for p in path]
@@ -360,6 +374,7 @@ def main(ctl_path, fad_path, ring_path, dxf_path, out_path):
     lever = fader_knob(asm, panel_z1 + 1.2 - mtg)
     place(asm, lever, [translate(x, fy + (t - 0.5) * 100.0, mtg) for x, t in zip(fx, travel)], 0)
 
+    compact_palette(asm)
     write_model(asm, out_path)
     drawn = {}
     for mesh, mat, g in asm.instances:
