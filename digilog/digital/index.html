@@ -35,9 +35,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
-  <link rel="stylesheet" href="../../assets/site.css?v=20261109d">
-  <script src="../../assets/site.js?v=20261109d" defer></script>
-  <script src="../../assets/board-viewer.js?v=20261109d" defer></script>
+  <link rel="stylesheet" href="../../assets/site.css?v=20261109e">
+  <script src="../../assets/site.js?v=20261109e" defer></script>
+  <script src="../../assets/board-viewer.js?v=20261109e" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -73,7 +73,7 @@
     <!-- Interactive 3D model (assets/board-viewer.js). Rebuild the .bin with tools/build-digital.py.
          Instance group 2 = front panel with its knob caps and display glass. Starts below the boards. -->
     <figure class="board-figure board-figure--solo">
-      <div class="board-viewer" data-board-viewer data-zoom="1.1" data-elevation="-0.4" data-azimuth="-0.25" data-src="../../assets/models/digital-assembly.bin?v=20261109d">
+      <div class="board-viewer" data-board-viewer data-zoom="1.1" data-elevation="-0.4" data-azimuth="-0.25" data-src="../../assets/models/digital-assembly.bin?v=20261109e">
         <img class="board-viewer__poster" src="../../assets/img/digital-assembly.jpg" width="1600" height="900" alt="3D render of Digilog’s digital section from below: the STM32 logic board and the DAC board hanging on white nylon standoffs under the green controls board">
         <canvas class="board-viewer__canvas" tabindex="0" role="img"
                 aria-label="Interactive 3D model of the digital section. Arrow keys rotate, Shift with arrows pans, plus and minus zoom, 0 resets the view."></canvas>
@@ -88,11 +88,15 @@
     </figure>
 
     <div class="prose">
-      <h2>So what is this one?</h2>
+      <h2>Design notes</h2>
 
-      <p>This is the digital half of Digilog, all in one stack. On top is the control surface. Hanging underneath the controls board are the two boards that run it: the STM32 logic board and the DAC board. Each sits on four 20 mm nylon standoffs, screwed into PEM standoffs soldered to the underside of the controls board, where the bottom silkscreen marks out exactly where each board goes. Both boards face up, so their chips point at the controls board above them.</p>
-
-      <p>The DAC board is where the digital side reaches over to the analog one: twenty MCP4728 quad 12-bit DACs on four I2C buses make eighty control voltages for the analog cards, and they leave on eight 20-pin headers, two per channel.</p>
+      <ul class="notes-list">
+        <li>One controller board (a “bucket”) runs four channel strips. Each strip has ten endless encoders with push switches and 32-LED rings, buttons with LEDs, a motorized touch-sensing fader and a 240 × 240 screen.</li>
+        <li>An STM32G474 at 170 MHz runs FreeRTOS: one task per channel’s I2C bus, scanning at about 1.5 kHz, an LED task at 120 Hz, a fader poller, and a UART link to a PC remote app.</li>
+        <li>Each channel has its own I2C bus, with three MCP23017 expanders for the encoders and buttons and five MCP4728 DACs for its control voltages.</li>
+        <li>The DAC board makes 80 control voltages, 0 to 2.048 V each, from twenty MCP4728s. Every output has a 470 Ω / 10 nF filter and there are no op-amps. Ribbon cables carry them to the analog routing board.</li>
+        <li>The STM32 and DAC boards hang under the controls board on 20 mm nylon standoffs, screwed into PEM SMT standoffs, with their parts facing up.</li>
+      </ul>
     </div>
 
     <section class="board-cards" aria-labelledby="digital-boards-title">

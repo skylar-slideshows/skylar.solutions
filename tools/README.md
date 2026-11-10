@@ -107,5 +107,23 @@ layer carries (for the captions). Rasterize them to JPEG and WebP in
 `assets/img/layers/` with any SVG renderer: cards and the controls board at
 468 px wide, the fader and digital boards at 640, the LED ring at 400.
 
+## Card schematics
+
+The full schematics in each card page's "See schematics" box are drawn straight
+from the KiCad files, one SVG per sheet, in the site's colours on light paper:
+
+    python3 tools/render-schematic.py INPUT/INPUT.kicad_sch assets/schematics/input.svg --bipolar C3,C4,C33
+    python3 tools/render-schematic.py EQ/EQ.kicad_sch assets/schematics/eq-1.svg
+    python3 tools/render-schematic.py EQ/lf_hf.kicad_sch assets/schematics/eq-2.svg
+    python3 tools/render-schematic.py EQ/lmf.kicad_sch assets/schematics/eq-3.svg
+    python3 tools/render-schematic.py EQ/hmf.kicad_sch assets/schematics/eq-4.svg
+    python3 tools/render-schematic.py COMP/COMP.kicad_sch assets/schematics/comp.svg
+    python3 tools/render-schematic.py PAN_FADER/PAN_FADER.kicad_sch assets/schematics/output.svg
+    python3 tools/render-schematic.py SENDS/SENDS.kicad_sch assets/schematics/sends.svg
+
+`--check` reports how many pin ends land on a wire, junction, label or pin (a
+quick test of the symbol transforms). `--bipolar` lists electrolytics drawn with a
+polarized symbol that are really bipolar; they're drawn without the "+".
+
 After rebuilding anything, bump the `?v=` number on the pages so browsers
 fetch the new files.

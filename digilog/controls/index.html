@@ -35,9 +35,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
-  <link rel="stylesheet" href="../../assets/site.css?v=20261109d">
-  <script src="../../assets/site.js?v=20261109d" defer></script>
-  <script src="../../assets/board-viewer.js?v=20261109d" defer></script>
+  <link rel="stylesheet" href="../../assets/site.css?v=20261109e">
+  <script src="../../assets/site.js?v=20261109e" defer></script>
+  <script src="../../assets/board-viewer.js?v=20261109e" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -73,7 +73,7 @@
     <!-- Interactive 3D model (assets/board-viewer.js). Rebuild the .bin with tools/build-controls.py.
          Instance groups: 1 = LED rings, 2 = front panel with its knob caps and display glass. -->
     <figure class="board-figure board-figure--solo">
-      <div class="board-viewer" data-board-viewer data-zoom="1.12" data-src="../../assets/models/controls-assembly.bin?v=20261109d">
+      <div class="board-viewer" data-board-viewer data-zoom="1.12" data-src="../../assets/models/controls-assembly.bin?v=20261109e">
         <img class="board-viewer__poster" src="../../assets/img/controls-assembly.jpg" width="1600" height="900" alt="3D render of the Digilog control surface: four black anodized panel strips with forty knobs, four fader caps and four display windows, over the green controls and fader boards">
         <canvas class="board-viewer__canvas" tabindex="0" role="img"
                 aria-label="Interactive 3D model of the controls board assembly. Arrow keys rotate, Shift with arrows pans, plus and minus zoom, 0 resets the view."></canvas>
@@ -89,17 +89,17 @@
     </figure>
 
     <div class="prose">
-      <h2>So what is this one?</h2>
+      <h2>Design notes</h2>
 
-      <p>This is everything you actually touch on Digilog. Each of the four channel strips gets ten encoders, ten buttons, a display and a 100 mm motorized fader, and the model is the whole stack: the controls board, the fader board at the bottom of the strips, forty little LED ring boards, and the front panel on top.</p>
-
-      <p>The controls board reads all of it. Every encoder goes through an RC debounce filter so the switch bounce never reaches the logic, then into one of twelve MCP23017 I/O expanders, three per channel strip, with each strip on its own I2C bus. Eight 74HCT595 shift registers handle the LEDs, and each strip has two connectors for its display.</p>
-
-      <p>Each encoder wears its own LED ring: a 24 mm, four-layer board with 32 white 0201 LEDs, each with its own 560 Ω resistor, driven by four 74HCT595s on the back. It plugs into two sockets on the controls board, one for power and one for data, so the shaft comes up through the middle and the LEDs sit right under the ring-shaped window in the panel.</p>
-
-      <p>The faders are ALPS RSA0N11M9s, 100 mm motorized faders with a touch-sense track. On the fader board, each one gets a DRV8871 H-bridge to drive its motor and an AT42QT1011 to feel for a finger on the lever, so the console knows when someone is holding a fader and the motor should leave it alone. The board is a comb, so the fader bodies drop right through it.</p>
-
-      <p>On top is the front panel, 1.6 mm black anodized aluminium, one strip per channel.</p>
+      <ul class="notes-list">
+        <li>Four channel strips, each with ten EC11 encoders with push switches, ten buttons, status LEDs and a screen.</li>
+        <li>Every encoder goes through an RC debounce filter to the MCP23017 I/O expanders: three per strip, with one I2C bus per strip.</li>
+        <li>LED rings: each is a 24 mm, four-layer board with 32 0201 LEDs and four 74HCT595 shift registers. With eight more 595s for the button LEDs, the whole surface is one 1344-bit chain, refreshed over SPI with DMA at 120 Hz.</li>
+        <li>Each ring plugs into two sockets: DATA (data, clock, latch and output enable) and POW (power, ground and cascade out). The LED resistors went from 560 Ω to 2.5 kΩ, since 560 Ω was far too bright.</li>
+        <li>Fader board: four ALPS RSA0N11M9 100 mm motorized faders, each with a DRV8871 motor driver, an AT42QT1011 touch sensor, and INSERT and PRE buttons.</li>
+        <li>Front panel: 1.6 mm black anodized aluminium, one 36.3 mm strip per channel.</li>
+        <li>Next revision: a ground beside every signal in the board-to-board cables, and terminated, buffered clock and latch lines for the LED chain.</li>
+      </ul>
     </div>
 
     <section class="card-section" aria-labelledby="layers-controls">

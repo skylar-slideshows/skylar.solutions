@@ -35,9 +35,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
-  <link rel="stylesheet" href="../../assets/site.css?v=20261109d">
-  <script src="../../assets/site.js?v=20261109d" defer></script>
-  <script src="../../assets/board-viewer.js?v=20261109d" defer></script>
+  <link rel="stylesheet" href="../../assets/site.css?v=20261109e">
+  <script src="../../assets/site.js?v=20261109e" defer></script>
+  <script src="../../assets/board-viewer.js?v=20261109e" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -72,7 +72,7 @@
 
     <!-- Interactive 3D model (assets/board-viewer.js). Rebuild the .bin with tools/step-to-mesh.mjs. -->
     <figure class="board-figure board-figure--solo">
-      <div class="board-viewer" data-board-viewer data-src="../../assets/models/sends-card.bin?v=20261109d">
+      <div class="board-viewer" data-board-viewer data-src="../../assets/models/sends-card.bin?v=20261109e">
         <img class="board-viewer__poster" src="../../assets/img/sends-card.jpg" width="1600" height="900" alt="3D render of the Sends card circuit board">
         <canvas class="board-viewer__canvas" tabindex="0" role="img"
                 aria-label="Interactive 3D model of the Sends card. Arrow keys rotate, Shift with arrows pans, plus and minus zoom, 0 resets the view."></canvas>
@@ -88,6 +88,18 @@
       <figure class="schematic">
         <svg class="sch" viewBox="0 0 1100 360" role="img" aria-labelledby="sch-t sch-d"><title id="sch-t">Sends card, simplified schematic</title><desc id="sch-d">One input buffer feeds seven VCAs side by side: three stereo sends (left and right) and one mono send. Each VCA has its own control voltage, so every send level is set independently.</desc><defs><marker id="sch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="currentColor"/></marker></defs><path class="sch-port" d="M68.92 57 L100 57 L110 70 L100 83 L68.92 83Z"/><text class="sch-pt" x="78.92" y="74.5" text-anchor="start">In</text><path class="sch-w" d="M110 70 L140 70"/><path class="sch-p" d="M140 46 L196 70 L140 94Z"/><text class="sch-t" x="162.4" y="34" text-anchor="middle">buffer</text><path class="sch-w" d="M196 70 L1026 70"/><circle class="sch-dot" cx="282" cy="70" r="4.5"/><path class="sch-w" d="M282 70 L282 120"/><path class="sch-p" d="M256 120 L282 184 L308 120Z"/><path class="sch-vca" d="M260 169.92 L306 127.68" marker-end="url(#sch-arrow)"/><path class="sch-cv" d="M230 150 L260 150" marker-end="url(#sch-arrow)"/><path class="sch-w" d="M282 184 L282 236" marker-end="url(#sch-arrow)"/><rect class="sch-port" x="240.84" y="240" width="82.32" height="28" rx="4"/><text class="sch-pt" x="282" y="259" text-anchor="middle">Send 1 L</text><circle class="sch-dot" cx="406" cy="70" r="4.5"/><path class="sch-w" d="M406 70 L406 120"/><path class="sch-p" d="M380 120 L406 184 L432 120Z"/><path class="sch-vca" d="M384 169.92 L430 127.68" marker-end="url(#sch-arrow)"/><path class="sch-cv" d="M354 150 L384 150" marker-end="url(#sch-arrow)"/><path class="sch-w" d="M406 184 L406 236" marker-end="url(#sch-arrow)"/><rect class="sch-port" x="364.84" y="240" width="82.32" height="28" rx="4"/><text class="sch-pt" x="406" y="259" text-anchor="middle">Send 1 R</text><circle class="sch-dot" cx="530" cy="70" r="4.5"/><path class="sch-w" d="M530 70 L530 120"/><path class="sch-p" d="M504 120 L530 184 L556 120Z"/><path class="sch-vca" d="M508 169.92 L554 127.68" marker-end="url(#sch-arrow)"/><path class="sch-cv" d="M478 150 L508 150" marker-end="url(#sch-arrow)"/><path class="sch-w" d="M530 184 L530 236" marker-end="url(#sch-arrow)"/><rect class="sch-port" x="488.84" y="240" width="82.32" height="28" rx="4"/><text class="sch-pt" x="530" y="259" text-anchor="middle">Send 2 L</text><circle class="sch-dot" cx="654" cy="70" r="4.5"/><path class="sch-w" d="M654 70 L654 120"/><path class="sch-p" d="M628 120 L654 184 L680 120Z"/><path class="sch-vca" d="M632 169.92 L678 127.68" marker-end="url(#sch-arrow)"/><path class="sch-cv" d="M602 150 L632 150" marker-end="url(#sch-arrow)"/><path class="sch-w" d="M654 184 L654 236" marker-end="url(#sch-arrow)"/><rect class="sch-port" x="612.84" y="240" width="82.32" height="28" rx="4"/><text class="sch-pt" x="654" y="259" text-anchor="middle">Send 2 R</text><circle class="sch-dot" cx="778" cy="70" r="4.5"/><path class="sch-w" d="M778 70 L778 120"/><path class="sch-p" d="M752 120 L778 184 L804 120Z"/><path class="sch-vca" d="M756 169.92 L802 127.68" marker-end="url(#sch-arrow)"/><path class="sch-cv" d="M726 150 L756 150" marker-end="url(#sch-arrow)"/><path class="sch-w" d="M778 184 L778 236" marker-end="url(#sch-arrow)"/><rect class="sch-port" x="736.84" y="240" width="82.32" height="28" rx="4"/><text class="sch-pt" x="778" y="259" text-anchor="middle">Send 3 L</text><circle class="sch-dot" cx="902" cy="70" r="4.5"/><path class="sch-w" d="M902 70 L902 120"/><path class="sch-p" d="M876 120 L902 184 L928 120Z"/><path class="sch-vca" d="M880 169.92 L926 127.68" marker-end="url(#sch-arrow)"/><path class="sch-cv" d="M850 150 L880 150" marker-end="url(#sch-arrow)"/><path class="sch-w" d="M902 184 L902 236" marker-end="url(#sch-arrow)"/><rect class="sch-port" x="860.84" y="240" width="82.32" height="28" rx="4"/><text class="sch-pt" x="902" y="259" text-anchor="middle">Send 3 R</text><path class="sch-w" d="M1026 70 L1026 120"/><path class="sch-p" d="M1000 120 L1026 184 L1052 120Z"/><path class="sch-vca" d="M1004 169.92 L1050 127.68" marker-end="url(#sch-arrow)"/><path class="sch-cv" d="M974 150 L1004 150" marker-end="url(#sch-arrow)"/><path class="sch-w" d="M1026 184 L1026 236" marker-end="url(#sch-arrow)"/><rect class="sch-port" x="992.38" y="240" width="67.24" height="28" rx="4"/><text class="sch-pt" x="1026" y="259" text-anchor="middle">Send 4</text><text class="sch-s" x="222" y="138" text-anchor="middle">CV</text><text class="sch-s" x="650" y="316" text-anchor="middle">one VCA per send, each with its own control voltage from the controller</text><text class="sch-s" x="650" y="336" text-anchor="middle">(three stereo sends and one mono)</text></svg>
       </figure>
+    </section>
+
+    <section class="card-section" aria-labelledby="notes-title">
+      <h2 class="card-section__title" id="notes-title">Design notes</h2>
+      <ul class="notes-list">
+        <li>Four aux sends: sends 1 and 2 are stereo, sends 3 and 4 mono.</li>
+        <li>An inverting input buffer feeds seven SSI2164 VCA channels.</li>
+        <li>Each VCA channel has its own temperature-compensated CV scaler, and the card has its own −2.5 V reference.</li>
+        <li>Range −83 to +10 dB across the DAC range.</li>
+        <li>Class AB for lower noise, as on the EQ; the class-A bias resistors are left unfitted.</li>
+        <li>VCAs rather than digital volume chips: a PGA2320 per send would have cost $14–21 each, and a strip needs about five.</li>
+      </ul>
     </section>
 
     <section class="card-section" aria-labelledby="layers-title">
@@ -146,6 +158,20 @@
         <li><a href="../output/">Output (fader VCA)</a></li>
       </ul>
     </nav>
+
+
+    <!-- Full schematics, rendered from the KiCad files with tools/render-schematic.py -->
+    <details class="schematics">
+      <summary>See schematics</summary>
+      <div class="schematics__pages">
+        <figure class="schematics__page">
+          <a href="../../assets/schematics/sends.svg?v=20261109e" target="_blank" rel="noopener">
+            <img src="../../assets/schematics/sends.svg?v=20261109e" width="1643" height="1110" loading="lazy" alt="Full schematic: Sends card">
+          </a>
+          <figcaption>Sends card. Opens full size in a new tab.</figcaption>
+        </figure>
+      </div>
+    </details>
 
     <!-- Schematic title block. Update the date and rev when you change the page. -->
     <footer class="title-block" aria-hidden="true">

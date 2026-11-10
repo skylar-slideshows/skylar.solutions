@@ -35,9 +35,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
-  <link rel="stylesheet" href="../../assets/site.css?v=20261109d">
-  <script src="../../assets/site.js?v=20261109d" defer></script>
-  <script src="../../assets/board-viewer.js?v=20261109d" defer></script>
+  <link rel="stylesheet" href="../../assets/site.css?v=20261109e">
+  <script src="../../assets/site.js?v=20261109e" defer></script>
+  <script src="../../assets/board-viewer.js?v=20261109e" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -72,7 +72,7 @@
 
     <!-- Interactive 3D model (assets/board-viewer.js). Rebuild the .bin with tools/step-to-mesh.mjs. -->
     <figure class="board-figure board-figure--solo">
-      <div class="board-viewer" data-board-viewer data-src="../../assets/models/fader-vca-card.bin?v=20261109d">
+      <div class="board-viewer" data-board-viewer data-src="../../assets/models/fader-vca-card.bin?v=20261109e">
         <img class="board-viewer__poster" src="../../assets/img/fader-vca-card.jpg" width="1600" height="900" alt="3D render of the Output card circuit board">
         <canvas class="board-viewer__canvas" tabindex="0" role="img"
                 aria-label="Interactive 3D model of the Output card. Arrow keys rotate, Shift with arrows pans, plus and minus zoom, 0 resets the view."></canvas>
@@ -88,6 +88,19 @@
       <figure class="schematic">
         <svg class="sch" viewBox="0 0 1100 430" role="img" aria-labelledby="sch-t sch-d"><title id="sch-t">Output (fader VCA) card, simplified schematic</title><desc id="sch-d">Pick the pre-EQ or post-EQ signal, send it out to the insert matrix and either take the insert return or skip it, then split it into left and right THAT2180 VCAs. Each VCA&#x27;s gain comes from its fader and pan CV plus the compressor CV, and an OPA1637 turns each side into a balanced mix output.</desc><defs><marker id="sch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="currentColor"/></marker></defs><path class="sch-port" d="M71.22 99 L140 99 L150 112 L140 125 L71.22 125Z"/><text class="sch-pt" x="81.22" y="116.5" text-anchor="start">Post-EQ</text><path class="sch-port" d="M78.76 169 L140 169 L150 182 L140 195 L78.76 195Z"/><text class="sch-pt" x="88.76" y="186.5" text-anchor="start">Pre-EQ</text><path class="sch-w" d="M150 112 L230 112"/><path class="sch-w" d="M150 182 L230 182"/><circle class="sch-contact" cx="230" cy="112" r="4"/><circle class="sch-contact" cx="230" cy="182" r="4"/><circle class="sch-contact" cx="268" cy="147" r="4"/><path class="sch-w" d="M265 147 L235 115"/><text class="sch-s" x="249" y="94" text-anchor="middle">pre / post</text><path class="sch-w" d="M268 147 L318 147"/><circle class="sch-dot" cx="318" cy="147" r="4.5"/><path class="sch-w" d="M318 147 L318 56"/><path class="sch-port" d="M318 43 L416.94 43 L426.94 56 L416.94 69 L318 69Z"/><text class="sch-pt" x="328" y="60.5" text-anchor="start">Insert send</text><path class="sch-w" d="M318 147 L470 147"/><path class="sch-port" d="M275.98 229 L390 229 L400 242 L390 255 L275.98 255Z"/><text class="sch-pt" x="285.98" y="246.5" text-anchor="start">Insert return</text><path class="sch-w" d="M400 242 L470 242"/><circle class="sch-contact" cx="470" cy="147" r="4"/><circle class="sch-contact" cx="470" cy="242" r="4"/><circle class="sch-contact" cx="508" cy="194.5" r="4"/><path class="sch-w" d="M505 194.5 L475 150"/><text class="sch-s" x="489" y="129" text-anchor="middle">insert in/out</text><path class="sch-w" d="M508 194.5 L556 194.5"/><circle class="sch-dot" cx="556" cy="194.5" r="4.5"/><path class="sch-w" d="M556 194.5 L556 100 L604 100"/><path class="sch-w" d="M556 194.5 L556 316 L604 316"/><path class="sch-p" d="M604 65 L686 100 L604 135Z"/><path class="sch-vca" d="M610.56 141 L667.96 63" marker-end="url(#sch-arrow)"/><text class="sch-t" x="626" y="48" text-anchor="end">THAT2180A</text><text class="sch-s" x="626" y="64" text-anchor="end">VCA (L)</text><path class="sch-w" d="M686 100 L742 100"/><path class="sch-p" d="M742 67 L818 100 L742 133Z"/><text class="sch-t" x="772.4" y="55" text-anchor="middle">OPA1637</text><text class="sch-s" x="772.4" y="71" text-anchor="middle">balanced driver</text><path class="sch-w" d="M818 100 L850 100 L850 86 L884 86"/><path class="sch-w" d="M818 100 L850 100 L850 114 L884 114"/><path class="sch-port" d="M884 73 L945.24 73 L955.24 86 L945.24 99 L884 99Z"/><text class="sch-pt" x="894" y="90.5" text-anchor="start">Mix L+</text><path class="sch-port" d="M884 101 L945.24 101 L955.24 114 L945.24 127 L884 127Z"/><text class="sch-pt" x="894" y="118.5" text-anchor="start">Mix L−</text><path class="sch-p" d="M604 281 L686 316 L604 351Z"/><path class="sch-vca" d="M610.56 357 L667.96 279" marker-end="url(#sch-arrow)"/><text class="sch-t" x="626" y="378" text-anchor="end">THAT2180A</text><text class="sch-s" x="626" y="394" text-anchor="end">VCA (R)</text><path class="sch-w" d="M686 316 L742 316"/><path class="sch-p" d="M742 283 L818 316 L742 349Z"/><text class="sch-t" x="772.4" y="369" text-anchor="middle">OPA1637</text><text class="sch-s" x="772.4" y="385" text-anchor="middle">balanced driver</text><path class="sch-w" d="M818 316 L850 316 L850 302 L884 302"/><path class="sch-w" d="M818 316 L850 316 L850 330 L884 330"/><path class="sch-port" d="M884 289 L945.24 289 L955.24 302 L945.24 315 L884 315Z"/><text class="sch-pt" x="894" y="306.5" text-anchor="start">Mix R+</text><path class="sch-port" d="M884 317 L945.24 317 L955.24 330 L945.24 343 L884 343Z"/><text class="sch-pt" x="894" y="334.5" text-anchor="start">Mix R−</text><path class="sch-cv" d="M638 24 L638 60" marker-end="url(#sch-arrow)"/><text class="sch-s" x="628" y="18" text-anchor="end">fader + pan CV (L)</text><path class="sch-cv" d="M638 410 L638 356" marker-end="url(#sch-arrow)"/><text class="sch-s" x="628" y="420" text-anchor="end">fader + pan CV (R)</text><path class="sch-cv" d="M700 194.5 L652 194.5 L652 136" marker-end="url(#sch-arrow)"/><path class="sch-cv" d="M652 194.5 L652 280" marker-end="url(#sch-arrow)"/><text class="sch-s" x="708" y="198.5" text-anchor="start">comp CV (from the comp card)</text></svg>
       </figure>
+    </section>
+
+    <section class="card-section" aria-labelledby="notes-title">
+      <h2 class="card-section__title" id="notes-title">Design notes</h2>
+      <ul class="notes-list">
+        <li>Two VCAs, one per side (THAT2180A on the current drawing). There’s no separate pan circuit: the firmware combines fader and pan into one gain per side, so the pan law is a firmware choice.</li>
+        <li>The control direction is inverted: a higher DAC voltage means a quieter channel, so full scale is mute, which is also the power-up state. The range is about +12 dB down to mute.</li>
+        <li>The compressor works through the VCAs’ second control pin (E−), so it adds to the fader and pan settings without interfering.</li>
+        <li>Insert point: an ADG1436 picks the direct signal or the insert return, and a second logic line takes the insert send before or after the EQ.</li>
+        <li>An OPA1637 fully differential amp drives the balanced mix bus.</li>
+        <li>The CV buffers are MFB-filtered, temperature-compensated scalers (OPA4197, OPA2197) with an ADR5041 reference, so moves glide instead of zippering.</li>
+        <li>System simulation caught the VCAs’ E− pins floating when no compressor card is fitted. The fix is to move that connector and bridge JP1.</li>
+      </ul>
     </section>
 
     <section class="card-section" aria-labelledby="layers-title">
@@ -146,6 +159,20 @@
         <li><a href="../output/" aria-current="page">Output (fader VCA)</a></li>
       </ul>
     </nav>
+
+
+    <!-- Full schematics, rendered from the KiCad files with tools/render-schematic.py -->
+    <details class="schematics">
+      <summary>See schematics</summary>
+      <div class="schematics__pages">
+        <figure class="schematics__page">
+          <a href="../../assets/schematics/output.svg?v=20261109e" target="_blank" rel="noopener">
+            <img src="../../assets/schematics/output.svg?v=20261109e" width="1557" height="937" loading="lazy" alt="Full schematic: Output (pan/fader) card">
+          </a>
+          <figcaption>Output (pan/fader) card. Opens full size in a new tab.</figcaption>
+        </figure>
+      </div>
+    </details>
 
     <!-- Schematic title block. Update the date and rev when you change the page. -->
     <footer class="title-block" aria-hidden="true">

@@ -1946,3 +1946,73 @@ a:hover {
   .board-viewer__toggles label { gap: 0.25rem; }
   .board-viewer__toggles input { width: 0.85rem; height: 0.85rem; }
 }
+
+/* Design notes: short bullet lists for now */
+.notes-list {
+  max-width: 72ch;
+  margin: 0.75rem 0 0;
+  padding-left: 1.25rem;
+}
+.notes-list li {
+  margin: 0.45rem 0;
+  line-height: 1.55;
+}
+.notes-list li::marker { color: var(--accent); }
+
+/* "See schematics": the full card schematics, collapsed until opened */
+.schematics {
+  margin: 2rem 0 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--sunk);
+}
+.schematics > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.1rem;
+  cursor: pointer;
+  font-weight: 650;
+  color: var(--ink);
+  list-style: none;
+}
+.schematics > summary::-webkit-details-marker { display: none; }
+.schematics > summary::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-right: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  transform: rotate(-45deg);
+  transition: transform 0.2s ease;
+}
+.schematics[open] > summary::before { transform: rotate(45deg); }
+.schematics > summary:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-radius: var(--radius-card); }
+.schematics__pages {
+  display: grid;
+  gap: 1.5rem;
+  padding: 0.25rem 1.1rem 1.1rem;
+}
+.schematics__page { margin: 0; }
+.schematics__page img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fcfbff;   /* the drawings are on light paper in both themes */
+}
+.schematics__page figcaption {
+  margin-top: 0.45rem;
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+}
+@media (prefers-reduced-motion: reduce) { .schematics > summary::before { transition: none; } }
+
+/* Inside prose the list already has its own markers and grid spacing */
+.prose .notes-list {
+  gap: 0.55em;
+  margin-top: 0.9em;
+  padding-left: 0;
+}
+.prose .notes-list li { margin: 0; }
