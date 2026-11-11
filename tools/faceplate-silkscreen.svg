@@ -268,7 +268,7 @@
   </g>
   <line id="DIVIDER_INPUT_MODE" class="st9" x1="5.67" y1="217.42" x2="97.23" y2="217.42"/>
   <g id="STRIP_BUTTONS">
-    <text id="STRIP_SEL_L" class="st4" transform="translate(10.81 876.74)"><tspan x="0" y="0">SEL</tspan></text>
+    <text id="STRIP_SOLO" class="st4" transform="translate(7.62 876.74)"><tspan x="0" y="0">SOLO</tspan></text>
     <text id="STRIP_MUTE" class="st4" transform="translate(41.07 876.74)"><tspan x="0" y="0">MUTE</tspan></text>
     <text id="STRIP_SEL_R" class="st4" transform="translate(77.71 876.74)"><tspan x="0" y="0">SEL</tspan></text>
   </g>
