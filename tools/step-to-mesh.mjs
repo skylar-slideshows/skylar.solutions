@@ -1654,7 +1654,8 @@ for (const inst of instances) {
   const faceBoxes = [];
   let overlay = false;
   const repName = String(args(inst.rep)[0] || "");
-  const isBoard = /(^|[_\s])pcb$/i.test(inst.name || "");
+  // the board body: KiCad names it "<project>_PCB"; some exports use "PCB (drilled, 1.6 mm)"
+  const isBoard = /(^|[_\s])pcb$/i.test(inst.name || "") || /^pcb\b/i.test(inst.name || "");
   const layer = /silk/i.test(repName) ? 3 : /pad|mask|paste/i.test(repName) ? 2 : /copper|\bcu\b/i.test(repName) ? 1 : 3;
   for (const item of geometryItems(inst.rep)) {
     if (typeOf(item) === "SHELL_BASED_SURFACE_MODEL") overlay = true;

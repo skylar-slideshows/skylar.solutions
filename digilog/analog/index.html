@@ -35,9 +35,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400..900&family=Recursive:wght,CASL,MONO@300..1000,0..1,0..1&display=swap">
-  <link rel="stylesheet" href="../../assets/site.css?v=20261109l">
-  <script src="../../assets/site.js?v=20261109l" defer></script>
-  <script src="../../assets/board-viewer.js?v=20261109l" defer></script>
+  <link rel="stylesheet" href="../../assets/site.css?v=20261109m">
+  <script src="../../assets/site.js?v=20261109m" defer></script>
+  <script src="../../assets/board-viewer.js?v=20261109m" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -73,7 +73,7 @@
     <!-- Interactive 3D model (assets/board-viewer.js). Rebuild the .bin with tools/build-analog.py.
          Instance groups: 1 input, 2 EQ, 3 comp, 4 sends, 5 output cards. -->
     <figure class="board-figure board-figure--solo">
-      <div class="board-viewer" data-board-viewer data-src="../../assets/models/analog-assembly.bin?v=20261109l">
+      <div class="board-viewer" data-board-viewer data-src="../../assets/models/analog-assembly.bin?v=20261109m">
         <img class="board-viewer__poster" src="../../assets/img/analog-assembly.jpg" width="1600" height="900" alt="3D render of Digilog’s analog section: the green routing motherboard with four channels of plug-in cards stacked on it">
         <canvas class="board-viewer__canvas" tabindex="0" role="img"
                 aria-label="Interactive 3D model of the analog section. Arrow keys rotate, Shift with arrows pans, plus and minus zoom, 0 resets the view."></canvas>
@@ -89,6 +89,7 @@
         </fieldset>
       </div>
       <figcaption class="board-figure__caption">Rendered from the STEP models, with every card where the full assembly puts it. Drag to rotate, scroll or pinch to zoom, and right-drag or use two fingers to pan. Untick a card to pull all four of it out; with every box unticked, it’s just the routing board.</figcaption>
+            <p class="board-credit">Every PCB pictured above was designed, routed, and tested by Skylar Denno.</p>
     </figure>
 
     <section class="card-section" aria-labelledby="flow-title">
@@ -163,6 +164,22 @@
           </a>
         </li>
       </ul>
+    </section>
+
+    <section class="card-section" aria-labelledby="master-title">
+      <h2 class="card-section__title" id="master-title">Master section board</h2>
+      <p class="card-section__lead">The master section on one 230 × 150 mm board: mix and aux summing, four stereo aux returns, the master insert, line drivers, the monitor section and the headphone amp.</p>
+      <figure class="board-figure board-figure--solo">
+        <div class="board-viewer" data-board-viewer data-src="../../assets/models/master-analog.bin?v=20261109m">
+          <img class="board-viewer__poster" src="../../assets/img/master-analog.jpg" width="1600" height="900" loading="lazy" alt="3D render of the green master section board, with eight THAT2180 VCAs standing in sockets">
+          <canvas class="board-viewer__canvas" tabindex="0" role="img"
+                  aria-label="Interactive 3D model of the master section board. Arrow keys rotate, Shift with arrows pans, plus and minus zoom, 0 resets the view."></canvas>
+          <p class="board-viewer__status" data-viewer-status role="status" hidden></p>
+          <button class="board-viewer__reset" type="button" data-viewer-reset hidden>Reset view</button>
+        </div>
+        <figcaption class="board-figure__caption">Rendered from the STEP model. The eight THAT2180 VCAs sit in sockets, and each pair shares a thermistor bent against one of them. Drag to rotate, scroll or pinch to zoom, and right-drag or use two fingers to pan.</figcaption>
+        <p class="board-credit">Every PCB pictured above was designed, routed, and tested by Skylar Denno.</p>
+      </figure>
     </section>
 
     <!-- Schematic title block. Update the date and rev when you change the page. -->

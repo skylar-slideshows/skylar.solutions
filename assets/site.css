@@ -2128,3 +2128,13 @@ h1, h2, h3, h4,
 .sf-ledglow.is-on { opacity: 0.9; }
 .sf-fader { cursor: ns-resize; outline: none; touch-action: none; }
 .sf-fader:focus-visible .sf-fadercap { stroke: #9d93ff; stroke-width: 0.5; }
+
+/* The credit under every 3D model */
+.board-credit {
+  max-width: 44rem;
+  margin: 0.4rem auto 0;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  opacity: 0.85;
+}

@@ -122,6 +122,20 @@ glass) is instance group 2, for the digital page's one checkbox. Colours within 
 small distance of one already in the model are merged, to stay inside the
 viewer's 64.
 
+## Master section boards
+
+Both exports carry a separate "plated holes and vias" part (every barrel, about
+165k triangles) that `finish-master.py` drops, since `--fill-holes` fills those
+holes in the board anyway. It also gives the boards the same green as the others.
+On the master analog board, `--vcas` seats a THAT2180 SIP-8 in each of the eight
+1x08 sockets and turns the four axial thermistor footprints into bead thermistors,
+each bent against the nearer VCA of its pair (positions come from the parts list):
+
+    node tools/step-to-mesh.mjs MASTER_CONTROLS.step master/MASTER_CONTROLS.bin --tol 0.03 --fill-holes 1.3 --parts master/MASTER_CONTROLS.parts.json
+    python3 tools/finish-master.py master/MASTER_CONTROLS.bin assets/models/master-controls.bin
+    node tools/step-to-mesh.mjs MASTER_ANALOG.step master/MASTER_ANALOG.bin --tol 0.03 --fill-holes 1.3 --parts master/MASTER_ANALOG.parts.json
+    python3 tools/finish-master.py master/MASTER_ANALOG.bin assets/models/master-analog.bin --vcas
+
 ## Layer images
 
     python3 tools/pcb-layers.py BOARD.kicad_pcb out/ PREFIX
