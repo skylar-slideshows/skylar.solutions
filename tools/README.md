@@ -66,8 +66,10 @@ page's top-down control surface draws it too:
 
     python3 tools/build-surface.py channel_strip_faceplate_v2.dxf controls.parts.json fader.parts.json assets/surface.js
 
-The art's own <style> block sets each label's size, colour and outline, so a revised
-export only needs swapping in. The 3 mm status LEDs in the model are white, with each
+The art's own <style> block sets each label's size, colour and outline (styles on
+parent groups carry down, as in a browser), so a revised export only needs swapping
+in. The reference layer (any group whose id contains REFERENCE), anything hidden and
+anything off the artboard are never printed. The 3 mm status LEDs in the model are white, with each
 strip's +48 V LED red.
 
 `surface.js` is built from `surface.template.js`. Its buttons work like the console's:

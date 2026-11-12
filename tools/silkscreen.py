@@ -40,29 +40,72 @@ def _colour(v):
 
 
 def parse(path):
-    """Labels, boxes and lines of the art, in millimetres (y down)."""
-    svg = open(path, encoding="utf-8").read()
-    st = _styles(svg)
+    """Labels, boxes and lines of the art, in millimetres (y down).
+
+    Walks the SVG with styles inherited from parent groups (as CSS does), and leaves out
+    the reference layer (any group whose id contains REFERENCE), anything hidden with
+    display:none, and anything placed outside the artboard."""
+    import xml.etree.ElementTree as ET
+    raw = open(path, encoding="utf-8").read()
+    st = _styles(raw)
+    root = ET.fromstring(raw.encode("utf-8"))
+    NS = "{http://www.w3.org/2000/svg}"
+    W, H = [float(v) for v in root.get("viewBox").replace(",", " ").split()[2:4]]
+    INHERITED = ("fill", "stroke", "stroke-width", "font-size", "font-weight", "font-family")
     texts, boxes, lines = [], [], []
-    for m in re.finditer(r'<text[^>]*class="(st\d+)"[^>]*transform="translate\(([-\d.]+) ([-\d.]+)\)"[^>]*>\s*<tspan[^>]*>([^<]*)</tspan>', svg):
-        p = st[m.group(1)]
-        x, y, s = float(m.group(2)), float(m.group(3)), m.group(4)
-        size = _num(p["font-size"])
-        stroke = _num(p.get("stroke-width", "0")) if p.get("stroke", "none") != "none" else 0.0
-        texts.append({"x": x * PT, "y": y * PT, "size": size * PT, "colour": _colour(p.get("fill", "#fff")), "text": s,
-                      "stroke": stroke * PT, "width": sum(ARIAL_BOLD.get(c, 556) for c in s) / 1000 * size * PT})
-    for m in re.finditer(r'<rect[^>]*class="(st\d+)"([^>]*)/>', svg):
-        p = st[m.group(1)]
-        a = dict(re.findall(r'(\w+)="([-\d.]+)"', m.group(2)))
-        filled = p.get("fill", "none") != "none" and p.get("stroke", "none") == "none"
-        boxes.append({"x": float(a["x"]) * PT, "y": float(a["y"]) * PT, "w": float(a["width"]) * PT,
-                      "h": float(a["height"]) * PT, "r": float(a.get("rx", 0)) * PT, "kind": "fill" if filled else "outline",
-                      "stroke": 0.0 if filled else _num(p.get("stroke-width", "1")) * PT})
-    for m in re.finditer(r'<line[^>]*class="(st\d+)"([^>]*)/>', svg):
-        p = st[m.group(1)]
-        a = dict(re.findall(r'(\w+)="([-\d.]+)"', m.group(2)))
-        lines.append({"x1": float(a["x1"]) * PT, "y1": float(a["y1"]) * PT, "x2": float(a["x2"]) * PT, "y2": float(a["y2"]) * PT,
-                      "stroke": _num(p.get("stroke-width", "1")) * PT})
+
+    def props(el, parent):
+        p = {k: v for k, v in parent.items() if k in INHERITED}
+        for cls in (el.get("class") or "").split(): p.update(st.get(cls, {}))
+        for k in INHERITED + ("display",):
+            if el.get(k) is not None: p[k] = el.get(k)
+        for d in (el.get("style") or "").split(";"):
+            if ":" in d:
+                k, v = d.split(":", 1); p[k.strip()] = v.strip()
+        return p
+
+    def shift(el):
+        m = re.search(r"translate\(\s*([-\d.eE]+)[\s,]+([-\d.eE]+)\s*\)", el.get("transform") or "")
+        return (float(m.group(1)), float(m.group(2))) if m else (0.0, 0.0)
+
+    def on_board(x, y):
+        return -0.5 <= x <= W + 0.5 and -0.5 <= y <= H + 0.5
+
+    def walk(el, parent, ox, oy):
+        if "REFERENCE" in (el.get("id") or "").upper(): return
+        p = props(el, parent)
+        if p.get("display") == "none": return
+        dx, dy = shift(el); ox, oy = ox + dx, oy + dy
+        tag = el.tag.replace(NS, "")
+        fill, stroke = p.get("fill", "#000"), p.get("stroke", "none")
+        sw = _num(p.get("stroke-width", "1")) if stroke != "none" else 0.0
+        if tag == "text":
+            spans = [t for t in el.iter(NS + "tspan")]
+            text = "".join((t.text or "") for t in spans) if spans else (el.text or "")
+            first = spans[0] if spans else el
+            x = ox + float(el.get("x", 0) or 0) + float(first.get("x", 0) or 0)
+            y = oy + float(el.get("y", 0) or 0) + float(first.get("y", 0) or 0)
+            if text.strip() and on_board(x, y):
+                size = _num(p.get("font-size", "12"))
+                texts.append({"x": x * PT, "y": y * PT, "size": size * PT, "text": text,
+                              "colour": None if fill == "none" else _colour(fill),     # None: outline only
+                              "stroke": sw * PT, "width": sum(ARIAL_BOLD.get(c, 556) for c in text) / 1000 * size * PT})
+            return
+        if tag == "rect":
+            x, y = ox + float(el.get("x", 0)), oy + float(el.get("y", 0))
+            if on_board(x, y):
+                filled = fill != "none" and stroke == "none"
+                boxes.append({"x": x * PT, "y": y * PT, "w": float(el.get("width")) * PT, "h": float(el.get("height")) * PT,
+                              "r": float(el.get("rx", 0) or 0) * PT, "kind": "fill" if filled else "outline",
+                              "stroke": 0.0 if filled else sw * PT})
+        elif tag == "line":
+            x1, y1 = ox + float(el.get("x1", 0)), oy + float(el.get("y1", 0))
+            x2, y2 = ox + float(el.get("x2", 0)), oy + float(el.get("y2", 0))
+            if on_board(x1, y1) and on_board(x2, y2):
+                lines.append({"x1": x1 * PT, "y1": y1 * PT, "x2": x2 * PT, "y2": y2 * PT, "stroke": sw * PT})
+        for child in el: walk(child, p, ox, oy)
+
+    walk(root, {}, 0.0, 0.0)
     return texts, boxes, lines
 
 
@@ -151,6 +194,7 @@ def mesh(path, colours, z, height=500.0):
             _flat(m, outer, [inner], z, colours["white"])
     cache = {}
     for t in texts:
+        if t["colour"] is None: continue          # an outline-only copy sits on its filled twin
         scale = t["size"] / upem
         natural = sum((_glyph_loops(font, c)[1] if c not in cache else cache[c][1]) for c in t["text"]) * scale
         stretch = t["width"] / natural if natural else 1.0

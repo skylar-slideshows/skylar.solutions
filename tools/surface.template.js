@@ -368,7 +368,8 @@
         el("line", { x1: l[0], y1: l[1], x2: l[2], y2: l[3], "stroke-width": l[4], "class": "sf-silk-outline" }, g);
       });
       DATA.silk.texts.forEach(function (t) {
-        var tx = el("text", { x: t[0], y: t[1], "font-size": t[2], "class": t[3] === "grey" ? "sf-silk-text sf-silk-dark" : "sf-silk-text",
+        var tx = el("text", { x: t[0], y: t[1], "font-size": t[2],
+                              "class": t[3] === "grey" ? "sf-silk-text sf-silk-dark" : t[3] === null ? "sf-silk-text sf-silk-line-text" : "sf-silk-text",
                               "stroke-width": t[5] ? t[5] : null, stroke: t[5] ? "#eeeee8" : null, "stroke-linejoin": t[5] ? "round" : null }, g);
         tx.textContent = t[4];
       });
