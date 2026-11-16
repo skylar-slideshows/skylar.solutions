@@ -129,14 +129,17 @@ viewer's 64.
 Both exports carry a separate "plated holes and vias" part (every barrel, about
 165k triangles) that `finish-master.py` drops, since `--fill-holes` fills those
 holes in the board anyway. It also gives the boards the same green as the others.
-On the master analog board, `--vcas` seats a THAT2180 SIP-8 in each of the eight
-1x08 sockets and turns the four axial thermistor footprints into bead thermistors,
-each bent against the nearer VCA of its pair (positions come from the parts list):
+On the master analog board, the export stands an AS2180 breakout in each of the
+eight 1x08 sockets; `--vcas` takes those out and seats the fader VCA card's THAT2180
+SIP-8 model in each socket instead (pass a conversion of FADER_VCA_card.step made with
+--parts), and turns the four axial thermistor footprints into bead thermistors, each
+bent against the nearer VCA of its pair (positions come from the parts list):
 
     node tools/step-to-mesh.mjs MASTER_CONTROLS.step master/MASTER_CONTROLS.bin --tol 0.03 --fill-holes 1.3 --parts master/MASTER_CONTROLS.parts.json
     python3 tools/finish-master.py master/MASTER_CONTROLS.bin assets/models/master-controls.bin
     node tools/step-to-mesh.mjs MASTER_ANALOG.step master/MASTER_ANALOG.bin --tol 0.03 --fill-holes 1.3 --parts master/MASTER_ANALOG.parts.json
-    python3 tools/finish-master.py master/MASTER_ANALOG.bin assets/models/master-analog.bin --vcas
+    node tools/step-to-mesh.mjs FADER_VCA_card.step master/fader-vca-donor.bin --tol 0.02 --fill-holes 1.3 --parts master/fader-vca-donor.parts.json
+    python3 tools/finish-master.py master/MASTER_ANALOG.bin assets/models/master-analog.bin --vcas master/fader-vca-donor.bin
 
 ## Layer images
 

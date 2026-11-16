@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
 """Finish a master-section board model after step-to-mesh.mjs (with --parts).
 
-    python3 tools/finish-master.py MODEL.bin OUT.bin [--vcas]
+    python3 tools/finish-master.py MODEL.bin OUT.bin [--vcas DONOR.bin]
 
 - drops the "plated holes and vias" part: the barrels sit inside holes that the converter
   fills (--fill-holes), so they can't be seen and only cost triangles
 - gives the board and its copper the same green as the other boards
-- --vcas, for the master analog board: a THAT2180 SIP-8 VCA seated in each of the eight
-  1x08 sockets, and each of the four axial thermistor footprints turned into a bead
-  thermistor whose leads bend it against the nearer VCA of its pair. The bead and lead
-  geometry is add-thermistors.py's; the positions come from the parts list, since there
-  is no KiCad file for this board here.
+- --vcas DONOR.bin, for the master analog board: the export puts an AS2180-on-adapter
+  breakout in each of the eight 1x08 sockets; these come out, and the THAT2180 SIP-8
+  model from the fader VCA card (DONOR.bin, converted from FADER_VCA_card.step with
+  --parts) goes into each socket instead, pin 1 to pin 1 with its pins down in the
+  socket. Each of the four axial thermistor footprints becomes a bead thermistor whose
+  leads bend it against the nearer VCA of its pair. The bead and lead geometry is
+  add-thermistors.py's; the positions come from the parts list, since there is no KiCad
+  file for this board here.
 """
 import importlib.util, json, math, os, struct, sys
 from pcb3 import read_model, write_model, add_mesh, colour_index, recolour, remove_instances, compact_palette, mesh_points
-from geom import box
 
 MASK_GREEN, COPPER_GREEN = (58, 89, 78), (86, 125, 90)
-VCA_BODY, VCA_LEAD = (32, 32, 35), (200, 200, 204)
-SIP_L, SIP_T, SIP_H, SIP_LIFT = 19.6, 2.9, 6.3, 0.8      # THAT2180 SIP-8 body, and its leads' visible length
 
 spec = importlib.util.spec_from_file_location("thermistors", os.path.join(os.path.dirname(os.path.abspath(__file__)), "add-thermistors.py"))
 th = importlib.util.module_from_spec(spec); spec.loader.exec_module(th)
@@ -62,25 +62,47 @@ def main(path, out, *flags):
     drop = {instance_of(model, p) for p in parts if p["name"] == "plated holes and vias"}
 
     if "--vcas" in flags:
-        body, lead = colour_index(model, VCA_BODY), colour_index(model, VCA_LEAD)
+        donor_path = flags[flags.index("--vcas") + 1]
+        donor = read_model(donor_path)
+        sip = next(p for p in json.load(open(donor_path.rsplit(".", 1)[0] + ".parts.json")) if p["name"].startswith("SIP-8"))
+        # copy the THAT2180's SIP-8 model over, mapping its colours into this palette
+        remap, chunks = {}, []
+        for vc, ic, P, N, I in donor.meshes[sip["mesh"]]["chunks"]:
+            N = bytearray(N)
+            for v in range(vc):
+                ci = N[v * 4 + 3]
+                if ci not in remap: remap[ci] = colour_index(model, donor.palette[ci])
+                N[v * 4 + 3] = remap[ci]
+            chunks.append((vc, ic, P, bytes(N), I))
+        model.meshes.append(dict(donor.meshes[sip["mesh"]], chunks=chunks))
+        k_sip = len(model.meshes) - 1
+        # the package body in the model's own frame: pin 1 at the origin, pins along +x
+        body = [q for ch in mesh_points(donor, sip["mesh"]) for q in ch if q[2] > 0.3]
+        bx, by, bz = [(min(q[i] for q in body), max(q[i] for q in body)) for i in range(3)]
+
         sockets = [p for p in parts if "PinSocket_1x08" in p["name"]]
+        layers = {"copper top", "copper bottom", "pads top", "pads bottom", "silkscreen top", "silkscreen bottom", "plated holes and vias"}
+        removed = 0
         vcas = []
-        m = None
-        for s in sockets:
-            cx, cy, _ = centre(s)
-            along_x = s["hi"][0] - s["lo"][0] > s["hi"][1] - s["lo"][1]
-            z0 = s["hi"][2] + SIP_LIFT
-            hl, ht = SIP_L / 2, SIP_T / 2
-            lo = (cx - hl, cy - ht, z0) if along_x else (cx - ht, cy - hl, z0)
-            hi = (cx + hl, cy + ht, z0 + SIP_H) if along_x else (cx + ht, cy + hl, z0 + SIP_H)
-            m = box(lo, hi, body, m)
-            for i in range(8):                         # the leads between the socket and the body
-                t = (i - 3.5) * 2.54
-                lx, ly = (cx + t, cy) if along_x else (cx, cy + t)
-                ex, ey = (0.25, 0.13) if along_x else (0.13, 0.25)
-                box((lx - ex, ly - ey, s["hi"][2] - 0.4), (lx + ex, ly + ey, z0 + 0.2), lead, m)
-            vcas.append({"c": (cx, cy), "along_x": along_x, "z0": z0})
-        add_mesh(model, m.pos, m.nrm, m.col, m.tri)
+        for s_ in sockets:
+            top = s_["hi"][2]
+            # the AS2180 breakout standing in the socket: its adapter board, header, chip and capacitor
+            for q in parts:
+                if q is s_ or q is board or q["name"] in layers: continue
+                c = centre(q)
+                if all(s_["lo"][i] - 1.5 <= c[i] <= s_["hi"][i] + 1.5 for i in range(2)) and q["hi"][2] > top + 0.5:
+                    i = instance_of(model, q)
+                    if i is not None and i not in drop: drop.add(i); removed += 1
+            ox, oy = s_["m"][3], s_["m"][7]                 # the socket's pin 1
+            cx, cy = centre(s_)[:2]
+            d = math.hypot(cx - ox, cy - oy)
+            assert 8.0 < d < 9.8, ("pin 1 to socket centre", d)
+            dx, dy = (cx - ox) / d, (cy - oy) / d
+            mat = [dx, -dy, 0.0, ox, dy, dx, 0.0, oy, 0.0, 0.0, 1.0, top]
+            model.instances.append((k_sip, mat, 0))
+            world = [(mat[0] * x + mat[1] * y + ox, mat[4] * x + mat[5] * y + oy, z + top) for x in bx for y in by for z in bz]
+            vcas.append({"lo": [min(w[i] for w in world) for i in range(3)], "hi": [max(w[i] for w in world) for i in range(3)]})
+        print(f"  removed {removed} breakout parts; seated {len(vcas)} THAT2180s")
 
         colours = {rgb: colour_index(model, rgb) for *_, rgb in th.BANDS}
         lead_ci = colour_index(model, th.LEAD_COLOUR)
@@ -88,17 +110,17 @@ def main(path, out, *flags):
         for q in [p for p in parts if "R_Axial" in p["name"]]:
             pads = pads_of(model, q, board_bottom)
             tx, ty = sum(p[0] for p in pads) / 2, sum(p[1] for p in pads) / 2
-            pair = sorted(vcas, key=lambda v: math.hypot(v["c"][0] - tx, v["c"][1] - ty))[:2]
+            mid = lambda v: ((v["lo"][0] + v["hi"][0]) / 2, (v["lo"][1] + v["hi"][1]) / 2)
+            pair = sorted(vcas, key=lambda v: math.hypot(mid(v)[0] - tx, mid(v)[1] - ty))[:2]
             v = pair[0]                                  # bent against the nearer VCA of the pair
-            # the broad face that looks toward the thermistor, at the point nearest it
-            if v["along_x"]:
-                n = [0.0, 1.0 if ty > v["c"][1] else -1.0, 0.0]
-                u = max(-SIP_L / 2 + 2.0, min(SIP_L / 2 - 2.0, tx - v["c"][0]))
-                point = [v["c"][0] + u, v["c"][1] + n[1] * SIP_T / 2, v["z0"] + SIP_H / 2]
-            else:
-                n = [1.0 if tx > v["c"][0] else -1.0, 0.0, 0.0]
-                u = max(-SIP_L / 2 + 2.0, min(SIP_L / 2 - 2.0, ty - v["c"][1]))
-                point = [v["c"][0] + n[0] * SIP_T / 2, v["c"][1] + u, v["z0"] + SIP_H / 2]
+            thin = 0 if v["hi"][0] - v["lo"][0] < v["hi"][1] - v["lo"][1] else 1
+            long_ = 1 - thin
+            t = (tx, ty)
+            n = [0.0, 0.0, 0.0]
+            n[thin] = 1.0 if t[thin] > mid(v)[thin] else -1.0
+            point = [0.0, 0.0, (v["lo"][2] + v["hi"][2]) / 2]
+            point[thin] = v["hi"][thin] if n[thin] > 0 else v["lo"][thin]
+            point[long_] = max(v["lo"][long_] + 2.0, min(v["hi"][long_] - 2.0, t[long_]))
             axis = [0.0, 0.0, 1.0]                     # leads come up from below
             a, b, c = th.BEAD
             centre_ = th.add(point, th.mul(n, c + 0.05))
@@ -113,9 +135,8 @@ def main(path, out, *flags):
                 curve = th.bezier(exitp, th.add(exitp, [0, 0, min(L * 0.3, 3.0)]), th.add(end, th.mul(axis, -min(L * 0.35, 4.0))), end, n=th.RES["curve"])
                 th.tube([under] + curve, lead_ci, pos, nrm, col, tri)
             drop.add(instance_of(model, q))
-            print(f"  thermistor at ({tx:.1f}, {ty:.1f}) -> VCA at ({v['c'][0]:.1f}, {v['c'][1]:.1f}), leads {L:.1f} mm")
+            print(f"  thermistor at ({tx:.1f}, {ty:.1f}) -> VCA at ({mid(v)[0]:.1f}, {mid(v)[1]:.1f}), leads {L:.1f} mm")
         add_mesh(model, pos, nrm, col, tri)
-        print(f"  {len(vcas)} THAT2180s seated")
 
     remove_instances(model, {i for i in drop if i is not None})
     compact_palette(model)
