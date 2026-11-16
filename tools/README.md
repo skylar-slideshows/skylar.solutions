@@ -145,11 +145,13 @@ bent against the nearer VCA of its pair (positions come from the parts list):
 
 The master controls board under its front panel (`master_front_panel.dxf`, 250 mm
 wide over the 230 mm board) with the master silkscreen (`master-silkscreen.svg`). The
-panel's position comes from its encoder holes matching the board's encoder shafts;
-LED ring boards sit under the four ring windows, centred on their encoders (this
-board's ring sockets are about 1.2 mm off from where a channel-strip ring board's
-headers would plug in, and the build says so); the Nidec caps stand 3 mm through
-the panel; the meter cutouts get unlit LEDs (per meter, top to bottom: one red,
+panel's position comes from its encoder holes matching the board's encoder shafts,
+each located by the centre of its round bushing (the D-shaped shaft tip would pull
+an average about 1.1 mm sideways); as a check, the build reports how far each button
+cap sits from its cutout (0.01 mm). LED ring boards sit under the four ring windows,
+centred on their encoders, and the build reports how well their headers meet the
+board's sockets (one socket, AUX IN 1's upper, is 0.57 mm along its row; the rest
+within 0.08 mm); the Nidec caps stand 3 mm through the panel; the meter cutouts get unlit LEDs (per meter, top to bottom: one red,
 three yellow, seven green; the master meters' LEDs have a white surround). Group 1
 is the front panel with its silkscreen, display glass and meter LEDs:
 

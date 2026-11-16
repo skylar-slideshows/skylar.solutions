@@ -173,7 +173,7 @@ def parse_all(path):
                 size = _num(p.get("font-size", "12"))
                 adv = sum(ARIAL_BOLD.get(c, 556) for c in text) / 1000 * size
                 x -= {"middle": adv / 2, "end": adv}.get(p.get("text-anchor", "start"), 0.0)
-                texts.append({"x": x * PT, "y": y * PT, "size": size * PT, "text": text,
+                texts.append({"x": x * PT, "y": y * PT, "size": size * PT, "text": text, "id": el.get("id", ""),
                               "colour": None if fill == "none" else _colour(fill),     # None: outline only
                               "stroke": sw * PT, "width": sum(ARIAL_BOLD.get(c, 556) for c in text) / 1000 * size * PT})
             return
@@ -260,9 +260,9 @@ def _glyph_loops(font, ch):
     return pen.loops, font["hmtx"][name][0]
 
 
-def mesh(path, colours, z, height=500.0):
+def mesh(path, colours, z, height=500.0, skip=()):
     """Silkscreen geometry for one strip in panel coordinates (x, y up, mm), top faces at z.
-    colours: {"white": palette index, "grey": palette index}."""
+    colours: {"white": palette index, "grey": palette index}; skip: ids of labels to leave off."""
     from fontTools.ttLib import TTFont
     font = TTFont(FONT)
     upem = font["head"].unitsPerEm
@@ -291,7 +291,7 @@ def mesh(path, colours, z, height=500.0):
             _flat(m, outer, [inner], z, colours["white"])
     cache = {}
     for t in texts:
-        if t["colour"] is None: continue          # an outline-only copy sits on its filled twin
+        if t["colour"] is None or t["id"] in skip: continue    # outline-only copies sit on their filled twins
         scale = t["size"] / upem
         natural = sum((_glyph_loops(font, c)[1] if c not in cache else cache[c][1]) for c in t["text"]) * scale
         stretch = t["width"] / natural if natural else 1.0

@@ -10,9 +10,13 @@ strips, LED ring boards plug into the board's 1x04 sockets under the four ring w
 the panel (1.6 mm, black anodized) sits 0.15 mm above them, and the Nidec caps are redrawn
 to stand 3 mm through it. The meter cutouts get unlit LEDs: per meter, top to bottom,
 one red, three yellow and seven green; the two master meters' LEDs have a white surround.
+The five encoders get the channel strips' knob with a white cap (their shafts cut to fit
+under it, as there), and the five transport buttons carry their symbols on the caps
+instead of the labels under them: a black square (STOP), triangle (PLAY), double
+triangles (REW, FF) and a red circle (REC).
 
 groups: 0  board, parts and LED ring boards
-        1  front panel: the panel, its silkscreen, the display glass and the meter LEDs
+        1  front panel: the panel, its silkscreen, the display glass, the meter LEDs and the knobs
 """
 import importlib.util, math, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -26,18 +30,41 @@ bc = importlib.util.module_from_spec(spec); spec.loader.exec_module(bc)
 
 METER_OFF = [(112, 36, 34)] + [(128, 112, 44)] * 3 + [(46, 98, 52)] * 7     # unlit lenses, top to bottom
 LED_SURROUND = (236, 236, 230)
+KNOB_WHITE = (240, 240, 236)
+SYMBOL_BLACK, SYMBOL_RED = (24, 24, 26), (210, 34, 38)
+TRANSPORT = ("STOP", "PLAY", "REC", "REW", "FF")          # the labels the symbols replace
 
 
-def top_centre(model, part, depth=0.8):
-    """Where a part's topmost point is in x, y: an encoder's shaft."""
-    M, pts = part["m"], []
-    for chunk in mesh_points(model, part["mesh"]):
-        for x, y, z in chunk:
-            w = [M[r * 4] * x + M[r * 4 + 1] * y + M[r * 4 + 2] * z + M[r * 4 + 3] for r in range(3)]
-            pts.append(w)
+def symbol(m, name, z):
+    """A transport symbol printed on a 12 mm cap top, centred on the cap."""
+    tri = lambda x0, x1, h: [(x0, -h), (x1, 0.0), (x0, h)]
+    shapes = {"STOP": [[(-2.2, -2.2), (2.2, -2.2), (2.2, 2.2), (-2.2, 2.2)]],
+              "PLAY": [tri(-2.1, 2.4, 2.6)],
+              "FF": [tri(-2.4, 0.0, 2.2), tri(0.0, 2.4, 2.2)],
+              "REW": [[(-x, y) for x, y in tri(-2.4, 0.0, 2.2)][::-1], [(-x, y) for x, y in tri(0.0, 2.4, 2.2)][::-1]],
+              "REC": [[(2.5 * math.cos(a * math.pi / 24), 2.5 * math.sin(a * math.pi / 24)) for a in range(48)]]}
+    ci = colour_index(m, SYMBOL_RED if name == "REC" else SYMBOL_BLACK)
+    out = None
+    for poly in shapes[name]:
+        piece = extrude(poly, [], z, z + 0.03, ci)
+        out = piece if out is None else (out.add(piece) or out)
+    return out
+
+
+def shaft_axis(model, part):
+    """Where an encoder's shaft axis is in x, y: the centre of its round threaded bushing.
+    (Not the shaft's tip: that is D-shaped, so an average of its points sits about 1.1 mm
+    toward the round side.)"""
+    M, levels = part["m"], {}
+    pts = [[M[r * 4] * x + M[r * 4 + 1] * y + M[r * 4 + 2] * z + M[r * 4 + 3] for r in range(3)]
+           for chunk in mesh_points(model, part["mesh"]) for x, y, z in chunk]
     top = max(p[2] for p in pts)
-    near = [p for p in pts if p[2] > top - depth]
-    return (sum(p[0] for p in near) / len(near), sum(p[1] for p in near) / len(near))
+    for p in pts:
+        if p[2] > top - 20.0: levels.setdefault(round(p[2], 1), []).append(p)
+    def size(ring):
+        return min(max(q[0] for q in ring) - min(q[0] for q in ring), max(q[1] for q in ring) - min(q[1] for q in ring))
+    ring = max(levels.values(), key=size)               # the widest round level: the bushing
+    return ((max(q[0] for q in ring) + min(q[0] for q in ring)) / 2, (max(q[1] for q in ring) + min(q[1] for q in ring)) / 2)
 
 
 def nidec_large(m, cap_top):
@@ -75,7 +102,7 @@ def main(ctl_path, ring_path, dxf_path, svg_path, out_path):
     asm = read_model(ctl_path); parts = bc.parts_of(ctl_path)
 
     # where the panel sits: its encoder holes over the board's encoder shafts
-    shafts = [top_centre(asm, p) for p in parts if "EC11" in p["name"]]
+    shafts = [shaft_axis(asm, p) for p in parts if "EC11" in p["name"]]
     holes = [(x, y) for x, y, r in layers["ENCODER"]["circles"]]
     best = None
     for sx, sy in shafts:
@@ -102,11 +129,14 @@ def main(ctl_path, ring_path, dxf_path, svg_path, out_path):
     headers = [((p["lo"][0] + p["hi"][0]) / 2 - bc.RING_CENTRE[0], (p["lo"][1] + p["hi"][1]) / 2 - bc.RING_CENTRE[1])
                for p in ring_parts if "1x04" in p["name"]]
     miss = max(min(math.hypot(x + hx - a, y + hy - b) for a, b in sockets) for x, y in ring_at for hx, hy in headers)
-    # the panel's ring windows are centred on the encoders, so the rings are too; on this board the
-    # 1x04 sockets sit about 1.2 mm off from where a channel-strip ring board's headers plug in
-    print(f"ring boards: {len(ring_at)}, centred on their encoders; NOTE the board's ring sockets are up to "
-          f"{miss:.2f} mm from where the ring board's headers would plug in (0.10 mm on the channel strips)")
+    print(f"ring boards: {len(ring_at)}, centred on their encoders; their headers land within {miss:.2f} mm "
+          f"of the board's sockets (0.10 mm on the channel strips)")
 
+    cut = [((min(p[0] for p in l) + max(p[0] for p in l)) / 2 + PX, (min(p[1] for p in l) + max(p[1] for p in l)) / 2 + PY)
+           for name in ("BUTTON", "BUTTON_LARGE") for l in bc.chain(layers[name]["paths"])]
+    caps = [((p["lo"][0] + p["hi"][0]) / 2, (p["lo"][1] + p["hi"][1]) / 2) for p in parts if "CFPB" in p["name"]]
+    off = max(min(math.hypot(cx - x, cy - y) for x, y in cut) for cx, cy in caps)
+    print(f"buttons: every cap within {off:.2f} mm of its cutout's centre")
     panel_z0 = ring_top + 0.15
     panel_z1 = panel_z0 + 1.6
     nidec_top = panel_z1 + 3.0
@@ -117,11 +147,21 @@ def main(ctl_path, ring_path, dxf_path, svg_path, out_path):
     for k in bc.mesh_ids(parts, "copper top", "copper bottom"): recolour(asm, k, to=copper)
     small = [((p["lo"][0] + p["hi"][0]) / 2, (p["lo"][1] + p["hi"][1]) / 2) for p in parts if "CFPB-1CC-4W6" in p["name"]]
     large = [((p["lo"][0] + p["hi"][0]) / 2, (p["lo"][1] + p["hi"][1]) / 2) for p in parts if "CFPB-1CC-4W2" in p["name"]]
-    gone = bc.mesh_ids(parts, "CFPB", "plated holes and vias")
+    gone = bc.mesh_ids(parts, "CFPB", "EC11", "plated holes and vias")
     asm.instances = [(mesh, mat, 0) for mesh, mat, *_ in asm.instances]
     remove_instances(asm, {i for i, inst in enumerate(asm.instances) if inst[0] in gone})
     bc.place(asm, bc.nidec_switch(asm, nidec_top), [translate(x, y, 0) for x, y in small], 0)
     bc.place(asm, nidec_large(asm, nidec_top), [translate(x, y, 0) for x, y in large], 0)
+    knob_base = panel_z1 + 0.6
+    bc.place(asm, bc.encoder(asm, knob_base + bc.KNOB_H - 0.6), [translate(x, y, 0) for x, y in shafts], 0)
+
+    # the transport symbols, each on the cap whose label sits under it
+    labels = {t["text"]: (t["x"] + t["width"] / 2, 500.0 - t["y"]) for t in silkscreen.parse_all(svg_path)[0] if t["text"] in TRANSPORT}
+    for name, (lx, ly) in labels.items():
+        bx, by = min(large, key=lambda b: abs(b[0] - PX - lx) + abs(b[1] - PY - ly - 10.0))
+        assert abs(bx - PX - lx) < 1.0, (name, bx - PX, lx)
+        bc.place(asm, symbol(asm, name, nidec_top), [translate(bx, by, 0)], 0)
+    print("transport symbols:", ", ".join(f"{n} at x {labels[n][0]:.1f}" for n in TRANSPORT if n in labels))
     bc.add_instanced(asm, ring, [translate(x - bc.RING_CENTRE[0], y - bc.RING_CENTRE[1], ring_z) for x, y in ring_at], 0,
                      lambda i: i not in hidden)
 
@@ -129,7 +169,7 @@ def main(ctl_path, ring_path, dxf_path, svg_path, out_path):
     at = [translate(PX, PY, 0)]
     bc.place(asm, bc.tint(bc.faceplate(layers, panel_z0, panel_z1), colour_index(asm, bc.ANODIZED)), at, 1)
     silk, n_text, n_marks = silkscreen.mesh(svg_path, {"white": colour_index(asm, bc.SILK_WHITE), "grey": colour_index(asm, bc.SILK_GREY)},
-                                            panel_z1 + 0.012)
+                                            panel_z1 + 0.012, skip={"label_" + n for n in TRANSPORT})
     bc.place(asm, silk, at, 1)
     d = [p for path in layers["DISPLAY"]["paths"] for p in path]
     x0, x1 = min(p[0] for p in d) - 0.8, max(p[0] for p in d) + 0.8
@@ -150,6 +190,8 @@ def main(ctl_path, ring_path, dxf_path, svg_path, out_path):
             else:
                 box((cx - w / 2 + 0.12, cy - h / 2 + 0.12, panel_z0 - 2.5), (cx + w / 2 - 0.12, cy + h / 2 - 0.12, top), lens, leds)
     bc.place(asm, leds, at, 1)
+    bc.place(asm, bc.knob(asm, bc.KNOB_H), [translate(x, y, knob_base) for x, y in shafts], 1)
+    bc.place(asm, bc.knob_cap(asm, bc.KNOB_H, KNOB_WHITE), [translate(x, y, knob_base) for x, y in shafts], 1)
     print(f"meters: {len(found)} ({sum(1 for m in found if m[0][2] > 6.0)} master), {sum(len(m) for m in found)} LEDs; "
           f"buttons {len(small)} small + {len(large)} large; silkscreen {n_text} labels, {n_marks} marks")
 
