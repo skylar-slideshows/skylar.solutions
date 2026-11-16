@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="250mm" height="500mm" viewBox="0 0 708.661 1417.323" xmlns:c2pa="http://c2pa.org/manifest">
+  <defs>
+    <style>
+      .ref-panel { fill: #4a4a4a; stroke: red; stroke-miterlimit: 11.34; stroke-width: .28px; }
+      .ref-cut { fill: #d6d6d6; stroke: red; stroke-miterlimit: 11.34; stroke-width: .28px; }
+      .ref-line { fill: none; stroke: red; stroke-width: .28px; stroke-dasharray: 2.83 2.83; }
+      .name, .btn, .val { font-family: Arial-BoldMT, Arial; font-weight: 700; fill: #fff; }
+      .name { font-size: 8.48px; }
+      .btn { font-size: 7.18px; }
+      .val { font-size: 5.22px; }
+      .logo { fill: #fff; }
+      .mtr { fill: #fff; font-size: 7px; }
+      .tick { fill: none; stroke: #fff; stroke-width: .85px; }
+      .mtr-silom { font-family: Silom, Silom; }
+      .mtr-minus { font-family: Arial-BoldMT, Arial; font-weight: 700; }
+    </style>
+  </defs>
+  <g id="REFERENCE_do_not_print">
+    <rect id="panel" class="ref-panel" x="0" y="0" width="708.661" height="1417.323"/>
+    <circle id="encoder_SW4" class="ref-cut" cx="163.559" cy="389.282" r="10.63"/>
+    <circle id="encoder_SW5" class="ref-cut" cx="291.118" cy="388.346" r="10.63"/>
+    <circle id="encoder_SW6" class="ref-cut" cx="418.662" cy="388.494" r="10.63"/>
+    <circle id="encoder_SW7" class="ref-cut" cx="546.389" cy="388.801" r="10.63"/>
+    <circle id="encoder_SW3" class="ref-cut" cx="70.937" cy="814.606" r="10.63"/>
+    <circle id="display_screw_DISP_M3" class="ref-cut" cx="103.161" cy="759.345" r="4.535"/>
+    <circle id="display_screw_DISP_M3" class="ref-cut" cx="103.161" cy="481.55" r="4.535"/>
+    <circle id="display_screw_DISP_M3" class="ref-cut" cx="596.389" cy="759.345" r="4.535"/>
+    <circle id="display_screw_DISP_M3" class="ref-cut" cx="596.389" cy="481.55" r="4.535"/>
+    <circle id="scrub_SCRUB" class="ref-cut" cx="494.646" cy="1027.843" r="13.465"/>
+    <circle id="chassis_screw_RAIL" class="ref-cut" cx="14.173" cy="1403.15" r="3.118"/>
+    <circle id="chassis_screw_RAIL" class="ref-cut" cx="14.173" cy="14.173" r="3.118"/>
+    <circle id="chassis_screw_RAIL" class="ref-cut" cx="354.331" cy="1403.15" r="3.118"/>
+    <circle id="chassis_screw_RAIL" class="ref-cut" cx="354.331" cy="14.173" r="3.118"/>
+    <circle id="chassis_screw_RAIL" class="ref-cut" cx="694.488" cy="1403.15" r="3.118"/>
+    <circle id="chassis_screw_RAIL" class="ref-cut" cx="694.488" cy="14.173" r="3.118"/>
+    <circle id="rotary_switch_MON_SOURCE" class="ref-cut" cx="113.386" cy="963.78" r="9.354"/>
+    <circle id="monitor_pot_MON_LEVEL" class="ref-cut" cx="113.386" cy="1111.181" r="10.63"/>
+    <circle id="push_switch_DIM" class="ref-cut" cx="99.213" cy="1230.236" r="22.677"/>
+    <circle id="push_switch_MUTE" class="ref-cut" cx="170.079" cy="1230.236" r="22.677"/>
+    <circle id="push_switch_MONO" class="ref-cut" cx="240.945" cy="1230.236" r="22.677"/>
+    <circle id="led_board_mount_LEDB_M3_1" class="ref-cut" cx="82.205" cy="45.354" r="4.535"/>
+    <circle id="led_board_mount_LEDB_M3_2" class="ref-cut" cx="626.457" cy="45.354" r="4.535"/>
+    <circle id="led_board_mount_LEDB_M3_3" class="ref-cut" cx="82.205" cy="317.48" r="4.535"/>
+    <circle id="led_board_mount_LEDB_M3_4" class="ref-cut" cx="626.457" cy="317.48" r="4.535"/>
+    <circle id="master_meter_mount_MMB_M3_H1" class="ref-cut" cx="311.811" cy="907.087" r="4.535"/>
+    <circle id="master_meter_mount_MMB_M3_H2" class="ref-cut" cx="192.756" cy="907.087" r="4.535"/>
+    <circle id="master_meter_mount_MMB_M3_H3" class="ref-cut" cx="311.811" cy="1139.528" r="4.535"/>
+    <circle id="master_meter_mount_MMB_M3_H4" class="ref-cut" cx="192.756" cy="1139.528" r="4.535"/>
+    <rect id="button_SW8" class="ref-cut" x="153.935" y="801.408" width="18.709" height="18.709" rx="1.417" ry="1.417"/>
+    <rect id="button_SW9" class="ref-cut" x="281.584" y="801.354" width="18.709" height="18.709" rx="1.417" ry="1.417"/>
+    <rect id="button_SW10" class="ref-cut" x="408.939" y="801.308" width="18.709" height="18.709" rx="1.417" ry="1.417"/>
+    <rect id="button_SW11" class="ref-cut" x="536.593" y="801.308" width="18.709" height="18.709" rx="1.417" ry="1.417"/>
+    <rect id="button_SW20" class="ref-cut" x="339.65" y="901.106" width="18.709" height="18.709" rx="1.417" ry="1.417"/>
+    <rect id="button_SW14" class="ref-cut" x="485.484" y="1246.25" width="18.709" height="18.709" rx="1.417" ry="1.417"/>
+    <rect id="button_SW13" class="ref-cut" x="552.584" y="1246.06" width="18.709" height="18.709" rx="1.417" ry="1.417"/>
+    <rect id="button_SW12" class="ref-cut" x="619.643" y="1245.851" width="18.709" height="18.709" rx="1.417" ry="1.417"/>
+    <rect id="button_large_SW16" class="ref-cut" x="342.595" y="1165.181" width="35.717" height="35.717" rx="2.268" ry="2.268"/>
+    <rect id="button_large_SW15" class="ref-cut" x="409.606" y="1165.181" width="35.717" height="35.717" rx="2.268" ry="2.268"/>
+    <rect id="button_large_SW17" class="ref-cut" x="476.745" y="1165.181" width="35.717" height="35.717" rx="2.268" ry="2.268"/>
+    <rect id="button_large_SW18" class="ref-cut" x="543.827" y="1165.181" width="35.717" height="35.717" rx="2.268" ry="2.268"/>
+    <rect id="button_large_SW19" class="ref-cut" x="610.866" y="1165.153" width="35.717" height="35.717" rx="2.268" ry="2.268"/>
+    <rect id="display_DISPLAY" class="ref-cut" x="130.394" y="501.732" width="447.874" height="255.118" rx="1.417" ry="1.417"/>
+    <rect id="meter_AUX_IN_1_led_1" class="ref-cut" x="146.551" y="311.811" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_2" class="ref-cut" x="146.551" y="300.472" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_3" class="ref-cut" x="146.551" y="289.134" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_4" class="ref-cut" x="146.551" y="277.795" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_5" class="ref-cut" x="146.551" y="266.457" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_6" class="ref-cut" x="146.551" y="255.118" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_7" class="ref-cut" x="146.551" y="243.78" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_8" class="ref-cut" x="146.551" y="232.441" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_9" class="ref-cut" x="146.551" y="221.102" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_10" class="ref-cut" x="146.551" y="209.764" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_11" class="ref-cut" x="146.551" y="198.425" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_12" class="ref-cut" x="166.394" y="311.811" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_13" class="ref-cut" x="166.394" y="300.472" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_14" class="ref-cut" x="166.394" y="289.134" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_15" class="ref-cut" x="166.394" y="277.795" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_16" class="ref-cut" x="166.394" y="266.457" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_17" class="ref-cut" x="166.394" y="255.118" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_18" class="ref-cut" x="166.394" y="243.78" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_19" class="ref-cut" x="166.394" y="232.441" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_20" class="ref-cut" x="166.394" y="221.102" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_21" class="ref-cut" x="166.394" y="209.764" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_1_led_22" class="ref-cut" x="166.394" y="198.425" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_1" class="ref-cut" x="274.11" y="311.811" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_2" class="ref-cut" x="274.11" y="300.472" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_3" class="ref-cut" x="274.11" y="289.134" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_4" class="ref-cut" x="274.11" y="277.795" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_5" class="ref-cut" x="274.11" y="266.457" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_6" class="ref-cut" x="274.11" y="255.118" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_7" class="ref-cut" x="274.11" y="243.78" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_8" class="ref-cut" x="274.11" y="232.441" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_9" class="ref-cut" x="274.11" y="221.102" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_10" class="ref-cut" x="274.11" y="209.764" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_11" class="ref-cut" x="274.11" y="198.425" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_12" class="ref-cut" x="293.953" y="311.811" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_13" class="ref-cut" x="293.953" y="300.472" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_14" class="ref-cut" x="293.953" y="289.134" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_15" class="ref-cut" x="293.953" y="277.795" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_16" class="ref-cut" x="293.953" y="266.457" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_17" class="ref-cut" x="293.953" y="255.118" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_18" class="ref-cut" x="293.953" y="243.78" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_19" class="ref-cut" x="293.953" y="232.441" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_20" class="ref-cut" x="293.953" y="221.102" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_21" class="ref-cut" x="293.953" y="209.764" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_2_led_22" class="ref-cut" x="293.953" y="198.425" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_1" class="ref-cut" x="401.654" y="311.811" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_2" class="ref-cut" x="401.654" y="300.472" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_3" class="ref-cut" x="401.654" y="289.134" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_4" class="ref-cut" x="401.654" y="277.795" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_5" class="ref-cut" x="401.654" y="266.457" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_6" class="ref-cut" x="401.654" y="255.118" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_7" class="ref-cut" x="401.654" y="243.78" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_8" class="ref-cut" x="401.654" y="232.441" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_9" class="ref-cut" x="401.654" y="221.102" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_10" class="ref-cut" x="401.654" y="209.764" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_11" class="ref-cut" x="401.654" y="198.425" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_12" class="ref-cut" x="421.496" y="311.811" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_13" class="ref-cut" x="421.496" y="300.472" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_14" class="ref-cut" x="421.496" y="289.134" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_15" class="ref-cut" x="421.496" y="277.795" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_16" class="ref-cut" x="421.496" y="266.457" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_17" class="ref-cut" x="421.496" y="255.118" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_18" class="ref-cut" x="421.496" y="243.78" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_19" class="ref-cut" x="421.496" y="232.441" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_20" class="ref-cut" x="421.496" y="221.102" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_21" class="ref-cut" x="421.496" y="209.764" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_3_led_22" class="ref-cut" x="421.496" y="198.425" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_1" class="ref-cut" x="529.381" y="311.811" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_2" class="ref-cut" x="529.381" y="300.472" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_3" class="ref-cut" x="529.381" y="289.134" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_4" class="ref-cut" x="529.381" y="277.795" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_5" class="ref-cut" x="529.381" y="266.457" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_6" class="ref-cut" x="529.381" y="255.118" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_7" class="ref-cut" x="529.381" y="243.78" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_8" class="ref-cut" x="529.381" y="232.441" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_9" class="ref-cut" x="529.381" y="221.102" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_10" class="ref-cut" x="529.381" y="209.764" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_11" class="ref-cut" x="529.381" y="198.425" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_12" class="ref-cut" x="549.223" y="311.811" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_13" class="ref-cut" x="549.223" y="300.472" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_14" class="ref-cut" x="549.223" y="289.134" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_15" class="ref-cut" x="549.223" y="277.795" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_16" class="ref-cut" x="549.223" y="266.457" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_17" class="ref-cut" x="549.223" y="255.118" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_18" class="ref-cut" x="549.223" y="243.78" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_19" class="ref-cut" x="549.223" y="232.441" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_20" class="ref-cut" x="549.223" y="221.102" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_21" class="ref-cut" x="549.223" y="209.764" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_IN_4_led_22" class="ref-cut" x="549.223" y="198.425" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_1" class="ref-cut" x="146.551" y="170.079" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_2" class="ref-cut" x="146.551" y="158.74" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_3" class="ref-cut" x="146.551" y="147.402" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_4" class="ref-cut" x="146.551" y="136.063" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_5" class="ref-cut" x="146.551" y="124.724" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_6" class="ref-cut" x="146.551" y="113.386" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_7" class="ref-cut" x="146.551" y="102.047" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_8" class="ref-cut" x="146.551" y="90.709" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_9" class="ref-cut" x="146.551" y="79.37" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_10" class="ref-cut" x="146.551" y="68.031" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_11" class="ref-cut" x="146.551" y="56.693" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_12" class="ref-cut" x="166.394" y="170.079" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_13" class="ref-cut" x="166.394" y="158.74" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_14" class="ref-cut" x="166.394" y="147.402" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_15" class="ref-cut" x="166.394" y="136.063" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_16" class="ref-cut" x="166.394" y="124.724" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_17" class="ref-cut" x="166.394" y="113.386" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_18" class="ref-cut" x="166.394" y="102.047" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_19" class="ref-cut" x="166.394" y="90.709" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_20" class="ref-cut" x="166.394" y="79.37" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_21" class="ref-cut" x="166.394" y="68.031" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_1_led_22" class="ref-cut" x="166.394" y="56.693" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_1" class="ref-cut" x="274.11" y="170.079" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_2" class="ref-cut" x="274.11" y="158.74" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_3" class="ref-cut" x="274.11" y="147.402" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_4" class="ref-cut" x="274.11" y="136.063" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_5" class="ref-cut" x="274.11" y="124.724" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_6" class="ref-cut" x="274.11" y="113.386" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_7" class="ref-cut" x="274.11" y="102.047" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_8" class="ref-cut" x="274.11" y="90.709" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_9" class="ref-cut" x="274.11" y="79.37" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_10" class="ref-cut" x="274.11" y="68.031" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_11" class="ref-cut" x="274.11" y="56.693" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_12" class="ref-cut" x="293.953" y="170.079" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_13" class="ref-cut" x="293.953" y="158.74" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_14" class="ref-cut" x="293.953" y="147.402" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_15" class="ref-cut" x="293.953" y="136.063" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_16" class="ref-cut" x="293.953" y="124.724" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_17" class="ref-cut" x="293.953" y="113.386" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_18" class="ref-cut" x="293.953" y="102.047" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_19" class="ref-cut" x="293.953" y="90.709" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_20" class="ref-cut" x="293.953" y="79.37" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_21" class="ref-cut" x="293.953" y="68.031" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_2_led_22" class="ref-cut" x="293.953" y="56.693" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_3_led_1" class="ref-cut" x="411.575" y="170.079" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_3_led_2" class="ref-cut" x="411.575" y="158.74" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_3_led_3" class="ref-cut" x="411.575" y="147.402" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_3_led_4" class="ref-cut" x="411.575" y="136.063" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_3_led_5" class="ref-cut" x="411.575" y="124.724" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_3_led_6" class="ref-cut" x="411.575" y="113.386" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_3_led_7" class="ref-cut" x="411.575" y="102.047" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_3_led_8" class="ref-cut" x="411.575" y="90.709" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_3_led_9" class="ref-cut" x="411.575" y="79.37" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_3_led_10" class="ref-cut" x="411.575" y="68.031" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_3_led_11" class="ref-cut" x="411.575" y="56.693" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_4_led_1" class="ref-cut" x="539.302" y="170.079" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_4_led_2" class="ref-cut" x="539.302" y="158.74" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_4_led_3" class="ref-cut" x="539.302" y="147.402" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_4_led_4" class="ref-cut" x="539.302" y="136.063" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_4_led_5" class="ref-cut" x="539.302" y="124.724" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_4_led_6" class="ref-cut" x="539.302" y="113.386" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_4_led_7" class="ref-cut" x="539.302" y="102.047" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_4_led_8" class="ref-cut" x="539.302" y="90.709" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_4_led_9" class="ref-cut" x="539.302" y="79.37" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_4_led_10" class="ref-cut" x="539.302" y="68.031" width="14.173" height="5.669"/>
+    <rect id="meter_AUX_OUT_4_led_11" class="ref-cut" x="539.302" y="56.693" width="14.173" height="5.669"/>
+    <rect id="master_meter_led_L_1" class="ref-cut" x="229.039" y="1065.969" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_L_2" class="ref-cut" x="229.039" y="1048.961" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_L_3" class="ref-cut" x="229.039" y="1031.953" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_L_4" class="ref-cut" x="229.039" y="1014.945" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_L_5" class="ref-cut" x="229.039" y="997.937" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_L_6" class="ref-cut" x="229.039" y="980.929" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_L_7" class="ref-cut" x="229.039" y="963.921" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_L_8" class="ref-cut" x="229.039" y="946.913" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_L_9" class="ref-cut" x="229.039" y="929.906" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_L_10" class="ref-cut" x="229.039" y="912.898" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_L_11" class="ref-cut" x="229.039" y="895.89" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_R_1" class="ref-cut" x="280.063" y="1065.969" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_R_2" class="ref-cut" x="280.063" y="1048.961" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_R_3" class="ref-cut" x="280.063" y="1031.953" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_R_4" class="ref-cut" x="280.063" y="1014.945" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_R_5" class="ref-cut" x="280.063" y="997.937" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_R_6" class="ref-cut" x="280.063" y="980.929" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_R_7" class="ref-cut" x="280.063" y="963.921" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_R_8" class="ref-cut" x="280.063" y="946.913" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_R_9" class="ref-cut" x="280.063" y="929.906" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_R_10" class="ref-cut" x="280.063" y="912.898" width="18.142" height="11.055"/>
+    <rect id="master_meter_led_R_11" class="ref-cut" x="280.063" y="895.89" width="18.142" height="11.055"/>
+    <circle id="monitor_level_knob_Rogan_PT_1.25in_not_cut" class="ref-line" cx="113.386" cy="1111.181" r="45"/>
+    <circle id="dim_bezel_19mm_not_cut" class="ref-line" cx="99.213" cy="1230.236" r="27"/>
+    <circle id="mute_bezel_19mm_not_cut" class="ref-line" cx="170.079" cy="1230.236" r="27"/>
+    <circle id="mono_bezel_19mm_not_cut" class="ref-line" cx="240.945" cy="1230.236" r="27"/>
+    <circle id="monitor_source_knob_assumed_19mm_not_cut" class="ref-line" cx="113.386" cy="963.78" r="26.929"/>
+    <path id="led_ring_SW4" class="ref-cut" d="M180.559,404.49 L181.082,403.883 L181.584,403.258 L182.063,402.616 L182.52,401.957 L182.954,401.283 L183.364,400.594 L183.749,399.892 L184.11,399.176 L184.445,398.448 L184.755,397.709 L185.039,396.96 L185.297,396.201 L185.528,395.433 L185.732,394.658 L185.909,393.877 L186.058,393.089 L186.18,392.297 L186.274,391.501 L186.341,390.703 L186.379,389.902 L186.39,389.101 L186.372,388.299 L186.327,387.499 L186.253,386.701 L186.152,385.906 L186.023,385.115 L185.867,384.329 L185.683,383.549 L185.473,382.776 L185.235,382.01 L184.971,381.254 L184.68,380.507 L184.364,379.77 L184.022,379.046 L183.655,378.333 L183.263,377.634 L182.848,376.949 L182.408,376.278 L181.946,375.624 L181.461,374.986 L180.954,374.365 L180.425,373.763 L179.876,373.179 L179.307,372.615 L178.718,372.071 L178.111,371.548 L177.486,371.046 L176.844,370.567 L176.185,370.11 L175.511,369.676 L174.823,369.266 L174.12,368.881 L173.404,368.52 L172.677,368.185 L171.937,367.875 L171.188,367.591 L170.429,367.333 L169.662,367.102 L168.887,366.898 L168.105,366.721 L167.318,366.572 L166.525,366.45 L165.73,366.356 L164.931,366.289 L164.13,366.251 L163.329,366.24 L162.528,366.258 L161.728,366.303 L160.93,366.377 L160.135,366.478 L159.344,366.607 L158.557,366.763 L157.777,366.947 L157.004,367.157 L156.239,367.395 L155.482,367.659 L154.735,367.95 L153.999,368.266 L153.274,368.608 L152.562,368.975 L151.862,369.367 L151.177,369.782 L150.507,370.222 L149.852,370.684 L149.214,371.169 L148.594,371.677 L147.991,372.205 L147.408,372.754 L146.843,373.323 L146.299,373.912 L145.776,374.519 L145.274,375.144 L144.795,375.786 L144.338,376.445 L143.905,377.119 L143.495,377.807 L143.109,378.51 L142.749,379.226 L142.413,379.954 L142.103,380.693 L141.819,381.442 L141.562,382.201 L141.331,382.968 L141.127,383.743 L140.95,384.525 L140.8,385.312 L140.678,386.105 L140.584,386.9 L140.518,387.699 L140.479,388.5 L140.469,389.301 L140.486,390.102 L140.532,390.902 L140.605,391.7 L140.706,392.495 L140.835,393.287 L140.991,394.073 L141.175,394.853 L141.386,395.626 L141.624,396.391 L141.888,397.148 L142.178,397.895 L142.495,398.631 L142.836,399.356 L143.203,400.069 L143.595,400.768 L144.011,401.453 L144.45,402.123 L144.913,402.778 L145.398,403.416 L145.905,404.036 L146.433,404.639 L146.982,405.223 L147.552,405.787 L148.14,406.331 L148.338,406.479 L148.559,406.59 L148.795,406.661 L149.041,406.69 L149.287,406.676 L149.528,406.619 L149.755,406.522 L149.961,406.386 L150.141,406.217 L150.289,406.019 L150.4,405.799 L150.472,405.562 L150.501,405.317 L150.487,405.07 L150.43,404.83 L150.332,404.603 L150.197,404.396 L150.028,404.216 L149.512,403.739 L149.013,403.245 L148.532,402.733 L148.068,402.205 L147.624,401.661 L147.199,401.102 L146.793,400.528 L146.408,399.94 L146.044,399.34 L145.7,398.727 L145.379,398.102 L145.079,397.467 L144.802,396.821 L144.547,396.167 L144.316,395.504 L144.107,394.833 L143.923,394.155 L143.761,393.471 L143.624,392.782 L143.512,392.089 L143.423,391.392 L143.359,390.692 L143.319,389.991 L143.303,389.289 L143.313,388.586 L143.346,387.885 L143.405,387.184 L143.487,386.487 L143.594,385.792 L143.725,385.102 L143.88,384.417 L144.059,383.738 L144.261,383.065 L144.487,382.4 L144.736,381.743 L145.008,381.095 L145.302,380.457 L145.618,379.83 L145.956,379.214 L146.315,378.61 L146.695,378.019 L147.096,377.442 L147.516,376.879 L147.956,376.331 L148.414,375.799 L148.891,375.283 L149.386,374.785 L149.897,374.303 L150.425,373.84 L150.969,373.396 L151.529,372.97 L152.102,372.565 L152.69,372.18 L153.29,371.815 L153.903,371.472 L154.528,371.15 L155.163,370.851 L155.809,370.573 L156.463,370.319 L157.126,370.087 L157.797,369.879 L158.475,369.694 L159.159,369.533 L159.848,369.396 L160.541,369.283 L161.238,369.194 L161.938,369.13 L162.639,369.09 L163.341,369.075 L164.044,369.084 L164.746,369.118 L165.446,369.176 L166.143,369.259 L166.838,369.366 L167.528,369.497 L168.213,369.652 L168.892,369.83 L169.565,370.033 L170.23,370.259 L170.887,370.508 L171.535,370.779 L172.173,371.073 L172.8,371.39 L173.416,371.727 L174.02,372.087 L174.611,372.467 L175.188,372.867 L175.751,373.287 L176.299,373.727 L176.831,374.186 L177.347,374.663 L177.846,375.157 L178.327,375.669 L178.79,376.197 L179.235,376.741 L179.66,377.3 L180.065,377.874 L180.45,378.461 L180.815,379.062 L181.158,379.675 L181.48,380.299 L181.779,380.935 L182.057,381.58 L182.311,382.235 L182.543,382.898 L182.751,383.569 L182.936,384.247 L183.097,384.931 L183.234,385.62 L183.347,386.313 L183.436,387.01 L183.5,387.709 L183.54,388.411 L183.555,389.113 L183.546,389.815 L183.512,390.517 L183.454,391.217 L183.371,391.915 L183.265,392.609 L183.133,393.299 L182.978,393.984 L182.8,394.664 L182.597,395.337 L182.371,396.002 L182.122,396.659 L181.851,397.306 L181.557,397.944 L181.24,398.572 L180.903,399.188 L180.543,399.791 L180.163,400.382 L179.763,400.959 L179.343,401.522 L178.903,402.07 L178.444,402.602 L178.297,402.8 L178.185,403.021 L178.114,403.257 L178.085,403.503 L178.099,403.749 L178.156,403.99 L178.253,404.217 L178.389,404.424 L178.558,404.604 L178.756,404.751 L178.977,404.863 L179.213,404.934 L179.458,404.963 L179.705,404.949 L179.946,404.892 L180.173,404.795 L180.379,404.659 Z"/>
+    <path id="led_ring_SW5" class="ref-cut" d="M308.118,403.554 L308.641,402.947 L309.143,402.322 L309.623,401.68 L310.079,401.022 L310.513,400.348 L310.923,399.659 L311.308,398.956 L311.669,398.241 L312.004,397.513 L312.314,396.774 L312.598,396.024 L312.856,395.265 L313.087,394.498 L313.291,393.723 L313.468,392.941 L313.617,392.154 L313.739,391.362 L313.833,390.566 L313.9,389.767 L313.938,388.967 L313.949,388.165 L313.931,387.364 L313.886,386.564 L313.812,385.766 L313.711,384.971 L313.582,384.18 L313.426,383.394 L313.242,382.614 L313.032,381.84 L312.794,381.075 L312.53,380.318 L312.239,379.571 L311.923,378.835 L311.581,378.11 L311.214,377.398 L310.822,376.698 L310.407,376.013 L309.967,375.343 L309.505,374.689 L309.02,374.051 L308.513,373.43 L307.984,372.827 L307.435,372.244 L306.866,371.679 L306.277,371.135 L305.67,370.612 L305.045,370.111 L304.403,369.631 L303.745,369.174 L303.07,368.741 L302.382,368.331 L301.679,367.946 L300.963,367.585 L300.236,367.249 L299.497,366.939 L298.747,366.655 L297.988,366.398 L297.221,366.167 L296.446,365.963 L295.664,365.786 L294.877,365.636 L294.085,365.514 L293.289,365.42 L292.49,365.354 L291.689,365.315 L290.888,365.305 L290.087,365.322 L289.287,365.368 L288.489,365.441 L287.694,365.542 L286.903,365.671 L286.117,365.828 L285.336,366.011 L284.563,366.222 L283.798,366.46 L283.041,366.724 L282.294,367.014 L281.558,367.331 L280.833,367.673 L280.121,368.04 L279.421,368.431 L278.736,368.847 L278.066,369.286 L277.411,369.749 L276.773,370.234 L276.153,370.741 L275.55,371.27 L274.967,371.819 L274.402,372.388 L273.858,372.976 L273.335,373.583 L272.834,374.208 L272.354,374.851 L271.897,375.509 L271.464,376.183 L271.054,376.872 L270.668,377.575 L270.308,378.29 L269.972,379.018 L269.662,379.757 L269.378,380.507 L269.121,381.266 L268.89,382.033 L268.686,382.808 L268.509,383.59 L268.359,384.377 L268.237,385.169 L268.143,385.965 L268.077,386.764 L268.038,387.564 L268.028,388.366 L268.045,389.167 L268.091,389.967 L268.164,390.765 L268.265,391.56 L268.394,392.351 L268.55,393.137 L268.734,393.917 L268.945,394.69 L269.183,395.456 L269.447,396.212 L269.737,396.959 L270.054,397.696 L270.396,398.421 L270.762,399.133 L271.154,399.832 L271.57,400.518 L272.009,401.188 L272.472,401.842 L272.957,402.48 L273.464,403.101 L273.992,403.703 L274.542,404.287 L275.111,404.851 L275.699,405.395 L275.897,405.543 L276.118,405.654 L276.354,405.726 L276.6,405.755 L276.846,405.741 L277.087,405.684 L277.314,405.586 L277.52,405.451 L277.7,405.282 L277.848,405.084 L277.959,404.863 L278.031,404.627 L278.06,404.381 L278.046,404.135 L277.989,403.894 L277.891,403.667 L277.756,403.46 L277.587,403.281 L277.071,402.804 L276.572,402.309 L276.091,401.797 L275.627,401.269 L275.183,400.725 L274.758,400.166 L274.352,399.592 L273.967,399.005 L273.603,398.404 L273.259,397.791 L272.938,397.167 L272.638,396.532 L272.361,395.886 L272.106,395.231 L271.875,394.568 L271.666,393.897 L271.482,393.219 L271.321,392.536 L271.183,391.847 L271.071,391.153 L270.982,390.456 L270.918,389.757 L270.878,389.056 L270.862,388.353 L270.872,387.651 L270.905,386.949 L270.964,386.249 L271.046,385.551 L271.153,384.857 L271.284,384.167 L271.439,383.482 L271.618,382.802 L271.82,382.13 L272.046,381.464 L272.295,380.808 L272.567,380.16 L272.861,379.522 L273.177,378.894 L273.515,378.279 L273.874,377.675 L274.254,377.084 L274.655,376.507 L275.075,375.944 L275.515,375.396 L275.973,374.864 L276.45,374.348 L276.945,373.849 L277.456,373.368 L277.984,372.905 L278.528,372.46 L279.088,372.035 L279.661,371.629 L280.249,371.244 L280.849,370.88 L281.462,370.537 L282.087,370.215 L282.722,369.915 L283.368,369.638 L284.022,369.383 L284.686,369.152 L285.356,368.943 L286.034,368.759 L286.718,368.598 L287.407,368.461 L288.1,368.348 L288.797,368.259 L289.497,368.195 L290.198,368.155 L290.9,368.14 L291.603,368.149 L292.305,368.182 L293.005,368.241 L293.702,368.323 L294.397,368.43 L295.087,368.561 L295.772,368.716 L296.451,368.895 L297.124,369.097 L297.789,369.323 L298.446,369.572 L299.094,369.844 L299.732,370.138 L300.359,370.454 L300.975,370.792 L301.579,371.151 L302.17,371.531 L302.747,371.932 L303.31,372.352 L303.858,372.792 L304.39,373.25 L304.906,373.727 L305.405,374.222 L305.886,374.733 L306.349,375.262 L306.794,375.806 L307.219,376.365 L307.624,376.938 L308.009,377.526 L308.374,378.126 L308.717,378.739 L309.039,379.364 L309.338,379.999 L309.616,380.645 L309.87,381.299 L310.102,381.963 L310.31,382.634 L310.495,383.311 L310.656,383.995 L310.793,384.684 L310.906,385.377 L310.995,386.074 L311.059,386.774 L311.099,387.475 L311.114,388.178 L311.105,388.88 L311.071,389.582 L311.013,390.282 L310.93,390.979 L310.824,391.674 L310.693,392.364 L310.537,393.049 L310.359,393.728 L310.156,394.401 L309.93,395.066 L309.681,395.723 L309.41,396.371 L309.116,397.009 L308.8,397.636 L308.462,398.252 L308.102,398.856 L307.722,399.447 L307.322,400.024 L306.902,400.587 L306.462,401.135 L306.003,401.667 L305.856,401.865 L305.744,402.085 L305.673,402.322 L305.644,402.567 L305.658,402.814 L305.715,403.055 L305.812,403.282 L305.948,403.488 L306.117,403.668 L306.315,403.816 L306.536,403.927 L306.772,403.998 L307.018,404.027 L307.264,404.013 L307.505,403.957 L307.732,403.859 L307.938,403.724 Z"/>
+    <path id="led_ring_SW6" class="ref-cut" d="M435.662,403.702 L436.185,403.095 L436.687,402.47 L437.166,401.828 L437.623,401.169 L438.056,400.495 L438.466,399.806 L438.852,399.104 L439.212,398.388 L439.548,397.66 L439.858,396.921 L440.142,396.172 L440.399,395.413 L440.63,394.645 L440.834,393.87 L441.011,393.089 L441.161,392.301 L441.283,391.509 L441.377,390.713 L441.443,389.915 L441.482,389.114 L441.492,388.313 L441.475,387.512 L441.429,386.711 L441.356,385.913 L441.255,385.118 L441.126,384.327 L440.97,383.541 L440.786,382.761 L440.575,381.988 L440.338,381.223 L440.073,380.466 L439.783,379.719 L439.466,378.983 L439.125,378.258 L438.758,377.545 L438.366,376.846 L437.95,376.161 L437.511,375.491 L437.048,374.836 L436.563,374.198 L436.056,373.578 L435.528,372.975 L434.979,372.391 L434.409,371.827 L433.821,371.283 L433.214,370.76 L432.589,370.258 L431.947,369.779 L431.288,369.322 L430.614,368.888 L429.925,368.479 L429.223,368.093 L428.507,367.732 L427.779,367.397 L427.04,367.087 L426.291,366.803 L425.532,366.545 L424.764,366.314 L423.989,366.11 L423.208,365.933 L422.42,365.784 L421.628,365.662 L420.832,365.568 L420.034,365.502 L419.233,365.463 L418.432,365.453 L417.63,365.47 L416.83,365.515 L416.032,365.589 L415.237,365.69 L414.446,365.819 L413.66,365.975 L412.88,366.159 L412.107,366.37 L411.341,366.607 L410.585,366.872 L409.838,367.162 L409.101,367.478 L408.377,367.82 L407.664,368.187 L406.965,368.579 L406.28,368.995 L405.61,369.434 L404.955,369.897 L404.317,370.382 L403.696,370.889 L403.094,371.417 L402.51,371.966 L401.946,372.535 L401.402,373.124 L400.879,373.731 L400.377,374.356 L399.898,374.998 L399.441,375.657 L399.007,376.331 L398.597,377.02 L398.212,377.722 L397.851,378.438 L397.516,379.166 L397.206,379.905 L396.922,380.654 L396.664,381.413 L396.433,382.181 L396.229,382.956 L396.052,383.737 L395.903,384.525 L395.781,385.317 L395.687,386.113 L395.62,386.911 L395.582,387.712 L395.571,388.513 L395.589,389.314 L395.634,390.115 L395.708,390.913 L395.809,391.708 L395.938,392.499 L396.094,393.285 L396.278,394.065 L396.489,394.838 L396.726,395.603 L396.99,396.36 L397.281,397.107 L397.597,397.843 L397.939,398.568 L398.306,399.281 L398.698,399.98 L399.113,400.665 L399.553,401.335 L400.015,401.99 L400.5,402.628 L401.008,403.248 L401.536,403.851 L402.085,404.435 L402.654,404.999 L403.243,405.543 L403.441,405.691 L403.661,405.802 L403.898,405.873 L404.143,405.902 L404.39,405.888 L404.63,405.832 L404.857,405.734 L405.064,405.599 L405.244,405.429 L405.392,405.231 L405.503,405.011 L405.574,404.774 L405.603,404.529 L405.589,404.282 L405.533,404.042 L405.435,403.815 L405.3,403.608 L405.13,403.428 L404.614,402.951 L404.116,402.457 L403.634,401.945 L403.171,401.417 L402.727,400.873 L402.301,400.314 L401.896,399.74 L401.511,399.153 L401.146,398.552 L400.803,397.939 L400.481,397.314 L400.182,396.679 L399.904,396.034 L399.65,395.379 L399.418,394.716 L399.21,394.045 L399.025,393.367 L398.864,392.683 L398.727,391.994 L398.614,391.301 L398.525,390.604 L398.461,389.904 L398.421,389.203 L398.406,388.501 L398.415,387.798 L398.449,387.097 L398.507,386.397 L398.59,385.699 L398.697,385.005 L398.828,384.314 L398.983,383.629 L399.162,382.95 L399.364,382.277 L399.59,381.612 L399.839,380.955 L400.11,380.307 L400.404,379.669 L400.721,379.042 L401.059,378.426 L401.418,377.822 L401.798,377.232 L402.198,376.654 L402.618,376.092 L403.058,375.544 L403.517,375.011 L403.994,374.496 L404.488,373.997 L405,373.515 L405.528,373.052 L406.072,372.608 L406.631,372.182 L407.205,371.777 L407.792,371.392 L408.393,371.027 L409.006,370.684 L409.63,370.363 L410.266,370.063 L410.911,369.786 L411.566,369.531 L412.229,369.299 L412.9,369.091 L413.578,368.906 L414.262,368.745 L414.951,368.608 L415.644,368.495 L416.341,368.407 L417.04,368.342 L417.742,368.303 L418.444,368.287 L419.146,368.296 L419.848,368.33 L420.548,368.388 L421.246,368.471 L421.94,368.578 L422.63,368.709 L423.316,368.864 L423.995,369.043 L424.668,369.245 L425.333,369.471 L425.99,369.72 L426.638,369.991 L427.275,370.286 L427.903,370.602 L428.519,370.94 L429.122,371.299 L429.713,371.679 L430.29,372.079 L430.853,372.5 L431.401,372.939 L431.933,373.398 L432.449,373.875 L432.948,374.369 L433.429,374.881 L433.893,375.409 L434.337,375.953 L434.762,376.512 L435.168,377.086 L435.553,377.673 L435.917,378.274 L436.261,378.887 L436.582,379.511 L436.882,380.147 L437.159,380.792 L437.414,381.447 L437.645,382.11 L437.854,382.781 L438.039,383.459 L438.2,384.143 L438.337,384.832 L438.45,385.525 L438.538,386.222 L438.603,386.921 L438.642,387.623 L438.658,388.325 L438.648,389.028 L438.615,389.729 L438.557,390.429 L438.474,391.127 L438.367,391.821 L438.236,392.511 L438.081,393.197 L437.902,393.876 L437.7,394.549 L437.474,395.214 L437.225,395.871 L436.953,396.519 L436.659,397.157 L436.343,397.784 L436.005,398.4 L435.646,399.004 L435.266,399.594 L434.866,400.172 L434.445,400.734 L434.006,401.282 L433.547,401.815 L433.399,402.012 L433.288,402.233 L433.217,402.47 L433.188,402.715 L433.202,402.962 L433.258,403.202 L433.356,403.429 L433.491,403.636 L433.661,403.816 L433.859,403.964 L434.079,404.075 L434.316,404.146 L434.561,404.175 L434.808,404.161 L435.048,404.104 L435.275,404.007 L435.482,403.871 Z"/>
+    <path id="led_ring_SW7" class="ref-cut" d="M563.389,404.009 L563.912,403.402 L564.414,402.777 L564.893,402.135 L565.35,401.476 L565.784,400.802 L566.193,400.113 L566.579,399.411 L566.94,398.695 L567.275,397.967 L567.585,397.228 L567.869,396.479 L568.127,395.72 L568.357,394.952 L568.562,394.177 L568.738,393.396 L568.888,392.608 L569.01,391.816 L569.104,391.02 L569.17,390.222 L569.209,389.421 L569.219,388.62 L569.202,387.818 L569.156,387.018 L569.083,386.22 L568.982,385.425 L568.853,384.634 L568.697,383.848 L568.513,383.068 L568.302,382.295 L568.065,381.529 L567.8,380.773 L567.51,380.026 L567.194,379.29 L566.852,378.565 L566.485,377.852 L566.093,377.153 L565.677,376.468 L565.238,375.798 L564.775,375.143 L564.29,374.505 L563.783,373.884 L563.255,373.282 L562.706,372.698 L562.136,372.134 L561.548,371.59 L560.941,371.067 L560.316,370.565 L559.674,370.086 L559.015,369.629 L558.341,369.195 L557.652,368.785 L556.95,368.4 L556.234,368.039 L555.506,367.704 L554.767,367.394 L554.018,367.11 L553.259,366.852 L552.491,366.621 L551.716,366.417 L550.935,366.24 L550.147,366.091 L549.355,365.969 L548.559,365.875 L547.761,365.808 L546.96,365.77 L546.159,365.759 L545.357,365.777 L544.557,365.822 L543.759,365.896 L542.964,365.997 L542.173,366.126 L541.387,366.282 L540.607,366.466 L539.834,366.677 L539.068,366.914 L538.312,367.178 L537.565,367.469 L536.829,367.785 L536.104,368.127 L535.391,368.494 L534.692,368.886 L534.007,369.301 L533.337,369.741 L532.682,370.203 L532.044,370.689 L531.424,371.196 L530.821,371.724 L530.237,372.273 L529.673,372.842 L529.129,373.431 L528.606,374.038 L528.104,374.663 L527.625,375.305 L527.168,375.964 L526.734,376.638 L526.325,377.326 L525.939,378.029 L525.578,378.745 L525.243,379.473 L524.933,380.212 L524.649,380.961 L524.391,381.72 L524.16,382.487 L523.956,383.262 L523.779,384.044 L523.63,384.832 L523.508,385.624 L523.414,386.419 L523.347,387.218 L523.309,388.019 L523.299,388.82 L523.316,389.621 L523.361,390.421 L523.435,391.22 L523.536,392.015 L523.665,392.806 L523.821,393.592 L524.005,394.372 L524.216,395.145 L524.453,395.91 L524.717,396.667 L525.008,397.414 L525.324,398.15 L525.666,398.875 L526.033,399.588 L526.425,400.287 L526.84,400.972 L527.28,401.642 L527.742,402.297 L528.228,402.935 L528.735,403.555 L529.263,404.158 L529.812,404.742 L530.381,405.306 L530.97,405.85 L531.168,405.998 L531.388,406.109 L531.625,406.18 L531.87,406.209 L532.117,406.195 L532.357,406.138 L532.584,406.041 L532.791,405.905 L532.971,405.736 L533.119,405.538 L533.23,405.318 L533.301,405.081 L533.33,404.836 L533.316,404.589 L533.26,404.349 L533.162,404.122 L533.027,403.915 L532.857,403.735 L532.342,403.258 L531.843,402.764 L531.361,402.252 L530.898,401.724 L530.454,401.18 L530.028,400.621 L529.623,400.047 L529.238,399.459 L528.873,398.859 L528.53,398.246 L528.208,397.621 L527.909,396.986 L527.632,396.341 L527.377,395.686 L527.145,395.023 L526.937,394.352 L526.752,393.674 L526.591,392.99 L526.454,392.301 L526.341,391.608 L526.253,390.911 L526.188,390.211 L526.148,389.51 L526.133,388.808 L526.142,388.105 L526.176,387.404 L526.234,386.703 L526.317,386.006 L526.424,385.312 L526.555,384.621 L526.71,383.936 L526.889,383.257 L527.091,382.584 L527.317,381.919 L527.566,381.262 L527.837,380.614 L528.131,379.976 L528.448,379.349 L528.786,378.733 L529.145,378.129 L529.525,377.538 L529.925,376.961 L530.346,376.398 L530.785,375.851 L531.244,375.318 L531.721,374.802 L532.215,374.304 L532.727,373.822 L533.255,373.359 L533.799,372.915 L534.358,372.489 L534.932,372.084 L535.519,371.699 L536.12,371.334 L536.733,370.991 L537.357,370.669 L537.993,370.37 L538.638,370.092 L539.293,369.838 L539.956,369.606 L540.627,369.398 L541.305,369.213 L541.989,369.052 L542.678,368.915 L543.371,368.802 L544.068,368.714 L544.767,368.649 L545.469,368.609 L546.171,368.594 L546.874,368.603 L547.575,368.637 L548.275,368.695 L548.973,368.778 L549.667,368.885 L550.357,369.016 L551.043,369.171 L551.722,369.35 L552.395,369.552 L553.06,369.778 L553.717,370.027 L554.365,370.298 L555.003,370.592 L555.63,370.909 L556.246,371.247 L556.849,371.606 L557.44,371.986 L558.018,372.386 L558.58,372.806 L559.128,373.246 L559.66,373.705 L560.176,374.182 L560.675,374.676 L561.157,375.188 L561.62,375.716 L562.064,376.26 L562.489,376.819 L562.895,377.393 L563.28,377.98 L563.644,378.581 L563.988,379.194 L564.309,379.818 L564.609,380.454 L564.886,381.099 L565.141,381.754 L565.373,382.417 L565.581,383.088 L565.766,383.766 L565.927,384.45 L566.064,385.139 L566.177,385.832 L566.265,386.529 L566.33,387.228 L566.369,387.93 L566.385,388.632 L566.376,389.334 L566.342,390.036 L566.284,390.736 L566.201,391.434 L566.094,392.128 L565.963,392.818 L565.808,393.504 L565.629,394.183 L565.427,394.856 L565.201,395.521 L564.952,396.178 L564.68,396.826 L564.386,397.464 L564.07,398.091 L563.732,398.707 L563.373,399.31 L562.993,399.901 L562.593,400.478 L562.172,401.041 L561.733,401.589 L561.274,402.121 L561.126,402.319 L561.015,402.54 L560.944,402.777 L560.915,403.022 L560.929,403.269 L560.985,403.509 L561.083,403.736 L561.218,403.943 L561.388,404.123 L561.586,404.27 L561.806,404.382 L562.043,404.453 L562.288,404.482 L562.535,404.468 L562.775,404.411 L563.002,404.314 L563.209,404.178 Z"/>
+    <circle id="scrub_wheel_2.5in_not_cut" class="ref-line" cx="494.646" cy="1027.843" r="90.568"/>
+    <rect id="display_module_pcb_behind_panel_not_cut" class="ref-line" x="94.657" y="473.046" width="510.236" height="294.803"/>
+  </g>
+  <g id="SILKSCREEN">
+    <g id="DIGILOG_logo">
+      <path class="logo" d="M261.58021866141735 1345.7941696062992H267.37621866141734L265.52149866141735 1354.5171496062992Q269.11501866141737 1354.5171496062992 272.20138866141735 1351.9669096062994Q275.28775866141734 1349.4166696062994 276.07021866141736 1345.8231496062992V1345.7941696062992H270.27421866141736Q271.0276986614174 1342.2006496062993 269.02807866141734 1339.6504096062993Q267.02845866141735 1337.1291496062993 263.4349386614174 1337.1291496062993ZM281.86621866141735 1345.7941696062992H287.66221866141734V1345.8231496062992Q285.8654586614174 1354.2273496062992 278.66392866141734 1360.1682496062992Q271.46239866141735 1366.1091496062993 263.05819866141735 1366.1091496062993H251.46619866141737L255.78421866141736 1345.7941696062992H249.98821866141736L254.30623866141735 1325.5371496062994H265.8982386614174Q274.30243866141734 1325.5371496062994 278.9682186614174 1331.4780496062992Q283.63399866141737 1337.4189496062993 281.86621866141735 1345.7941696062992Z"/>
+      <path class="logo" d="M296.32723866141737 1345.9390696062992H302.12323866141736L297.83419866141736 1366.1091496062993H286.2421986614174L290.5312386614174 1345.9390696062992H284.7352386614174L289.08223866141736 1325.5371496062994H300.67423866141735Z"/>
+      <path class="logo" d="M316.6711986614174 1345.6782496062992Q316.6711986614174 1345.7362096062993 316.64221866141736 1345.8231496062992Q315.8597586614174 1349.4166696062994 317.8738686614174 1351.9669096062994Q319.8879786614174 1354.5171496062992 323.4814986614174 1354.5171496062992H326.3794986614174L326.9880786614174 1351.6191496062993H321.1920786614174L322.4671986614174 1345.6782496062992ZM316.6711986614174 1345.6782496062992 317.8593786614174 1340.0271496062992H335.2473786614174L334.0591986614174 1345.6782496062992H339.8551986614174L335.5081986614174 1366.1091496062993H321.0181986614174Q312.6139986614174 1366.1091496062993 307.9337286614174 1360.1682496062992Q303.25345866141737 1354.2273496062992 305.0502186614174 1345.8231496062992Q305.07919866141737 1345.7362096062993 305.07919866141737 1345.6782496062992H299.2831986614174Q301.0799586614174 1337.3609896062992 308.2380186614174 1331.4780496062992Q315.45403866141737 1325.5371496062994 323.8582386614174 1325.5371496062994H338.3482386614174L335.8849386614174 1337.1291496062993H321.39493866141737Q317.8014186614174 1337.1291496062993 314.7005586614174 1339.6504096062993Q311.6576586614174 1342.1426896062992 310.87519866141736 1345.6782496062992Z"/>
+      <path class="logo" d="M348.49123866141736 1345.9390696062992H354.28723866141735L349.99819866141735 1366.1091496062993H338.40619866141736L342.69523866141736 1345.9390696062992H336.89923866141737L341.24623866141735 1325.5371496062994H352.83823866141734Z"/>
+      <path class="logo" d="M363.01021866141735 1345.7941696062992H368.80621866141735L366.95149866141736 1354.5171496062992H375.6454986614174L373.1821986614174 1366.1091496062993H352.8961986614174L357.21421866141736 1345.7941696062992H351.41821866141737L355.73623866141736 1325.5371496062994H367.32823866141734Z"/>
+      <path class="logo" d="M409.4071986614174 1345.6782496062992H403.6111986614174Q404.3067186614174 1342.1426896062992 402.3360786614174 1339.6504096062993Q400.3364586614174 1337.1291496062993 396.7429386614174 1337.1291496062993Q393.14941866141737 1337.1291496062993 390.0485586614174 1339.6504096062993Q387.0056586614174 1342.1426896062992 386.2231986614174 1345.6782496062992H392.0191986614174Q392.0191986614174 1345.7362096062993 391.9902186614174 1345.8231496062992Q391.2077586614174 1349.4166696062994 393.2218686614174 1351.9669096062994Q395.2359786614174 1354.5171496062992 398.8294986614174 1354.5171496062992Q402.4230186614174 1354.5171496062992 405.5093886614174 1351.9669096062994Q408.5957586614174 1349.4166696062994 409.3782186614174 1345.8231496062992Q409.4071986614174 1345.7362096062993 409.4071986614174 1345.6782496062992ZM380.4271986614174 1345.6782496062992H374.6311986614174Q376.4279586614174 1337.3609896062992 383.5860186614174 1331.4780496062992Q390.8020386614174 1325.5371496062994 399.2062386614174 1325.5371496062994Q407.6104386614174 1325.5371496062994 412.2762186614174 1331.4780496062992Q416.9130186614174 1337.3609896062992 415.2031986614174 1345.6782496062992H420.9991986614174Q420.9991986614174 1345.7362096062993 420.9702186614174 1345.8231496062992Q419.1734586614174 1354.2273496062992 411.9719286614174 1360.1682496062992Q404.7703986614174 1366.1091496062993 396.3661986614174 1366.1091496062993Q387.9619986614174 1366.1091496062993 383.2817286614174 1360.1682496062992Q378.6014586614174 1354.2273496062992 380.3982186614174 1345.8231496062992Q380.4271986614174 1345.7362096062993 380.4271986614174 1345.6782496062992Z"/>
+      <path class="logo" d="M435.4891986614174 1345.6782496062992Q435.4891986614174 1345.7362096062993 435.46021866141734 1345.8231496062992Q434.6777586614174 1349.4166696062994 436.6918686614174 1351.9669096062994Q438.70597866141736 1354.5171496062992 442.2994986614174 1354.5171496062992H445.1974986614174L445.80607866141736 1351.6191496062993H440.01007866141737L441.2851986614174 1345.6782496062992ZM435.4891986614174 1345.6782496062992 436.6773786614174 1340.0271496062992H454.06537866141736L452.87719866141737 1345.6782496062992H458.67319866141736L454.3261986614174 1366.1091496062993H439.83619866141737Q431.43199866141737 1366.1091496062993 426.75172866141736 1360.1682496062992Q422.07145866141735 1354.2273496062992 423.86821866141736 1345.8231496062992Q423.89719866141735 1345.7362096062993 423.89719866141735 1345.6782496062992H418.10119866141736Q419.89795866141736 1337.3609896062992 427.0560186614174 1331.4780496062992Q434.27203866141735 1325.5371496062994 442.67623866141736 1325.5371496062994H457.16623866141737L454.70293866141736 1337.1291496062993H440.21293866141735Q436.6194186614174 1337.1291496062993 433.5185586614174 1339.6504096062993Q430.47565866141736 1342.1426896062992 429.69319866141734 1345.6782496062992Z"/>
+    </g>
+    <text id="label_AUX_IN_1" class="name" x="163.559" y="362.353" text-anchor="middle">AUX IN 1</text>
+    <text class="val" x="146.835" y="413.943" text-anchor="end">−36</text>
+    <text class="val" x="180.283" y="413.943" text-anchor="start">+12</text>
+    <text id="label_AUX_IN_2" class="name" x="291.118" y="361.417" text-anchor="middle">AUX IN 2</text>
+    <text class="val" x="274.394" y="413.008" text-anchor="end">−36</text>
+    <text class="val" x="307.843" y="413.008" text-anchor="start">+12</text>
+    <text id="label_AUX_IN_3" class="name" x="418.662" y="361.565" text-anchor="middle">AUX IN 3</text>
+    <text class="val" x="401.937" y="413.155" text-anchor="end">−36</text>
+    <text class="val" x="435.386" y="413.155" text-anchor="start">+12</text>
+    <text id="label_AUX_IN_4" class="name" x="546.389" y="361.872" text-anchor="middle">AUX IN 4</text>
+    <text class="val" x="529.664" y="413.462" text-anchor="end">−36</text>
+    <text class="val" x="563.113" y="413.462" text-anchor="start">+12</text>
+    <text id="label_SCREEN" class="name" x="70.937" y="787.677" text-anchor="middle">SCREEN</text>
+    <text id="label_INSERT" class="btn" x="349.005" y="929.169" text-anchor="middle">INSERT</text>
+    <text id="label_AUTO_REC" class="btn" x="494.839" y="1274.313" text-anchor="middle">AUTO REC</text>
+    <text id="label_CTRL" class="btn" x="561.938" y="1274.123" text-anchor="middle">CTRL</text>
+    <text id="label_SHIFT" class="btn" x="628.997" y="1273.914" text-anchor="middle">SHIFT</text>
+    <text id="label_STOP" class="btn" x="360.453" y="1211.102" text-anchor="middle">STOP</text>
+    <text id="label_PLAY" class="btn" x="427.465" y="1211.102" text-anchor="middle">PLAY</text>
+    <text id="label_REC" class="btn" x="494.603" y="1211.102" text-anchor="middle">REC</text>
+    <text id="label_REW" class="btn" x="561.685" y="1211.102" text-anchor="middle">REW</text>
+    <text id="label_FF" class="btn" x="628.724" y="1211.074" text-anchor="middle">FF</text>
+    <text id="label_SCRUB" class="name" x="494.646" y="1136.836" text-anchor="middle">SCRUB</text>
+    <g id="master_meter_scale">
+    <text class="mtr" x="263.622" y="1073.946" text-anchor="middle"><tspan class="mtr-minus">−</tspan><tspan class="mtr-silom">20</tspan></text>
+    <text class="mtr" x="263.622" y="1056.938" text-anchor="middle"><tspan class="mtr-minus">−</tspan><tspan class="mtr-silom">10</tspan></text>
+    <text class="mtr" x="263.622" y="1039.93" text-anchor="middle"><tspan class="mtr-minus">−</tspan><tspan class="mtr-silom">7</tspan></text>
+    <text class="mtr" x="263.622" y="1022.922" text-anchor="middle"><tspan class="mtr-minus">−</tspan><tspan class="mtr-silom">5</tspan></text>
+    <text class="mtr" x="263.622" y="1005.915" text-anchor="middle"><tspan class="mtr-minus">−</tspan><tspan class="mtr-silom">3</tspan></text>
+    <text class="mtr" x="263.622" y="988.907" text-anchor="middle"><tspan class="mtr-minus">−</tspan><tspan class="mtr-silom">1</tspan></text>
+    <text class="mtr mtr-silom" x="263.622" y="971.899" text-anchor="middle">0</text>
+    <text class="mtr mtr-silom" x="263.622" y="954.891" text-anchor="middle">+1</text>
+    <text class="mtr mtr-silom" x="263.622" y="937.883" text-anchor="middle">+2</text>
+    <text class="mtr mtr-silom" x="263.622" y="920.875" text-anchor="middle">+3</text>
+    <text class="mtr mtr-silom" x="263.622" y="903.867" text-anchor="middle">CLIP</text>
+    </g>
+    <line class="tick" x1="86.382" y1="979.37" x2="80.245" y2="982.913"/>
+    <text id="monitor_source_1_MIX" class="btn" x="75.335" y="988.261" text-anchor="end">MIX</text>
+    <line class="tick" x1="82.205" y1="963.78" x2="75.118" y2="963.78"/>
+    <text id="monitor_source_2_OUT_1" class="btn" x="69.449" y="966.293" text-anchor="end">OUT 1</text>
+    <line class="tick" x1="86.382" y1="948.189" x2="80.245" y2="944.646"/>
+    <text id="monitor_source_3_OUT_2" class="btn" x="75.335" y="944.324" text-anchor="end">OUT 2</text>
+    <line class="tick" x1="97.795" y1="936.776" x2="94.252" y2="930.639"/>
+    <text id="monitor_source_4_OUT_3" class="btn" x="91.417" y="928.242" text-anchor="end">OUT 3</text>
+    <line class="tick" x1="113.386" y1="932.598" x2="113.386" y2="925.512"/>
+    <text id="monitor_source_5_OUT_4" class="btn" x="113.386" y="915.269" text-anchor="middle">OUT 4</text>
+    <line class="tick" x1="128.976" y1="936.776" x2="132.52" y2="930.639"/>
+    <text id="monitor_source_6_IN_1" class="btn" x="135.354" y="928.242" text-anchor="start">IN 1</text>
+    <line class="tick" x1="140.389" y1="948.189" x2="146.527" y2="944.646"/>
+    <text id="monitor_source_7_IN_2" class="btn" x="151.436" y="944.324" text-anchor="start">IN 2</text>
+    <line class="tick" x1="144.567" y1="963.78" x2="151.654" y2="963.78"/>
+    <text id="monitor_source_8_IN_3" class="btn" x="157.323" y="966.293" text-anchor="start">IN 3</text>
+    <line class="tick" x1="140.389" y1="979.37" x2="146.527" y2="982.913"/>
+    <text id="monitor_source_9_IN_4" class="btn" x="151.436" y="988.261" text-anchor="start">IN 4</text>
+    <text id="label_MONITOR_SOURCE" class="name" x="113.386" y="892.913" text-anchor="middle">MONITOR SOURCE</text>
+    <line class="tick" x1="87.874" y1="1155.369" x2="83.622" y2="1162.733"/>
+    <line class="tick" x1="69.198" y1="1136.693" x2="64.288" y2="1139.528"/>
+    <line class="tick" x1="62.362" y1="1111.181" x2="56.693" y2="1111.181"/>
+    <line class="tick" x1="69.198" y1="1085.669" x2="64.288" y2="1082.835"/>
+    <line class="tick" x1="87.874" y1="1066.993" x2="85.039" y2="1062.084"/>
+    <line class="tick" x1="113.386" y1="1060.157" x2="113.386" y2="1051.654"/>
+    <line class="tick" x1="138.898" y1="1066.993" x2="141.732" y2="1062.084"/>
+    <line class="tick" x1="157.574" y1="1085.669" x2="162.483" y2="1082.835"/>
+    <line class="tick" x1="164.409" y1="1111.181" x2="170.079" y2="1111.181"/>
+    <line class="tick" x1="157.574" y1="1136.693" x2="162.483" y2="1139.528"/>
+    <line class="tick" x1="138.898" y1="1155.369" x2="143.15" y2="1162.733"/>
+    <text class="val" x="80.787" y="1169.47" text-anchor="end">0</text>
+    <text class="val" x="145.984" y="1169.47" text-anchor="start">10</text>
+    <text id="label_MONITOR_LEVEL" class="name" x="113.386" y="1187.717" text-anchor="middle">MONITOR LEVEL</text>
+    <text id="label_DIM" class="btn" x="99.213" y="1268.575" text-anchor="middle">DIM</text>
+    <text id="label_MUTE" class="btn" x="170.079" y="1268.575" text-anchor="middle">MUTE</text>
+    <text id="label_MONO" class="btn" x="240.945" y="1268.575" text-anchor="middle">MONO</text>
+    <g id="meter_scale_AUX_IN_1">
+    <text class="mtr" transform="translate(184.365 317.48)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">20</tspan></text>
+    <text class="mtr" transform="translate(184.365 306.142)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">10</tspan></text>
+    <text class="mtr" transform="translate(184.365 294.803)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">7</tspan></text>
+    <text class="mtr" transform="translate(184.365 283.465)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">5</tspan></text>
+    <text class="mtr" transform="translate(184.365 272.126)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">3</tspan></text>
+    <text class="mtr" transform="translate(184.365 260.787)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">1</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(184.365 249.449)"><tspan x="0" y="0">0</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(184.365 238.11)"><tspan x="0" y="0">+1</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(184.365 226.772)"><tspan x="0" y="0">+2</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(184.365 215.433)"><tspan x="0" y="0">+3</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(184.365 204.094)"><tspan x="0" y="0">CLIP</tspan></text>
+    </g>
+    <g id="meter_scale_AUX_IN_2">
+    <text class="mtr" transform="translate(311.924 317.48)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">20</tspan></text>
+    <text class="mtr" transform="translate(311.924 306.142)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">10</tspan></text>
+    <text class="mtr" transform="translate(311.924 294.803)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">7</tspan></text>
+    <text class="mtr" transform="translate(311.924 283.465)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">5</tspan></text>
+    <text class="mtr" transform="translate(311.924 272.126)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">3</tspan></text>
+    <text class="mtr" transform="translate(311.924 260.787)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">1</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(311.924 249.449)"><tspan x="0" y="0">0</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(311.924 238.11)"><tspan x="0" y="0">+1</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(311.924 226.772)"><tspan x="0" y="0">+2</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(311.924 215.433)"><tspan x="0" y="0">+3</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(311.924 204.094)"><tspan x="0" y="0">CLIP</tspan></text>
+    </g>
+    <g id="meter_scale_AUX_IN_3">
+    <text class="mtr" transform="translate(439.468 317.48)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">20</tspan></text>
+    <text class="mtr" transform="translate(439.468 306.142)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">10</tspan></text>
+    <text class="mtr" transform="translate(439.468 294.803)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">7</tspan></text>
+    <text class="mtr" transform="translate(439.468 283.465)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">5</tspan></text>
+    <text class="mtr" transform="translate(439.468 272.126)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">3</tspan></text>
+    <text class="mtr" transform="translate(439.468 260.787)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">1</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(439.468 249.449)"><tspan x="0" y="0">0</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(439.468 238.11)"><tspan x="0" y="0">+1</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(439.468 226.772)"><tspan x="0" y="0">+2</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(439.468 215.433)"><tspan x="0" y="0">+3</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(439.468 204.094)"><tspan x="0" y="0">CLIP</tspan></text>
+    </g>
+    <g id="meter_scale_AUX_IN_4">
+    <text class="mtr" transform="translate(567.195 317.48)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">20</tspan></text>
+    <text class="mtr" transform="translate(567.195 306.142)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">10</tspan></text>
+    <text class="mtr" transform="translate(567.195 294.803)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">7</tspan></text>
+    <text class="mtr" transform="translate(567.195 283.465)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">5</tspan></text>
+    <text class="mtr" transform="translate(567.195 272.126)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">3</tspan></text>
+    <text class="mtr" transform="translate(567.195 260.787)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">1</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(567.195 249.449)"><tspan x="0" y="0">0</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(567.195 238.11)"><tspan x="0" y="0">+1</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(567.195 226.772)"><tspan x="0" y="0">+2</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(567.195 215.433)"><tspan x="0" y="0">+3</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(567.195 204.094)"><tspan x="0" y="0">CLIP</tspan></text>
+    </g>
+    <g id="meter_scale_AUX_OUT_1">
+    <text class="mtr" transform="translate(184.365 175.748)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">20</tspan></text>
+    <text class="mtr" transform="translate(184.365 164.409)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">10</tspan></text>
+    <text class="mtr" transform="translate(184.365 153.071)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">7</tspan></text>
+    <text class="mtr" transform="translate(184.365 141.732)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">5</tspan></text>
+    <text class="mtr" transform="translate(184.365 130.394)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">3</tspan></text>
+    <text class="mtr" transform="translate(184.365 119.055)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">1</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(184.365 107.717)"><tspan x="0" y="0">0</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(184.365 96.378)"><tspan x="0" y="0">+1</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(184.365 85.039)"><tspan x="0" y="0">+2</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(184.365 73.701)"><tspan x="0" y="0">+3</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(184.365 62.362)"><tspan x="0" y="0">CLIP</tspan></text>
+    </g>
+    <text id="label_AUX_OUT_1" class="name" x="163.559" y="45.354" text-anchor="middle">AUX OUT 1</text>
+    <g id="meter_scale_AUX_OUT_2">
+    <text class="mtr" transform="translate(311.924 175.748)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">20</tspan></text>
+    <text class="mtr" transform="translate(311.924 164.409)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">10</tspan></text>
+    <text class="mtr" transform="translate(311.924 153.071)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">7</tspan></text>
+    <text class="mtr" transform="translate(311.924 141.732)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">5</tspan></text>
+    <text class="mtr" transform="translate(311.924 130.394)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">3</tspan></text>
+    <text class="mtr" transform="translate(311.924 119.055)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">1</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(311.924 107.717)"><tspan x="0" y="0">0</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(311.924 96.378)"><tspan x="0" y="0">+1</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(311.924 85.039)"><tspan x="0" y="0">+2</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(311.924 73.701)"><tspan x="0" y="0">+3</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(311.924 62.362)"><tspan x="0" y="0">CLIP</tspan></text>
+    </g>
+    <text id="label_AUX_OUT_2" class="name" x="291.118" y="45.354" text-anchor="middle">AUX OUT 2</text>
+    <g id="meter_scale_AUX_OUT_3">
+    <text class="mtr" transform="translate(429.547 175.748)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">20</tspan></text>
+    <text class="mtr" transform="translate(429.547 164.409)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">10</tspan></text>
+    <text class="mtr" transform="translate(429.547 153.071)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">7</tspan></text>
+    <text class="mtr" transform="translate(429.547 141.732)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">5</tspan></text>
+    <text class="mtr" transform="translate(429.547 130.394)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">3</tspan></text>
+    <text class="mtr" transform="translate(429.547 119.055)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">1</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(429.547 107.717)"><tspan x="0" y="0">0</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(429.547 96.378)"><tspan x="0" y="0">+1</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(429.547 85.039)"><tspan x="0" y="0">+2</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(429.547 73.701)"><tspan x="0" y="0">+3</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(429.547 62.362)"><tspan x="0" y="0">CLIP</tspan></text>
+    </g>
+    <text id="label_AUX_OUT_3" class="name" x="418.662" y="45.354" text-anchor="middle">AUX OUT 3</text>
+    <g id="meter_scale_AUX_OUT_4">
+    <text class="mtr" transform="translate(557.274 175.748)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">20</tspan></text>
+    <text class="mtr" transform="translate(557.274 164.409)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">10</tspan></text>
+    <text class="mtr" transform="translate(557.274 153.071)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">7</tspan></text>
+    <text class="mtr" transform="translate(557.274 141.732)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">5</tspan></text>
+    <text class="mtr" transform="translate(557.274 130.394)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">3</tspan></text>
+    <text class="mtr" transform="translate(557.274 119.055)"><tspan class="mtr-minus" x="0" y="0">−</tspan><tspan class="mtr-silom" x="4.09" y="0">1</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(557.274 107.717)"><tspan x="0" y="0">0</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(557.274 96.378)"><tspan x="0" y="0">+1</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(557.274 85.039)"><tspan x="0" y="0">+2</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(557.274 73.701)"><tspan x="0" y="0">+3</tspan></text>
+    <text class="mtr mtr-silom" transform="translate(557.274 62.362)"><tspan x="0" y="0">CLIP</tspan></text>
+    </g>
+    <text id="label_AUX_OUT_4" class="name" x="546.389" y="45.354" text-anchor="middle">AUX OUT 4</text>
+  </g>
+<metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTowNzcwNzdkOS01YjJhLTRlZjItYjA2Ni01ZjYzZmQ4NTA5ZjAAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaHFEU6LEGafUuLugNZxHrKUAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDo4NGIxYWFjZC0wN2IyLTQ0OWQtOWIzYi1lMGMwN2RjMzJjYTFscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoQ48BfBsDeg2pw2trrDOuzAAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggNpZiUPJwgXH6ltVZBqdxV7XH9S4AyUjwT6JNvw7/LaukZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaOjWhICNav4HEdr9cN7L1pEAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRKAAAAAAAAAAAAAGRoYXNoWCAeKAO9cyFU7NPcL2Odh9XwbdXlplp7AELtqpjlGgZ23mRuYW1lbmp1bWJmIG1hbmlmZXN0amV4Y2x1c2lvbnOBomVzdGFydBoAARhaZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOjA3NzA3N2Q5LTViMmEtNGVmMi1iMDY2LTVmNjNmZDg1MDlmMC9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOjcxNjExYzdjLTFiNmYtNGExYy05NmQwLTRjYmU4NmU5Y2UxNHJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCA2lmJQ8nCBcfqW1VkGp3FXtcf1LgDJSPBPok2/Dv8tq6JjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggUpcoqXSkg23uswfEuDRqByLu2Eajvb1211Y25ycYgQuiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggkJ7Gdgf1aK1YYbtioxEtQ1w/rnkgPVqo+HdfeYdAP9V0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQMByrNQGWsN7f8vtqERQ0+SN45RPv0u4gxrw6pOJWXkn9p/HhIJoqjJ1ma8BRmX48XgxNhzHKvRaDdLAAOd2qV8=</c2pa:manifest></metadata></svg>

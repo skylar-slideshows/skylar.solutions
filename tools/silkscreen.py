@@ -39,7 +39,91 @@ def _colour(v):
     return "grey" if v.lower() in ("#4a4a4a",) else "white"
 
 
+def _path_loops(d):
+    """Subpaths of an SVG path's d attribute, flattened to closed point lists."""
+    toks = re.findall(r"[MmLlHhVvCcSsQqTtAaZz]|[-+]?(?:\d*\.\d+|\d+\.?)(?:[eE][-+]?\d+)?", d)
+    loops, cur, i = [], [], 0
+    x = y = sx = sy = 0.0
+    cmd, prev, ctrl = None, None, None
+
+    def num():
+        nonlocal i
+        v = float(toks[i]); i += 1
+        return v
+
+    def bez(pts, n):
+        out = []
+        for k in range(1, n + 1):
+            t = k / n
+            q = pts
+            while len(q) > 1:
+                q = [((1 - t) * q[j][0] + t * q[j + 1][0], (1 - t) * q[j][1] + t * q[j + 1][1]) for j in range(len(q) - 1)]
+            out.append(q[0])
+        return out
+
+    while i < len(toks):
+        if toks[i].isalpha():
+            cmd = toks[i]; i += 1
+        elif cmd is None:
+            i += 1; continue
+        C, rel = cmd.upper(), cmd.islower()
+        if C == "Z":
+            if len(cur) > 2: loops.append(cur)
+            cur, (x, y), prev, ctrl = [], (sx, sy), "Z", None
+            continue
+        if C == "M":
+            nx, ny = num(), num()
+            if rel: nx, ny = nx + x, ny + y
+            if len(cur) > 2: loops.append(cur)
+            cur, x, y, sx, sy = [(nx, ny)], nx, ny, nx, ny
+            cmd = "l" if rel else "L"                  # more pairs after a moveto are linetos
+        elif C == "L":
+            nx, ny = num(), num()
+            if rel: nx, ny = nx + x, ny + y
+            cur.append((nx, ny)); x, y = nx, ny
+        elif C == "H":
+            nx = num(); nx = nx + x if rel else nx
+            cur.append((nx, y)); x = nx
+        elif C == "V":
+            ny = num(); ny = ny + y if rel else ny
+            cur.append((x, ny)); y = ny
+        elif C in "QT":
+            if C == "Q":
+                cx, cy = num(), num()
+                if rel: cx, cy = cx + x, cy + y
+            else:
+                cx, cy = (2 * x - ctrl[0], 2 * y - ctrl[1]) if ctrl and prev in "QT" else (x, y)
+            nx, ny = num(), num()
+            if rel: nx, ny = nx + x, ny + y
+            cur += bez([(x, y), (cx, cy), (nx, ny)], 8)
+            ctrl, x, y = (cx, cy), nx, ny
+        elif C in "CS":
+            if C == "C":
+                c1x, c1y = num(), num()
+                if rel: c1x, c1y = c1x + x, c1y + y
+            else:
+                c1x, c1y = (2 * x - ctrl[0], 2 * y - ctrl[1]) if ctrl and prev in "CS" else (x, y)
+            c2x, c2y, nx, ny = num(), num(), num(), num()
+            if rel: c2x, c2y, nx, ny = c2x + x, c2y + y, nx + x, ny + y
+            cur += bez([(x, y), (c1x, c1y), (c2x, c2y), (nx, ny)], 10)
+            ctrl, x, y = (c2x, c2y), nx, ny
+        elif C == "A":                                  # not used by the art so far: a straight chord
+            for _ in range(5): num()
+            nx, ny = num(), num()
+            if rel: nx, ny = nx + x, ny + y
+            cur.append((nx, ny)); x, y = nx, ny
+        prev = C if C in "QTCS" else C
+        if C not in "QTCS": ctrl = None
+    if len(cur) > 2: loops.append(cur)
+    return [l[:-1] if l[0] == l[-1] else l for l in loops]
+
+
 def parse(path):
+    """Labels, boxes and lines of the art (see parse_all, which also returns filled paths)."""
+    return parse_all(path)[:3]
+
+
+def parse_all(path):
     """Labels, boxes and lines of the art, in millimetres (y down).
 
     Walks the SVG with styles inherited from parent groups (as CSS does), and leaves out
@@ -51,8 +135,8 @@ def parse(path):
     root = ET.fromstring(raw.encode("utf-8"))
     NS = "{http://www.w3.org/2000/svg}"
     W, H = [float(v) for v in root.get("viewBox").replace(",", " ").split()[2:4]]
-    INHERITED = ("fill", "stroke", "stroke-width", "font-size", "font-weight", "font-family")
-    texts, boxes, lines = [], [], []
+    INHERITED = ("fill", "stroke", "stroke-width", "font-size", "font-weight", "font-family", "text-anchor")
+    texts, boxes, lines, shapes = [], [], [], []
 
     def props(el, parent):
         p = {k: v for k, v in parent.items() if k in INHERITED}
@@ -82,11 +166,13 @@ def parse(path):
         if tag == "text":
             spans = [t for t in el.iter(NS + "tspan")]
             text = "".join((t.text or "") for t in spans) if spans else (el.text or "")
-            first = spans[0] if spans else el
-            x = ox + float(el.get("x", 0) or 0) + float(first.get("x", 0) or 0)
-            y = oy + float(el.get("y", 0) or 0) + float(first.get("y", 0) or 0)
+            first = spans[0] if spans else None          # a bare <text> has no run of its own
+            x = ox + float(el.get("x", 0) or 0) + (float(first.get("x", 0) or 0) if first is not None else 0.0)
+            y = oy + float(el.get("y", 0) or 0) + (float(first.get("y", 0) or 0) if first is not None else 0.0)
             if text.strip() and on_board(x, y):
                 size = _num(p.get("font-size", "12"))
+                adv = sum(ARIAL_BOLD.get(c, 556) for c in text) / 1000 * size
+                x -= {"middle": adv / 2, "end": adv}.get(p.get("text-anchor", "start"), 0.0)
                 texts.append({"x": x * PT, "y": y * PT, "size": size * PT, "text": text,
                               "colour": None if fill == "none" else _colour(fill),     # None: outline only
                               "stroke": sw * PT, "width": sum(ARIAL_BOLD.get(c, 556) for c in text) / 1000 * size * PT})
@@ -98,6 +184,10 @@ def parse(path):
                 boxes.append({"x": x * PT, "y": y * PT, "w": float(el.get("width")) * PT, "h": float(el.get("height")) * PT,
                               "r": float(el.get("rx", 0) or 0) * PT, "kind": "fill" if filled else "outline",
                               "stroke": 0.0 if filled else sw * PT})
+        elif tag == "path" and fill != "none":
+            loops = [[(ox + px, oy + py) for px, py in l] for l in _path_loops(el.get("d", ""))]
+            if loops and on_board(*loops[0][0]):
+                shapes.append({"loops": [[(px * PT, py * PT) for px, py in l] for l in loops], "colour": _colour(fill)})
         elif tag == "line":
             x1, y1 = ox + float(el.get("x1", 0)), oy + float(el.get("y1", 0))
             x2, y2 = ox + float(el.get("x2", 0)), oy + float(el.get("y2", 0))
@@ -106,7 +196,7 @@ def parse(path):
         for child in el: walk(child, p, ox, oy)
 
     walk(root, {}, 0.0, 0.0)
-    return texts, boxes, lines
+    return texts, boxes, lines, shapes
 
 
 def _flat(m, outer, holes, z, ci):
@@ -176,8 +266,15 @@ def mesh(path, colours, z, height=500.0):
     from fontTools.ttLib import TTFont
     font = TTFont(FONT)
     upem = font["head"].unitsPerEm
-    texts, boxes, lines = parse(path)
+    texts, boxes, lines, shapes = parse_all(path)
     m = Mesh()
+    for sh in shapes:                  # filled paths: a loop inside an odd number of others is a hole
+        loops = [[(x, height - y) for x, y in l] for l in sh["loops"]]
+        depth = [sum(1 for j, o in enumerate(loops) if j != i and _inside(l[0], o)) for i, l in enumerate(loops)]
+        for i, l in enumerate(loops):
+            if depth[i] % 2: continue
+            holes = [h for j, h in enumerate(loops) if depth[j] == depth[i] + 1 and _inside(h[0], l)]
+            _flat(m, l, holes, z, colours[sh["colour"]])
     for l in lines:
         x1, y1, x2, y2 = l["x1"], height - l["y1"], l["x2"], height - l["y2"]
         d = math.hypot(x2 - x1, y2 - y1) or 1.0

@@ -141,6 +141,23 @@ bent against the nearer VCA of its pair (positions come from the parts list):
     node tools/step-to-mesh.mjs FADER_VCA_card.step master/fader-vca-donor.bin --tol 0.02 --fill-holes 1.3 --parts master/fader-vca-donor.parts.json
     python3 tools/finish-master.py master/MASTER_ANALOG.bin assets/models/master-analog.bin --vcas master/fader-vca-donor.bin
 
+## Master digital section
+
+The master controls board under its front panel (`master_front_panel.dxf`, 250 mm
+wide over the 230 mm board) with the master silkscreen (`master-silkscreen.svg`). The
+panel's position comes from its encoder holes matching the board's encoder shafts;
+LED ring boards sit under the four ring windows, centred on their encoders (this
+board's ring sockets are about 1.2 mm off from where a channel-strip ring board's
+headers would plug in, and the build says so); the Nidec caps stand 3 mm through
+the panel; the meter cutouts get unlit LEDs (per meter, top to bottom: one red,
+three yellow, seven green; the master meters' LEDs have a white surround). Group 1
+is the front panel with its silkscreen, display glass and meter LEDs:
+
+    python3 tools/build-master-digital.py master/MASTER_CONTROLS.bin ring.bin master_front_panel.dxf tools/master-silkscreen.svg assets/models/master-digital.bin
+
+The silkscreen code reads filled paths (the logo) and text-anchor as well as text,
+boxes and lines.
+
 ## Layer images
 
     python3 tools/pcb-layers.py BOARD.kicad_pcb out/ PREFIX
